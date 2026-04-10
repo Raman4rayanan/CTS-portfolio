@@ -24,7 +24,7 @@ const customers = [
 
 export default function PartnersSection() {
   return (
-    <section className="bg-[#1D1932] py-24 overflow-hidden flex flex-col gap-20">
+    <section className="py-24 overflow-hidden flex flex-col gap-20">
       
       {/* 
         Inline styles for custom smooth marquees and hover pausing.
@@ -59,8 +59,8 @@ export default function PartnersSection() {
         </h3>
         
         <div className="relative flex w-full overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#1D1932] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#1D1932] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#040C19] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#040C19] to-transparent z-10 pointer-events-none" />
 
           {/* Marquee Track */}
           <div className="flex w-max animate-marquee-left pause-on-hover">
@@ -105,8 +105,8 @@ export default function PartnersSection() {
         </h3>
         
         <div className="relative flex w-full overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#1D1932] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#1D1932] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#040C19] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#040C19] to-transparent z-10 pointer-events-none" />
 
           {/* Marquee Track Reverse */}
           <div className="flex w-max animate-marquee-right pause-on-hover">

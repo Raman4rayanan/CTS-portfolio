@@ -6,19 +6,19 @@ const activities = [
   {
     title: 'Work Updates',
     subtitle: 'Latest developments and operational milestones from our daily industrial engagements.',
-    image: '/activity1.jpg',
+    image: '/image1.png',
     gradient: 'linear-gradient(135deg, #0F4C81, #0B1F3A)',
   },
   {
     title: 'Project Highlights',
     subtitle: 'Showcasing our recent successful implementations and turnkey solutions.',
-    image: '/activity2.jpg',
+    image: '/image2.png',
     gradient: 'linear-gradient(135deg, #198e9d, #0B1F3A)',
   },
   {
     title: 'Product Demonstrations',
     subtitle: 'On-site technical demonstrations of our newest power tools and equipment.',
-    image: '/activity3.jpg',
+    image: '/image3.png',
     gradient: 'linear-gradient(135deg, #016A8A, #053b4d)',
   },
 ];

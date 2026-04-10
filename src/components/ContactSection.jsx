@@ -144,7 +144,7 @@ export default function ContactSection() {
            className="w-full h-96 rounded-2xl overflow-hidden shadow-lg border border-slate-200"
         >
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.0827145781304!2d80.1834!3d13.1098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526400c28383e5%3A0xe67ba3dca7c7d415!2sRailway%20Station%20Rd%2C%20Korattur%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1713000000000!5m2!1sen!2sin" 
+            src="https://maps.google.com/maps?q=13.102683129944433,80.17952379651084&z=17&output=embed"
             className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500"
             style={{ border: 0 }} 
             allowFullScreen="" 

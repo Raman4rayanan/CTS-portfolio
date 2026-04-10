@@ -1,19 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Settings, Clock, TrendingDown, Cpu, ThumbsUp, HardHat } from 'lucide-react';
+import { ShieldCheck, TrendingDown, Cpu, ThumbsUp, HardHat } from 'lucide-react';
 
-const badges = [
-  { icon: Clock, label: '25+ Years Experience' },
-  { icon: ShieldCheck, label: 'HSE Compliant' },
-  { icon: Settings, label: 'Customized Solutions' },
+const journey = [
+  { year: '2021', event: 'Founded' },
+  { year: '2022', event: 'Expanded Portfolio' },
+  { year: '2023', event: 'Engineering & Global Partnerships' },
+  { year: '2024', event: 'Presence across Wind Energy Sector' },
 ];
 
 const reasons = [
-  { title: 'High-Quality Products', icon: ShieldCheck, desc: 'Sourced from the best global brands.' },
-  { title: 'Cost-Effective Solutions', icon: TrendingDown, desc: 'Value-driven pricing without compromise.' },
-  { title: 'Advanced Technology', icon: Cpu, desc: 'State-of-the-art tools and equipment.' },
-  { title: 'Reliable Service', icon: ThumbsUp, desc: 'Consistent support you can count on.' },
-  { title: 'HSE Compliance', icon: HardHat, desc: 'Highest standards in health & safety.' },
+  { title: 'High-Quality Products', icon: ShieldCheck,  desc: 'Sourced from best global brands.' },
+  { title: 'Cost-Effective',        icon: TrendingDown,  desc: 'Value-driven solutions.' },
+  { title: 'Advanced Technology',   icon: Cpu,           desc: 'State-of-the-art tools and equipment.' },
+  { title: 'Reliable Service',      icon: ThumbsUp,      desc: 'Consistent support you can count on.' },
+  { title: 'HSE Compliance',        icon: HardHat,       desc: 'Highest standards in health & safety.' },
 ];
 
 const fadeUp = {
@@ -25,122 +26,113 @@ export default function AboutSection() {
   return (
     <section id="about" className="bg-white py-20 px-6 md:px-16 lg:px-28">
       <div className="max-w-7xl mx-auto">
-        
-        {/* Top Section: About Us Intro */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-          {/* Left – Image */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
+          {/* ===== LEFT COLUMN ===== */}
           <motion.div
-            className="relative rounded-2xl overflow-hidden shadow-xl"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <img
-              src="/about.jpg"
-              alt="Concept Tools Workshop"
-              className="w-full h-[420px] object-cover"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.parentElement.style.background = 'linear-gradient(135deg, #0F4C81 0%, #0B1F3A 100%)';
-                e.target.parentElement.style.display = 'flex';
-                e.target.parentElement.style.alignItems = 'center';
-                e.target.parentElement.style.justifyContent = 'center';
-                e.target.parentElement.innerHTML = `<div style="text-align:center;color:#fff;padding:2rem"><div style="font-size:4rem;margin-bottom:1rem">🔧</div><div style="font-size:1.2rem;font-weight:600">Concept Tools & Services</div><div style="opacity:.7;margin-top:.5rem">Est. 2021</div></div>`;
-              }}
-            />
-            {/* Accent bar */}
-            <div className="absolute left-0 top-0 h-full w-1.5 bg-primary-blue rounded-l-2xl" />
+            {/* Hero image — activity card style with text at bottom */}
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-[560px]">
+              <img
+                src="/image1.png"
+                alt="Concept Tools Workshop"
+                className="w-full h-full object-cover"
+              />
+              {/* Bottom-up gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-navy/90 via-primary-navy/30 to-transparent" />
+
+              {/* Bottom-aligned text — exactly like the reference */}
+              <div className="absolute bottom-0 left-0 right-0 px-8 pb-8 text-white">
+                <h2 className="text-3xl md:text-4xl font-bold leading-tight drop-shadow-lg">
+                  Powering Industries with{' '}
+                  <span className="text-blue-300">Precision &amp; Reliability</span>
+                </h2>
+                <p className="mt-3 text-sm text-slate-200 leading-relaxed font-light max-w-md">
+                  CTS is dedicated to being the most trusted partner for industrial tools and MRO
+                  solutions, delivering world-class products paired with over 25 years of hands-on
+                  expertise to meet evolving demands with full HSE compliance.
+                </p>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Right – Text */}
+          {/* ===== RIGHT COLUMN ===== */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+            className="flex flex-col gap-14"
           >
-            <motion.span
-              variants={fadeUp}
-              className="text-sm font-semibold tracking-widest text-primary-blue uppercase"
-            >
-              About Us
-            </motion.span>
 
-            <motion.h2
-              variants={fadeUp}
-              className="mt-3 text-3xl md:text-4xl font-bold text-primary-navy leading-snug"
-            >
-              Powering Industries with <br />
-              <span className="text-primary-blue">Precision &amp; Reliability</span>
-            </motion.h2>
+            {/* Our Journey */}
+            <div>
+              <motion.h3
+                variants={fadeUp}
+                className="text-2xl md:text-3xl font-bold text-primary-navy mb-8"
+              >
+                Our Journey
+              </motion.h3>
 
-            <motion.p variants={fadeUp} className="mt-5 text-slate-600 leading-relaxed text-base">
-              Concept Tools and Services (CTS) was established in 2021 with a clear mission — to be
-              the most trusted partner for industrial tools and MRO (Maintenance, Repair &amp;
-              Operations) solutions in India. Backed by a leadership team with over{' '}
-              <strong>25 years of hands-on industry experience</strong>, we deliver world-class
-              products paired with expert technical knowledge.
-            </motion.p>
+              {/* Timeline */}
+              <div className="relative flex flex-col gap-0 pl-6 border-l-2 border-slate-200">
+                {journey.map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    variants={fadeUp}
+                    className="relative mb-8 last:mb-0"
+                  >
+                    {/* Dot */}
+                    <span
+                      className={`absolute -left-[1.45rem] top-1 w-4 h-4 rounded-full border-2 border-white shadow-md ${
+                        idx === 0 ? 'bg-primary-blue' : 'bg-slate-300'
+                      }`}
+                    />
+                    <p className="text-slate-700 text-base leading-snug">
+                      <span className="font-bold text-primary-navy">{item.year}:</span> {item.event}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
 
-            <motion.p variants={fadeUp} className="mt-4 text-slate-600 leading-relaxed text-base">
-              From pneumatic &amp; power tools to safety equipment and customized solutions, our
-              comprehensive product range is carefully curated to meet the evolving demands of
-              modern industrial operations — all while maintaining full HSE compliance.
-            </motion.p>
+            {/* Why Choose Us */}
+            <div>
+              <motion.h3
+                variants={fadeUp}
+                className="text-2xl md:text-3xl font-bold text-primary-navy mb-8"
+              >
+                Why Choose Us
+              </motion.h3>
 
-            {/* Badges */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-8 flex flex-wrap gap-4"
-            >
-              {badges.map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-background-light border border-slate-200 rounded-lg shadow-sm text-sm font-semibold text-primary-navy"
-                >
-                  <Icon size={16} className="text-primary-blue flex-shrink-0" />
-                  {label}
-                </div>
-              ))}
-            </motion.div>
+              <div className="grid grid-cols-2 gap-4">
+                {reasons.map((reason, idx) => {
+                  const Icon = reason.icon;
+                  return (
+                    <motion.div
+                      key={idx}
+                      variants={fadeUp}
+                      className="flex items-center gap-5 p-4 bg-background-light rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="w-14 h-14 flex-shrink-0 bg-white text-primary-blue rounded-full shadow-sm flex items-center justify-center">
+                        <Icon size={26} strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-primary-navy text-sm">{reason.title}:</h4>
+                        <p className="text-slate-500 text-sm">{reason.desc}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
           </motion.div>
-        </div>
-
-        {/* Bottom Section: Why Choose Us */}
-        <div className="mt-28">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary-navy mb-4">
-              Why Choose Us
-            </h3>
-            <div className="h-1 w-16 bg-primary-blue mx-auto rounded"></div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
-            {reasons.map((reason, idx) => {
-              const Icon = reason.icon;
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  className="text-center flex flex-col items-center bg-background-light p-6 rounded-xl border border-slate-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <div className="w-16 h-16 bg-white text-primary-blue rounded-full shadow-sm flex items-center justify-center mb-5">
-                    <Icon size={28} strokeWidth={1.5} />
-                  </div>
-                  <h4 className="text-primary-navy font-bold text-base mb-3">
-                    {reason.title}
-                  </h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">
-                    {reason.desc}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
 
       </div>

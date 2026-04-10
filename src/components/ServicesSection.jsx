@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Settings, PenTool, Wrench, Archive, ArrowUpSquare,  Leaf, HardHat, Cog, Wrench as ToolIcon } from 'lucide-react';
+import { Settings, PenTool, Wrench, Archive, ArrowUpSquare, Leaf, HardHat, Cog, Wrench as ToolIcon } from 'lucide-react';
+import MagicBento from './MagicBento';
 
 const services = [
   { title: 'Pneumatic Tools', icon: Settings, desc: 'High-performance air-powered tools for heavy-duty applications.' },
@@ -51,34 +52,9 @@ export default function ServicesSection() {
           </motion.h2>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {services.map((service, idx) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={idx}
-                variants={cardVariants}
-                className="bg-white p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer"
-              >
-                <div className="w-14 h-14 bg-primary-blue/5 rounded-lg flex items-center justify-center text-primary-blue mb-6 group-hover:bg-primary-blue group-hover:text-white transition-colors duration-300">
-                  <Icon size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
-                  {service.desc}
-                </p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        <div className="w-full">
+          <MagicBento items={services} />
+        </div>
       </div>
     </section>
   );
