@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 overflow-x-hidden font-sans bg-background-light text-slate-800;
+  }
+}
+
+/* Hide scrollbar during the single page experience */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
