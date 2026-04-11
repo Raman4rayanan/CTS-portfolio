@@ -17,6 +17,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'Poppins', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
       animation: {
         'breathe': 'breathe 4s ease-in-out infinite',

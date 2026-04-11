@@ -86,7 +86,7 @@ export default function HeroSection({ isVisible }) {
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.33, 1, 0.68, 1] } }
                 }}
-                className="text-lg md:text-xl lg:text-2xl text-slate-300 font-light max-w-2xl mb-12 leading-relaxed"
+                className="text-base md:text-lg lg:text-xl text-slate-300 font-light max-w-2xl mb-12 leading-relaxed"
               >
                 Reliable industrial tools, MRO solutions, safety equipment, and technical support tailored for modern industries.
               </motion.p>

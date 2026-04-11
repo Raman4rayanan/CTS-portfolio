@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply m-0 p-0 overflow-x-hidden font-sans bg-background-light text-slate-800;
   }
@@ -12,4 +15,24 @@
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
+}
+
+/* Explicit User Fixes for Navbar */
+.navbar, .navbar a {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.navbar a {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.navbar a:hover {
+  opacity: 1;
+}
+
+.navbar .cta-button {
+  font-weight: 600;
 }

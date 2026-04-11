@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, TrendingDown, Cpu, ThumbsUp, HardHat } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, Cpu, ThumbsUp, HardHat } from 'lucide-react';
 
 const journey = [
   { year: '2021', event: 'Founded' },
@@ -11,10 +11,9 @@ const journey = [
 
 const reasons = [
   { title: 'High-Quality Products', icon: ShieldCheck,  desc: 'Sourced from best global brands.' },
-  { title: 'Cost-Effective',        icon: TrendingDown,  desc: 'Value-driven solutions.' },
+  { title: 'HSE COMPLIANCE',        icon: HardHat,       desc: 'Highest standards in health & safety.' },
   { title: 'Advanced Technology',   icon: Cpu,           desc: 'State-of-the-art tools and equipment.' },
   { title: 'Reliable Service',      icon: ThumbsUp,      desc: 'Consistent support you can count on.' },
-  { title: 'HSE Compliance',        icon: HardHat,       desc: 'Highest standards in health & safety.' },
 ];
 
 const fadeUp = {
@@ -23,6 +22,16 @@ const fadeUp = {
 };
 
 export default function AboutSection() {
+  const [currentImg, setCurrentImg] = useState(0);
+  const aboutImages = ['/about 1.jpg', '/about 2.jpg', '/about 3.jpg', '/about 4.jpg'];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % aboutImages.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section id="about" className="bg-white py-20 px-6 md:px-16 lg:px-28">
       <div className="max-w-7xl mx-auto">
@@ -37,12 +46,19 @@ export default function AboutSection() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             {/* Hero image — activity card style with text at bottom */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl h-[560px]">
-              <img
-                src="/image1.png"
-                alt="Concept Tools Workshop"
-                className="w-full h-full object-cover"
-              />
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-[560px] bg-primary-navy/10">
+              <AnimatePresence mode="popLayout">
+                <motion.img
+                  key={currentImg}
+                  src={aboutImages[currentImg]}
+                  alt="Concept Tools Workshop"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </AnimatePresence>
               {/* Bottom-up gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-primary-navy/90 via-primary-navy/30 to-transparent" />
 
@@ -52,7 +68,7 @@ export default function AboutSection() {
                   Powering Industries with{' '}
                   <span className="text-blue-300">Precision &amp; Reliability</span>
                 </h2>
-                <p className="mt-3 text-sm text-slate-200 leading-relaxed font-light max-w-md">
+                <p className="mt-3 text-base text-slate-200 leading-relaxed font-light max-w-md">
                   CTS is dedicated to being the most trusted partner for industrial tools and MRO
                   solutions, delivering world-class products paired with over 25 years of hands-on
                   expertise to meet evolving demands with full HSE compliance.
@@ -87,11 +103,8 @@ export default function AboutSection() {
                     variants={fadeUp}
                     className="relative mb-8 last:mb-0"
                   >
-                    {/* Dot */}
                     <span
-                      className={`absolute -left-[1.45rem] top-1 w-4 h-4 rounded-full border-2 border-white shadow-md ${
-                        idx === 0 ? 'bg-primary-blue' : 'bg-slate-300'
-                      }`}
+                      className="absolute -left-[1.45rem] top-1 w-4 h-4 rounded-full border-2 border-white shadow-md bg-primary-blue"
                     />
                     <p className="text-slate-700 text-base leading-snug">
                       <span className="font-bold text-primary-navy">{item.year}:</span> {item.event}

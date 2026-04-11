@@ -443,7 +443,8 @@ const MagicBento = ({
   enableTilt = true,
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
-  enableMagnetism = false
+  enableMagnetism = false,
+  onItemClick = null
 }) => {
   const gridRef = useRef(null);
   const isMobile = useMobileDetection();
@@ -484,8 +485,8 @@ const MagicBento = ({
             .card-responsive .card:nth-child(1) { grid-column: span 2; grid-row: span 2; }
             .card-responsive .card:nth-child(2) { }
             .card-responsive .card:nth-child(3) { }
-            .card-responsive .card:nth-child(6) { grid-column: span 2; grid-row: span 1; }
-            .card-responsive .card:nth-child(8) { grid-column: span 2; grid-row: span 1; }
+            .card-responsive .card:nth-child(7) { grid-column: span 2; grid-row: span 1; }
+            .card-responsive .card:nth-child(9) { grid-column: 1 / -1; grid-row: span 1; }
           }
           
           /* Glow effects adjusted for light theme */
@@ -610,6 +611,9 @@ const MagicBento = ({
                   };
 
                   const handleClick = (e) => {
+                    if (onItemClick) {
+                      onItemClick(card);
+                    }
                     if (!clickEffect || shouldDisableAnimations) return;
 
                     const rect = el.getBoundingClientRect();
@@ -642,24 +646,43 @@ const MagicBento = ({
                   el.addEventListener('click', handleClick);
                 }}
               >
-                <div className="card__header flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
-                  {/* Central placeholder/icon block, as requested */}
-                  <div className="w-16 h-16 bg-blue-50/50 rounded-2xl flex items-center justify-center border border-blue-100/50 relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-primary-blue/5 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-2xl" />
-                    {Icon ? <Icon size={32} className="text-primary-blue relative z-10" strokeWidth={1.5} /> : <div className="text-primary-blue/50 text-xs text-center font-bold relative z-10">Icon<br/>Slot</div>}
+                {/* Full-card background image and overlay */}
+                {card.image && (
+                  <>
+                    <div className="absolute inset-0 z-0">
+                      <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
+                    </div>
+                    {/* Gradient overlay for text readability */}
+                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-primary-navy/90 via-primary-navy/40 to-black/20" />
+                  </>
+                )}
+
+                <div className="relative z-10 flex flex-col h-full w-full">
+                  <div className="card__header flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                    {/* Only show icon slot if no image is present */}
+                    {!card.image && (
+                      <div className="w-16 h-16 bg-blue-50/50 rounded-2xl flex items-center justify-center border border-blue-100/50 relative overflow-hidden group shrink-0">
+                        <div className="absolute inset-0 bg-primary-blue/5 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-2xl" />
+                        {Icon ? (
+                          <Icon size={32} className="text-primary-blue relative z-10" strokeWidth={1.5} />
+                        ) : (
+                          <div className="text-primary-blue/50 text-xs text-center font-bold relative z-10">Icon<br/>Slot</div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {card.title && (
+                      <h3 className={`card__title font-bold text-xl md:text-2xl m-0 ${card.image ? 'text-white' : 'text-primary-navy'} ${card.image ? 'w-full text-left drop-shadow-md' : ''}`}>
+                        {card.title}
+                      </h3>
+                    )}
                   </div>
                   
-                  {card.title && (
-                    <h3 className="card__title font-bold text-xl md:text-2xl text-primary-navy m-0">
-                      {card.title}
-                    </h3>
-                  )}
-                </div>
-                
-                <div className="card__content flex-1 flex flex-col justify-end">
-                  <p className="card__description text-sm md:text-base leading-relaxed text-slate-500">
-                    {card.desc || card.description}
-                  </p>
+                  <div className="card__content flex-1 flex flex-col justify-end mt-4">
+                    <p className={`card__description text-sm md:text-base leading-relaxed ${card.image ? 'text-slate-100 drop-shadow-md' : 'text-slate-500'}`}>
+                      {card.desc || card.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
