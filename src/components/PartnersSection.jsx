@@ -54,7 +54,7 @@ export default function PartnersSection() {
 
       {/* ----------------- PARTNERS ROW ----------------- */}
       <div className="w-full relative">
-        <h3 className="text-center text-lg font-semibold text-slate-300 mb-10 uppercase tracking-widest px-6 opacity-80">
+        <h3 className="text-center text-xl font-semibold mb-10 uppercase tracking-widest px-6" style={{ color: '#1b809a' }}>
           The Companies We Partner With
         </h3>
         
@@ -100,7 +100,7 @@ export default function PartnersSection() {
 
       {/* ----------------- CUSTOMERS ROW ----------------- */}
       <div className="w-full relative">
-        <h3 className="text-center text-lg font-semibold text-slate-300 mb-10 uppercase tracking-widest px-6 opacity-80">
+        <h3 className="text-center text-xl font-semibold mb-10 uppercase tracking-widest px-6" style={{ color: '#1b809a' }}>
           Our Prestigious Customers
         </h3>
         

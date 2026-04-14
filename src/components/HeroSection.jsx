@@ -98,12 +98,12 @@ export default function HeroSection({ isVisible }) {
                 }}
                 className="flex flex-col sm:flex-row gap-5"
               >
-                <button className="px-8 py-4 bg-primary-blue hover:bg-blue-600 text-white font-semibold tracking-wide rounded border border-transparent shadow-[0_0_20px_rgba(15,76,129,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0, 0, 0, 1)]">
+                <a href="#services" className="px-8 py-4 bg-[#04667b] hover:bg-[#2796a9] text-white font-semibold tracking-wide rounded border border-transparent shadow-[0_0_15px_rgba(6,53,67,0.5)] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(6,53,67,0.8)] text-center">
                   Explore Services
-                </button>
-                <button className="px-8 py-4 bg-transparent border border-white/40 hover:border-white hover:bg-white/5 text-white font-semibold tracking-wide rounded transition-all duration-300 transform hover:-translate-y-1">
+                </a>
+                <a href="#contact" className="px-8 py-4 bg-transparent border border-white/40 hover:border-white hover:bg-white/5 text-white font-semibold tracking-wide rounded transition-all duration-300 transform hover:-translate-y-1 text-center">
                   Contact Us
-                </button>
+                </a>
               </motion.div>
             </motion.div>
           )}

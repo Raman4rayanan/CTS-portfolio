@@ -7,12 +7,15 @@ export default function Footer() {
   return (
     <footer className="bg-primary-navy pt-16 pb-8 px-6 md:px-16 lg:px-28 text-white w-full">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 border-b border-white/10 pb-12">
-        
+
         {/* Company Info */}
         <div className="md:w-1/3">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-              Concept Tools & Services
+            <span
+              className="text-2xl font-bold bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(to right, #08BFB0, #228B88, #08BFB0)' }}
+            >
+              Concept Tools &amp; Services
             </span>
           </div>
           <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
@@ -26,13 +29,13 @@ export default function Footer() {
           <ul className="space-y-3">
             {['Home', 'About', 'Services', 'Contact'].map((link) => (
               <li key={link}>
-                 <a
-                    href={`#${link.toLowerCase()}`}
-                    className="text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1 group w-fit"
-                 >
-                   {link}
-                   <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-                 </a>
+                <a
+                  href={`#${link.toLowerCase()}`}
+                  className="text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1 group w-fit"
+                >
+                  {link}
+                  <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                </a>
               </li>
             ))}
           </ul>

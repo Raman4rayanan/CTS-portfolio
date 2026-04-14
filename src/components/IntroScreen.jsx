@@ -15,7 +15,7 @@ export default function IntroScreen({ onComplete }) {
 
     window.addEventListener('wheel', handleScroll, { passive: true });
     window.addEventListener('touchmove', handleScroll, { passive: true });
-    
+
     // We don't listen to 'scroll' strictly because overflow is hidden at this point,
     // so 'wheel' or 'touchmove' are the best ways to detect a scroll intent.
 

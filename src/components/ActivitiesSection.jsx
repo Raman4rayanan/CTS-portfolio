@@ -21,6 +21,24 @@ const activities = [
     image: '/image3.png',
     gradient: 'linear-gradient(135deg, #016A8A, #053b4d)',
   },
+  {
+    title: 'Client Visits',
+    subtitle: 'Building lasting partnerships through on-site visits and collaborative consultations with our clients.',
+    image: '/image1.png',
+    gradient: 'linear-gradient(135deg, #1a3a5c, #0B1F3A)',
+  },
+  {
+    title: 'Training & Workshops',
+    subtitle: 'Empowering our teams with the latest safety protocols, tool handling skills, and industry best practices.',
+    image: '/image2.png',
+    gradient: 'linear-gradient(135deg, #0e5c6e, #0B1F3A)',
+  },
+  {
+    title: 'Trade Exhibitions',
+    subtitle: 'Representing CTS at premier industrial expos to showcase innovations and connect with global partners.',
+    image: '/image3.png',
+    gradient: 'linear-gradient(135deg, #0a4a7a, #0B1F3A)',
+  },
 ];
 
 export default function ActivitiesSection() {

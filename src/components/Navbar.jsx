@@ -56,7 +56,7 @@ export default function Navbar({ isVisible }) {
               ))}
               <a
                 href="#contact"
-                className="cta-button ml-2 px-5 py-2.5 bg-primary-blue hover:bg-blue-600 text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-md hover:shadow-blue-500/30 hover:-translate-y-0.5 transform"
+                className="cta-button ml-2 px-5 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)] hover:-translate-y-0.5 transform"
               >
                 Get a Quote
               </a>
@@ -96,7 +96,7 @@ export default function Navbar({ isVisible }) {
                   <a
                     href="#contact"
                     onClick={() => setMobileOpen(false)}
-                    className="cta-button mt-2 px-5 py-3 bg-primary-blue text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg text-center"
+                    className="cta-button mt-2 px-5 py-3 bg-[#063543] hover:bg-[#052b36] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg text-center transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)]"
                   >
                     Get a Quote
                   </a>

@@ -18,7 +18,7 @@ export default function CustomersSection() {
         <h2 className="text-center text-3xl font-bold text-primary-navy mb-12 uppercase tracking-wide">
           Our Prestigious Customers
         </h2>
-        
+
         <div className="relative flex w-full overflow-hidden">
           {/* Fading Gradients for smooth edges - pointer-events-none so it doesn't block clicks */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
@@ -44,8 +44,8 @@ export default function CustomersSection() {
                   key={`set1-${idx}`}
                   className="flex-shrink-0 w-48 h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100"
                 >
-                  <img 
-                    src={customer.src} 
+                  <img
+                    src={customer.src}
                     alt={customer.name}
                     className="max-w-full max-h-full object-contain mix-blend-multiply"
                     title={customer.name}
@@ -61,8 +61,8 @@ export default function CustomersSection() {
                   key={`set2-${idx}`}
                   className="flex-shrink-0 w-48 h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100"
                 >
-                  <img 
-                    src={customer.src} 
+                  <img
+                    src={customer.src}
                     alt={customer.name}
                     className="max-w-full max-h-full object-contain mix-blend-multiply"
                     title={customer.name}

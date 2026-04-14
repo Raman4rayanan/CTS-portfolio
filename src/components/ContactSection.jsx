@@ -6,8 +6,8 @@ export default function ContactSection() {
   return (
     <section id="contact" className="bg-background-light py-20 px-6 md:px-16 lg:px-28">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 mb-16">
+
           {/* Left Column: Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -18,26 +18,11 @@ export default function ContactSection() {
             <span className="text-sm font-semibold tracking-widest text-primary-blue uppercase">
               Get in Touch
             </span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold text-primary-navy mb-6">
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold text-primary-navy mb-10">
               Contact Us
             </h2>
-            <p className="text-slate-600 mb-10 leading-relaxed max-w-md">
-              Ready to upgrade your industrial tools and safety equipment? Reach out to us for customized solutions, quotes, and expert MRO support.
-            </p>
 
             <div className="space-y-6">
-              {/* Point of Contact */}
-              <div className="flex items-start gap-4 cursor-pointer group">
-                <div className="w-12 h-12 bg-white rounded-lg shadow-sm flex flex-shrink-0 items-center justify-center text-primary-blue group-hover:bg-primary-blue group-hover:text-white transition-colors duration-300">
-                  <User size={24} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-slate-500">Point of Contact</h4>
-                  <p className="text-lg font-bold text-primary-navy mt-1">Priyadharshan A</p>
-                  <p className="text-md font-semibold text-primary-navy">6379427064</p>
-                </div>
-              </div>
-
               {/* Company Phone */}
               <div className="flex items-start gap-4 cursor-pointer group">
                 <div className="w-12 h-12 bg-white rounded-lg shadow-sm flex flex-shrink-0 items-center justify-center text-primary-blue group-hover:bg-primary-blue group-hover:text-white transition-colors duration-300">
@@ -77,7 +62,7 @@ export default function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Right Column: Contact Form */}
+          {/* Center Column: Contact Form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -104,7 +89,7 @@ export default function ContactSection() {
                   className="w-full bg-background-light border border-slate-200 rounded-lg px-4 py-3 text-slate-700 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue transition-all"
                 />
               </div>
-              
+
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-500">Email (Optional)</label>
                 <input
@@ -125,7 +110,10 @@ export default function ContactSection() {
 
               <button
                 type="submit"
-                className="w-full mt-4 bg-primary-blue hover:bg-blue-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all duration-300 shadow-md hover:shadow-lg"
+                style={{ backgroundColor: '#0f5660' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1b809a'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0f5660'}
+                className="w-full mt-4 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Send Message
                 <Send size={18} />
@@ -133,25 +121,25 @@ export default function ContactSection() {
             </form>
           </motion.div>
 
-        </div>
+          {/* Right Column: Map Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="w-full h-full min-h-[300px] md:min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-slate-200"
+          >
+            <iframe
+              src="https://maps.google.com/maps?q=13.102535392655057, 80.17953434935382&z=17&output=embed"
+              className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </motion.div>
 
-        {/* Incorporated Map Section */}
-        <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.6, delay: 0.4 }}
-           className="w-full h-96 rounded-2xl overflow-hidden shadow-lg border border-slate-200"
-        >
-          <iframe 
-            src="https://maps.google.com/maps?q=13.102683129944433,80.17952379651084&z=17&output=embed"
-            className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500"
-            style={{ border: 0 }} 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

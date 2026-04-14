@@ -10,10 +10,10 @@ const journey = [
 ];
 
 const reasons = [
-  { title: 'High-Quality Products', icon: ShieldCheck,  desc: 'Sourced from best global brands.' },
-  { title: 'HSE COMPLIANCE',        icon: HardHat,       desc: 'Highest standards in health & safety.' },
-  { title: 'Advanced Technology',   icon: Cpu,           desc: 'State-of-the-art tools and equipment.' },
-  { title: 'Reliable Service',      icon: ThumbsUp,      desc: 'Consistent support you can count on.' },
+  { title: 'High-Quality Products', icon: ShieldCheck, desc: 'Sourced from best global brands.' },
+  { title: 'HSE COMPLIANCE', icon: HardHat, desc: 'Highest standards in health & safety.' },
+  { title: 'Advanced Technology', icon: Cpu, desc: 'State-of-the-art tools and equipment.' },
+  { title: 'Reliable Service', icon: ThumbsUp, desc: 'Consistent support you can count on.' },
 ];
 
 const fadeUp = {
@@ -36,7 +36,7 @@ export default function AboutSection() {
     <section id="about" className="bg-white py-20 px-6 md:px-16 lg:px-28">
       <div className="max-w-7xl mx-auto">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
 
           {/* ===== LEFT COLUMN ===== */}
           <motion.div
@@ -44,9 +44,10 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="h-full"
           >
             {/* Hero image — activity card style with text at bottom */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl h-[560px] bg-primary-navy/10">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-full min-h-[480px] bg-primary-navy/10">
               <AnimatePresence mode="popLayout">
                 <motion.img
                   key={currentImg}
@@ -64,9 +65,12 @@ export default function AboutSection() {
 
               {/* Bottom-aligned text — exactly like the reference */}
               <div className="absolute bottom-0 left-0 right-0 px-8 pb-8 text-white">
-                <h2 className="text-3xl md:text-4xl font-bold leading-tight drop-shadow-lg">
-                  Powering Industries with{' '}
-                  <span className="text-blue-300">Precision &amp; Reliability</span>
+                <h2
+                  className="leading-tight drop-shadow-lg font-bold"
+                  style={{ fontFamily: '"Kollektif", sans-serif' }}
+                >
+                  <span className="text-[#6bb5c1] text-xl md:text-3xl block mb-1">Powering Industries with</span>
+                  <span className="text-white text-xl md:text-5xl block mb-1 ">Precision &amp; Reliability</span>
                 </h2>
                 <p className="mt-3 text-base text-slate-200 leading-relaxed font-light max-w-md">
                   CTS is dedicated to being the most trusted partner for industrial tools and MRO

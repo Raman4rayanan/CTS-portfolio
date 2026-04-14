@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
-// Single portrait card with its own hover spotlight
-function ActivityCard({ item, onClick }) {
+const INITIAL_VISIBLE = 3; // number of cards visible before "View More"
+
+// Single portrait card with hover spotlight
+function ActivityCard({ item, onClick, index }) {
   const handleCardMove = (e) => {
     const c = e.currentTarget;
     const rect = c.getBoundingClientRect();
@@ -13,13 +15,13 @@ function ActivityCard({ item, onClick }) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.45, ease: [0.33, 1, 0.68, 1], delay: (index % 3) * 0.1 }}
       onMouseMove={handleCardMove}
       onClick={onClick}
-      className="group relative w-full h-[480px] rounded-3xl overflow-hidden shadow-xl cursor-pointer flex-1"
+      className="group relative w-full h-[420px] rounded-3xl overflow-hidden shadow-xl cursor-pointer"
       style={{ '--spotlight-color': 'rgba(255,255,255,0.25)' }}
     >
       {/* Spotlight effect on hover */}
@@ -44,99 +46,60 @@ function ActivityCard({ item, onClick }) {
       {/* Text Overlay */}
       <div className="relative z-10 w-full h-full flex flex-col justify-end p-7 text-white">
         <h3 className="text-2xl font-bold mb-2 drop-shadow-md">{item.title}</h3>
-        <p className="text-sm text-slate-200 leading-relaxed font-light line-clamp-3 mb-4 drop-shadow-sm">
+        <p className="text-sm text-slate-200 leading-relaxed font-light line-clamp-3 drop-shadow-sm">
           {item.subtitle}
         </p>
-        <span className="text-xs font-semibold uppercase tracking-widest text-blue-300 flex items-center gap-2 group-hover:text-blue-100 transition-colors">
-          View Details <ChevronRight size={14} />
-        </span>
       </div>
     </motion.article>
   );
 }
 
 const ChromaGrid = ({ items }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const data = items?.length ? items : [];
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex(prev => (prev + 1) % data.length);
-  }, [data.length]);
-
-  const handlePrev = useCallback(() => {
-    setCurrentIndex(prev => (prev - 1 + data.length) % data.length);
-  }, [data.length]);
-
-  // Auto-advance (pause on hover or when modal open)
-  useEffect(() => {
-    if (isHovered || selectedItem) return;
-    const timer = setInterval(handleNext, 4500);
-    return () => clearInterval(timer);
-  }, [handleNext, isHovered, selectedItem]);
+  const visibleItems = showAll ? data : data.slice(0, INITIAL_VISIBLE);
 
   if (!data.length) return null;
 
-  // Show 2 cards — current and the one after it (wraps around)
-  const firstItem = data[currentIndex];
-  const secondItem = data[(currentIndex + 1) % data.length];
-
   return (
     <>
-      <div
-        className="flex flex-col items-center w-full"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="flex flex-row items-center justify-center w-full max-w-5xl gap-4 md:gap-8">
-
-          {/* Left Arrow */}
-          <button
-            onClick={handlePrev}
-            className="hidden md:flex flex-shrink-0 w-14 h-14 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 shadow-md hover:bg-primary-navy hover:border-primary-navy hover:text-white transition-all duration-300 transform hover:-translate-x-1"
-          >
-            <ChevronLeft size={28} />
-          </button>
-
-          {/* Two Cards Side by Side */}
-          <div className="flex flex-col sm:flex-row gap-6 w-full">
-            <AnimatePresence mode="wait">
-              <ActivityCard
-                key={`card-a-${currentIndex}`}
-                item={firstItem}
-                onClick={() => setSelectedItem(firstItem)}
-              />
-            </AnimatePresence>
-            <AnimatePresence mode="wait">
-              <ActivityCard
-                key={`card-b-${(currentIndex + 1) % data.length}`}
-                item={secondItem}
-                onClick={() => setSelectedItem(secondItem)}
-              />
-            </AnimatePresence>
-          </div>
-
-          {/* Right Arrow */}
-          <button
-            onClick={handleNext}
-            className="hidden md:flex flex-shrink-0 w-14 h-14 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 shadow-md hover:bg-primary-navy hover:border-primary-navy hover:text-white transition-all duration-300 transform hover:translate-x-1"
-          >
-            <ChevronRight size={28} />
-          </button>
-        </div>
-
-        {/* Mobile Arrows */}
-        <div className="flex md:hidden gap-6 mt-8">
-          <button onClick={handlePrev} className="w-12 h-12 flex items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm hover:bg-slate-100">
-            <ChevronLeft size={24} />
-          </button>
-          <button onClick={handleNext} className="w-12 h-12 flex items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm hover:bg-slate-100">
-            <ChevronRight size={24} />
-          </button>
-        </div>
+      {/* Static Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <AnimatePresence>
+          {visibleItems.map((item, index) => (
+            <ActivityCard
+              key={item.title + index}
+              item={item}
+              index={index}
+              onClick={() => setSelectedItem(item)}
+            />
+          ))}
+        </AnimatePresence>
       </div>
+
+      {/* View More / Show Less Button */}
+      {data.length > INITIAL_VISIBLE && (
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={() => setShowAll(prev => !prev)}
+            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-primary-blue text-primary-blue font-semibold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:text-white"
+          >
+            <span className="absolute inset-0 bg-primary-blue scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className="relative z-10">
+              {showAll ? 'Show Less' : `View More (${data.length - INITIAL_VISIBLE} more)`}
+            </span>
+            <motion.span
+              animate={{ rotate: showAll ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10 text-lg leading-none"
+            >
+              ↓
+            </motion.span>
+          </button>
+        </div>
+      )}
 
       {/* Detail Modal */}
       <AnimatePresence>
