@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Cpu, ThumbsUp, HardHat } from 'lucide-react';
 
+const iconMap = {
+  ShieldCheck,
+  Cpu,
+  ThumbsUp,
+  HardHat
+};
+
 const journey = [
   { year: '2021', event: 'Founded' },
   { year: '2022', event: 'Expanded Portfolio' },
@@ -21,8 +28,15 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
 };
 
-export default function AboutSection() {
+export default function AboutSection({ config }) {
   const [currentImg, setCurrentImg] = useState(0);
+  const journeyList = config && config.journey && config.journey.length > 0 ? config.journey : journey;
+  const reasonsList = config && config.reasons && config.reasons.length > 0
+    ? config.reasons.map(r => ({
+        ...r,
+        icon: iconMap[r.icon] || ShieldCheck
+      }))
+    : reasons;
   const aboutImages = ['/about 1.jpg', '/about 2.jpg', '/about 3.jpg', '/about 4.jpg'];
 
   useEffect(() => {
@@ -69,13 +83,15 @@ export default function AboutSection() {
                   className="leading-tight drop-shadow-lg font-bold"
                   style={{ fontFamily: '"Kollektif", sans-serif' }}
                 >
-                  <span className="text-[#6bb5c1] text-xl md:text-3xl block mb-1">Powering Industries with</span>
-                  <span className="text-white text-xl md:text-5xl block mb-1 ">Precision &amp; Reliability</span>
+                  <span className="text-[#6bb5c1] text-xl md:text-3xl block mb-1">
+                    {config && config.aboutHeaderLight ? config.aboutHeaderLight : "Powering Industries with"}
+                  </span>
+                  <span className="text-white text-xl md:text-5xl block mb-1 ">
+                    {config && config.aboutHeaderBold ? config.aboutHeaderBold : "Precision & Reliability"}
+                  </span>
                 </h2>
                 <p className="mt-3 text-base text-slate-200 leading-relaxed font-light max-w-md">
-                  CTS is dedicated to being the most trusted partner for industrial tools and MRO
-                  solutions, delivering world-class products paired with over 25 years of hands-on
-                  expertise to meet evolving demands with full HSE compliance.
+                  {config && config.aboutText ? config.aboutText : "From industrial tools and MRO solutions to customized technical support, we help organizations maintain safe, efficient, and productive operations."}
                 </p>
               </div>
             </div>
@@ -101,7 +117,7 @@ export default function AboutSection() {
 
               {/* Timeline */}
               <div className="relative flex flex-col gap-0 pl-6 border-l-2 border-slate-200">
-                {journey.map((item, idx) => (
+                {journeyList.map((item, idx) => (
                   <motion.div
                     key={idx}
                     variants={fadeUp}
@@ -128,7 +144,7 @@ export default function AboutSection() {
               </motion.h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {reasons.map((reason, idx) => {
+                {reasonsList.map((reason, idx) => {
                   const Icon = reason.icon;
                   return (
                     <motion.div

@@ -1,6 +1,47 @@
 const Activity = require('../models/portfolio/Activity');
 const ProductService = require('../models/portfolio/ProductService');
 const Inquiry = require('../models/portfolio/Inquiry');
+const PortfolioConfig = require('../models/portfolio/PortfolioConfig');
+
+const defaultConfig = {
+  heroTitle: 'Precision & Reliability',
+  heroSubtitle: 'Supporting industries with reliable tools, technical solutions, and responsive service tailored to real-world operational challenges.',
+  aboutText: 'From industrial tools and MRO solutions to customized technical support, we help organizations maintain safe, efficient, and productive operations.',
+  aboutHeaderLight: 'Powering Industries with',
+  aboutHeaderBold: 'Precision & Reliability',
+  journey: [
+    { year: '2021', event: 'Founded' },
+    { year: '2022', event: 'Expanded Portfolio' },
+    { year: '2023', event: 'Engineering & Global Partnerships' },
+    { year: '2024', event: 'Presence across Wind Energy Sector' }
+  ],
+  reasons: [
+    { title: 'High-Quality Products', icon: 'ShieldCheck', desc: 'Sourced from best global brands.' },
+    { title: 'HSE COMPLIANCE', icon: 'HardHat', desc: 'Highest standards in health & safety.' },
+    { title: 'Advanced Technology', icon: 'Cpu', desc: 'State-of-the-art tools and equipment.' },
+    { title: 'Reliable Service', icon: 'ThumbsUp', desc: 'Consistent support you can count on.' }
+  ],
+  partners: [
+    { name: 'Bosch Power Tools', src: '/boach-Photoroom.png' },
+    { name: 'Ingersoll Rand', src: '/inger.png', scale: 1.35 },
+    { name: 'Stanley Black & Decker', src: '/stanley.png' },
+    { name: 'Kärcher', src: '/karcher.png' },
+    { name: 'Eibenstock', src: '/elbenstock.png', scale: 1.35 },
+    { name: 'Klingspor', src: '/Klingspor-Emblem.png' },
+    { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.35 },
+    { name: 'KOVAX Abrasive Solutions', src: '/kovax.png' },
+    { name: 'Atlas Protective Products', src: '/atlas.png', scale: 1.35 }
+  ],
+  customers: [
+    { name: 'Nordex India', src: '/nordex-Photoroom.png' },
+    { name: 'Senvion India', src: '/Senvion-Photoroom.png' },
+    { name: 'Suzlon Energy', src: '/suzlon-Photoroom.png', scale: 1.35 },
+    { name: 'Gurit Wind', src: '/gurit-Photoroom.png' },
+    { name: 'Indocool Composites', src: '/indocool-Photoroom.png' },
+    { name: 'Stellantis Avtec Powertrain', src: '/Stellantis-Photoroom.png', scale: 1.35 },
+    { name: 'Exeraxis India', src: '/EVERAXIS-Photoroom.png', scale: 1.35 }
+  ]
+};
 
 // ===== ACTIVITIES CONTROLLER =====
 exports.getActivities = async (req, res) => {
@@ -129,6 +170,46 @@ exports.createInquiry = async (req, res) => {
     }
     const newInquiry = await Inquiry.create({ name, phone, email, message });
     res.status(201).json({ success: true, data: newInquiry, message: 'Inquiry saved successfully.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ===== PORTFOLIO CONFIG CONTROLLER =====
+exports.getPortfolioConfig = async (req, res) => {
+  try {
+    let config = await PortfolioConfig.findOne();
+    if (!config) {
+      config = await PortfolioConfig.create(defaultConfig);
+      console.log('Database: Created and seeded default Portfolio Configuration.');
+    }
+    res.json({ success: true, data: config });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.updatePortfolioConfig = async (req, res) => {
+  try {
+    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, journey, reasons, partners, customers } = req.body;
+    
+    let config = await PortfolioConfig.findOne();
+    if (!config) {
+      config = new PortfolioConfig();
+    }
+
+    if (heroTitle !== undefined) config.heroTitle = heroTitle;
+    if (heroSubtitle !== undefined) config.heroSubtitle = heroSubtitle;
+    if (aboutText !== undefined) config.aboutText = aboutText;
+    if (aboutHeaderLight !== undefined) config.aboutHeaderLight = aboutHeaderLight;
+    if (aboutHeaderBold !== undefined) config.aboutHeaderBold = aboutHeaderBold;
+    if (journey !== undefined) config.journey = journey;
+    if (reasons !== undefined) config.reasons = reasons;
+    if (partners !== undefined) config.partners = partners;
+    if (customers !== undefined) config.customers = customers;
+
+    await config.save();
+    res.json({ success: true, data: config });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

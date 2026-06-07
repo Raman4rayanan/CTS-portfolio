@@ -7,7 +7,7 @@ const images = [
   '/image3.png'
 ];
 
-export default function HeroSection({ isVisible }) {
+export default function HeroSection({ isVisible, config }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -77,8 +77,14 @@ export default function HeroSection({ isVisible }) {
                 }}
                 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
               >
-                Your Partner in <br />
-                <span style={{ color: '#198e9d' }}>Industrial</span> Productivity
+                {config && config.heroTitle ? (
+                  config.heroTitle
+                ) : (
+                  <>
+                    Your Partner in <br />
+                    <span style={{ color: '#198e9d' }}>Industrial</span> Productivity
+                  </>
+                )}
               </motion.h1>
 
               <motion.p
@@ -88,7 +94,7 @@ export default function HeroSection({ isVisible }) {
                 }}
                 className="text-sm md:text-lg lg:text-xl text-slate-300 font-light max-w-2xl mb-12 leading-relaxed"
               >
-                Reliable industrial tools, MRO solutions, safety equipment, and technical support tailored for modern industries.
+                {config && config.heroSubtitle ? config.heroSubtitle : "Supporting industries with reliable tools, technical solutions, and responsive service tailored to real-world operational challenges."}
               </motion.p>
 
               <motion.div

@@ -95,8 +95,36 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
 };
 
+const iconMap = {
+  Settings,
+  PenTool,
+  Wrench,
+  Archive,
+  ArrowUpSquare,
+  HardHat,
+  Leaf,
+  Cog,
+  ToolIcon
+};
+
 export default function ServicesSection() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [servicesList, setServicesList] = useState(services);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/portfolio/services')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data && data.data.length > 0) {
+          const mapped = data.data.map(item => ({
+            ...item,
+            icon: iconMap[item.icon] || Settings
+          }));
+          setServicesList(mapped);
+        }
+      })
+      .catch(err => console.error('Error fetching services:', err));
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -140,7 +168,7 @@ export default function ServicesSection() {
         </div>
 
         <div className="w-full relative z-0">
-          <MagicBento items={services} onItemClick={(card) => setSelectedCategory(card)} />
+          <MagicBento items={servicesList} onItemClick={(card) => setSelectedCategory(card)} />
         </div>
       </div>
 

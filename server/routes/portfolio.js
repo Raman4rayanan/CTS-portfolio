@@ -9,28 +9,36 @@ const {
   createService,
   updateService,
   deleteService,
-  createInquiry
+  createInquiry,
+  getPortfolioConfig,
+  updatePortfolioConfig
 } = require('../controllers/portfolioController');
+const { protectAdmin } = require('../middleware/auth');
+
+// Configuration Endpoints
+router.route('/config')
+  .get(getPortfolioConfig)
+  .put(protectAdmin, updatePortfolioConfig);
 
 // Activities Endpoints
 router.route('/activities')
   .get(getActivities)
-  .post(createActivity);
+  .post(protectAdmin, createActivity);
 
 router.route('/activities/:id')
-  .put(updateActivity)
-  .delete(deleteActivity);
+  .put(protectAdmin, updateActivity)
+  .delete(protectAdmin, deleteActivity);
 
 // Product Services Endpoints
 router.route('/services')
   .get(getServices)
-  .post(createService);
+  .post(protectAdmin, createService);
 
 router.route('/services/:id')
-  .put(updateService)
-  .delete(deleteService);
+  .put(protectAdmin, updateService)
+  .delete(protectAdmin, deleteService);
 
-// Inquiry Endpoint
+// Inquiry Endpoint (Public submission)
 router.post('/inquiries', createInquiry);
 
 module.exports = router;

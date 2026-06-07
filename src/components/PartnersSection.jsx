@@ -22,7 +22,10 @@ const customers = [
   { name: 'Exeraxis India', src: '/EVERAXIS-Photoroom.png', scale: 2.00 }
 ];
 
-export default function PartnersSection() {
+export default function PartnersSection({ config }) {
+  const partnersList = config && config.partners && config.partners.length > 0 ? config.partners : partners;
+  const customersList = config && config.customers && config.customers.length > 0 ? config.customers : customers;
+
   return (
     <section className="py-24 overflow-hidden flex flex-col gap-20">
 
@@ -72,7 +75,7 @@ export default function PartnersSection() {
           <div className="flex w-max animate-marquee-left pause-on-hover">
             {/* Set 1 */}
             <div className="flex gap-12 md:gap-20 items-center flex-shrink-0 px-10">
-              {partners.map((partner, idx) => (
+              {partnersList.map((partner, idx) => (
                 <div key={`p-set1-${idx}`} className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-2 cursor-pointer">
                   {/*
                      brightness-0 invert = Pure White. 
@@ -90,7 +93,7 @@ export default function PartnersSection() {
             </div>
             {/* Set 2 */}
             <div className="flex gap-12 md:gap-20 items-center flex-shrink-0 px-10">
-              {partners.map((partner, idx) => (
+              {partnersList.map((partner, idx) => (
                 <div key={`p-set2-${idx}`} className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-2 cursor-pointer">
                   <img
                     src={partner.src}
@@ -120,7 +123,7 @@ export default function PartnersSection() {
           <div className="flex w-max animate-marquee-right pause-on-hover">
             {/* Set 1 */}
             <div className="flex gap-12 md:gap-20 items-center flex-shrink-0 px-10">
-              {customers.map((customer, idx) => (
+              {customersList.map((customer, idx) => (
                 <div key={`c-set1-${idx}`} className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-2 cursor-pointer">
                   <img
                     src={customer.src}
@@ -134,7 +137,7 @@ export default function PartnersSection() {
             </div>
             {/* Set 2 */}
             <div className="flex gap-12 md:gap-20 items-center flex-shrink-0 px-10">
-              {customers.map((customer, idx) => (
+              {customersList.map((customer, idx) => (
                 <div key={`c-set2-${idx}`} className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-2 cursor-pointer">
                   <img
                     src={customer.src}

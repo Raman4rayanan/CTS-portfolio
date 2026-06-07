@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ChromaGrid from './ChromaGrid';
 
@@ -42,6 +42,19 @@ const activities = [
 ];
 
 export default function ActivitiesSection() {
+  const [activitiesList, setActivitiesList] = useState(activities);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/portfolio/activities')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data && data.data.length > 0) {
+          setActivitiesList(data.data);
+        }
+      })
+      .catch(err => console.error('Error fetching activities:', err));
+  }, []);
+
   return (
     <section id="activities" className="bg-white py-32 px-6 md:px-16 lg:px-28 flex flex-col justify-center">
       <div className="max-w-[1400px] mx-auto w-full">
@@ -66,7 +79,7 @@ export default function ActivitiesSection() {
         </div>
 
         {/* Integrated ChromaGrid Carousel component */}
-        <ChromaGrid items={activities} />
+        <ChromaGrid items={activitiesList} />
       </div>
     </section>
   );
