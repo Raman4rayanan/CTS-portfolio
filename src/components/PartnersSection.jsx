@@ -5,11 +5,11 @@ const partners = [
   { name: 'Ingersoll Rand', src: '/inger.png', scale: 1.35 },
   { name: 'Stanley Black & Decker', src: '/stanley.png', scale: 1.00 },
   { name: 'Kärcher', src: '/karcher.png' },
-  { name: 'Eibenstock', src: '/elbenstock.png', scale: 1.80 },
+  { name: 'Eibenstock', src: '/elbenstock.png', scale: 2.5 },
   { name: 'Klingspor', src: '/Klingspor-Emblem.png' },
-  { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.35 },
+  { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.8 },
   { name: 'KOVAX Abrasive Solutions', src: '/kovax.png' },
-  { name: 'Atlas Protective Products', src: '/atlas.png', scale: 2.00 }
+  { name: 'Atlas Protective Products', src: '/atlas.png', scale: 2.5 }
 ];
 
 const customers = [
@@ -25,6 +25,8 @@ const customers = [
 export default function PartnersSection({ config }) {
   const partnersList = config && config.partners && config.partners.length > 0 ? config.partners : partners;
   const customersList = config && config.customers && config.customers.length > 0 ? config.customers : customers;
+
+
 
   return (
     <section className="py-24 overflow-hidden flex flex-col gap-20">
@@ -67,9 +69,13 @@ export default function PartnersSection({ config }) {
           The Companies We Partner With
         </h3>
 
-        <div className="relative flex w-full overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#040C19] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#040C19] to-transparent z-10 pointer-events-none" />
+        <div
+          className="relative flex w-full overflow-hidden"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent, white 8rem, white calc(100% - 8rem), transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, white 8rem, white calc(100% - 8rem), transparent)'
+          }}
+        >
 
           {/* Marquee Track */}
           <div className="flex w-max animate-marquee-left pause-on-hover">
@@ -85,7 +91,7 @@ export default function PartnersSection({ config }) {
                     src={partner.src}
                     alt={partner.name}
                     className="max-w-full max-h-full object-contain brightness-0 invert opacity-70 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-500 logo-img"
-                    style={{ '--base-scale': partner.scale || 1 }}
+                    style={{ '--base-scale': String(partner.scale || 1) }}
                     title={partner.name}
                   />
                 </div>
@@ -99,7 +105,7 @@ export default function PartnersSection({ config }) {
                     src={partner.src}
                     alt={partner.name}
                     className="max-w-full max-h-full object-contain brightness-0 invert opacity-70 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-500 logo-img"
-                    style={{ '--base-scale': partner.scale || 1 }}
+                    style={{ '--base-scale': String(partner.scale || 1) }}
                     title={partner.name}
                   />
                 </div>
@@ -115,9 +121,13 @@ export default function PartnersSection({ config }) {
           Our Prestigious Customers
         </h3>
 
-        <div className="relative flex w-full overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#040C19] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#040C19] to-transparent z-10 pointer-events-none" />
+        <div
+          className="relative flex w-full overflow-hidden"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent, white 8rem, white calc(100% - 8rem), transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, white 8rem, white calc(100% - 8rem), transparent)'
+          }}
+        >
 
           {/* Marquee Track Reverse */}
           <div className="flex w-max animate-marquee-right pause-on-hover">
@@ -129,7 +139,7 @@ export default function PartnersSection({ config }) {
                     src={customer.src}
                     alt={customer.name}
                     className="max-w-full max-h-full object-contain brightness-0 invert opacity-70 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-500 logo-img"
-                    style={{ '--base-scale': customer.scale || 1 }}
+                    style={{ '--base-scale': String(customer.scale || 1) }}
                     title={customer.name}
                   />
                 </div>
@@ -143,7 +153,7 @@ export default function PartnersSection({ config }) {
                     src={customer.src}
                     alt={customer.name}
                     className="max-w-full max-h-full object-contain brightness-0 invert opacity-70 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 transition-all duration-500 logo-img"
-                    style={{ '--base-scale': customer.scale || 1 }}
+                    style={{ '--base-scale': String(customer.scale || 1) }}
                     title={customer.name}
                   />
                 </div>

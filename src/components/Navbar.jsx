@@ -53,8 +53,9 @@ export default function Navbar({ isVisible }) {
   }, [mobileOpen]);
 
   const handleLogin = async (email, password) => {
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', {
+      const response = await fetch(`${apiBaseUrl}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -75,10 +76,11 @@ export default function Navbar({ isVisible }) {
   };
 
   const handleLogout = async () => {
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
       const token = localStorage.getItem('cts_token');
       if (token) {
-        await fetch('http://localhost:5000/api/admin/logout', {
+        await fetch(`${apiBaseUrl}/api/admin/logout`, {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${token}` 

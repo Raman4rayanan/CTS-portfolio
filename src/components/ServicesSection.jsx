@@ -5,13 +5,13 @@ import MagicBento from './MagicBento';
 
 const services = [
   { title: 'Pneumatic Tools', icon: Settings, image: '/pneumatic.png', desc: 'High-performance air-powered tools for heavy-duty applications.' },
-  { title: 'Power Tools', icon: PenTool, image: '/power.jpeg', desc: 'Reliable and efficient electric tools for precision and power.' },
-  { title: 'Hand Tools', icon: Wrench, image: '/hand.jpg', desc: 'Durable manual tools crafted for everyday industrial tasks.' },
   { title: 'Storage Cabinets', icon: Archive, image: '/storage.jpg', desc: 'Robust industrial storage solutions to keep workspaces organized.' },
-  { title: 'Lifting Equipment', icon: ArrowUpSquare, image: '/lifting.jpg', desc: 'Safe and certified lifting gear for seamless material handling.' },
+  { title: 'Hand Tools', icon: Wrench, image: '/hand.jpg', desc: 'Durable manual tools crafted for everyday industrial tasks.' },
+  { title: 'Power Tools', icon: PenTool, image: '/power.jpeg', desc: 'Reliable and efficient electric tools for precision and power.' },
+  { title: 'Lifting Equipment', icon: ArrowUpSquare, image: '/torque.jpg', desc: 'Safe and certified lifting gear for seamless material handling.' },
   { title: 'PPE (Personal Protective Equipment)', icon: HardHat, image: '/personal.jpg', desc: 'Industry-standard safety gear to protect your workforce.' },
-  { title: 'Environmental Protection Equipment', icon: Leaf, image: '/environment.jpg', desc: 'Sustainable solutions for emission control and safe disposal.' },
-  { title: 'Service Solutions', icon: ToolIcon, image: '/services.jpg', desc: 'Expert MRO support and repair services to minimize downtime.' },
+  { title: 'power', icon: Leaf, image: '/power.jpg', desc: 'Sustainable solutions for emission control and safe disposal.' },
+  { title: 'Service Solutions', icon: ToolIcon, image: '/vaccum.jpg', desc: 'Expert MRO support and repair services to minimize downtime.' },
   { title: 'Customized Tools', icon: Cog, image: '/customized.jpg', desc: 'Bespoke tool designs tailored to your specific operational needs.' },
 ];
 
@@ -112,7 +112,8 @@ export default function ServicesSection() {
   const [servicesList, setServicesList] = useState(services);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/portfolio/services')
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${apiBaseUrl}/api/portfolio/services`)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data && data.data.length > 0) {
@@ -181,11 +182,11 @@ export default function ServicesSection() {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12"
           >
             {/* Backdrop */}
-            <div 
+            <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
               onClick={() => setSelectedCategory(null)}
             />
-            
+
             {/* Modal Content */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -215,26 +216,26 @@ export default function ServicesSection() {
               {/* Scrollable grid area */}
               <div className="p-6 md:p-8 overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                   {(dummyTools[selectedCategory.title] || []).map((tool, idx) => (
-                     <div key={idx} className="group flex flex-col bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                       <div className="h-48 w-full bg-slate-50 relative overflow-hidden">
-                         <img src={tool.image} alt={tool.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                         <div className="absolute inset-0 bg-primary-navy/5 group-hover:bg-transparent transition-colors duration-300" />
-                       </div>
-                       <div className="p-5 flex-1 flex flex-col justify-between gap-3">
-                         <h4 className="font-bold text-primary-navy text-lg leading-tight">
-                           {tool.name}
-                         </h4>
-                         <span className="text-xs font-semibold text-primary-blue bg-blue-50 w-max px-3 py-1.5 rounded-md self-start border border-blue-100/50">View specs</span>
-                       </div>
-                     </div>
-                   ))}
-                   
-                   {(!dummyTools[selectedCategory.title] || dummyTools[selectedCategory.title].length === 0) && (
-                     <div className="col-span-full py-12 text-center text-slate-400">
-                       <p>Detailed equipment lists coming soon.</p>
-                     </div>
-                   )}
+                  {(dummyTools[selectedCategory.title] || []).map((tool, idx) => (
+                    <div key={idx} className="group flex flex-col bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                      <div className="h-48 w-full bg-slate-50 relative overflow-hidden">
+                        <img src={tool.image} alt={tool.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-primary-navy/5 group-hover:bg-transparent transition-colors duration-300" />
+                      </div>
+                      <div className="p-5 flex-1 flex flex-col justify-between gap-3">
+                        <h4 className="font-bold text-primary-navy text-lg leading-tight">
+                          {tool.name}
+                        </h4>
+                        <span className="text-xs font-semibold text-primary-blue bg-blue-50 w-max px-3 py-1.5 rounded-md self-start border border-blue-100/50">View specs</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {(!dummyTools[selectedCategory.title] || dummyTools[selectedCategory.title].length === 0) && (
+                    <div className="col-span-full py-12 text-center text-slate-400">
+                      <p>Detailed equipment lists coming soon.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

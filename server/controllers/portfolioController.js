@@ -9,6 +9,9 @@ const defaultConfig = {
   aboutText: 'From industrial tools and MRO solutions to customized technical support, we help organizations maintain safe, efficient, and productive operations.',
   aboutHeaderLight: 'Powering Industries with',
   aboutHeaderBold: 'Precision & Reliability',
+  partnersBgColor1: '#112A4F',
+  partnersBgColor2: '#040C19',
+  partnersBgColor3: '#02060C',
   journey: [
     { year: '2021', event: 'Founded' },
     { year: '2022', event: 'Expanded Portfolio' },
@@ -26,11 +29,11 @@ const defaultConfig = {
     { name: 'Ingersoll Rand', src: '/inger.png', scale: 1.35 },
     { name: 'Stanley Black & Decker', src: '/stanley.png' },
     { name: 'Kärcher', src: '/karcher.png' },
-    { name: 'Eibenstock', src: '/elbenstock.png', scale: 1.35 },
+    { name: 'Eibenstock', src: '/elbenstock.png', scale: 2.5 },
     { name: 'Klingspor', src: '/Klingspor-Emblem.png' },
-    { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.35 },
+    { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.8 },
     { name: 'KOVAX Abrasive Solutions', src: '/kovax.png' },
-    { name: 'Atlas Protective Products', src: '/atlas.png', scale: 1.35 }
+    { name: 'Atlas Protective Products', src: '/atlas.png', scale: 3.5 }
   ],
   customers: [
     { name: 'Nordex India', src: '/nordex-Photoroom.png' },
@@ -191,7 +194,7 @@ exports.getPortfolioConfig = async (req, res) => {
 
 exports.updatePortfolioConfig = async (req, res) => {
   try {
-    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, journey, reasons, partners, customers } = req.body;
+    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers } = req.body;
     
     let config = await PortfolioConfig.findOne();
     if (!config) {
@@ -203,6 +206,9 @@ exports.updatePortfolioConfig = async (req, res) => {
     if (aboutText !== undefined) config.aboutText = aboutText;
     if (aboutHeaderLight !== undefined) config.aboutHeaderLight = aboutHeaderLight;
     if (aboutHeaderBold !== undefined) config.aboutHeaderBold = aboutHeaderBold;
+    if (partnersBgColor1 !== undefined) config.partnersBgColor1 = partnersBgColor1;
+    if (partnersBgColor2 !== undefined) config.partnersBgColor2 = partnersBgColor2;
+    if (partnersBgColor3 !== undefined) config.partnersBgColor3 = partnersBgColor3;
     if (journey !== undefined) config.journey = journey;
     if (reasons !== undefined) config.reasons = reasons;
     if (partners !== undefined) config.partners = partners;

@@ -45,7 +45,8 @@ export default function ActivitiesSection() {
   const [activitiesList, setActivitiesList] = useState(activities);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/portfolio/activities')
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${apiBaseUrl}/api/portfolio/activities`)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data && data.data.length > 0) {

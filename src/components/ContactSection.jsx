@@ -30,8 +30,9 @@ export default function ContactSection() {
     setStatus('submitting');
     setErrorMsg('');
 
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
-      const response = await fetch('http://localhost:5000/api/portfolio/inquiries', {
+      const response = await fetch(`${apiBaseUrl}/api/portfolio/inquiries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

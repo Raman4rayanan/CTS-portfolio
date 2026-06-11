@@ -32,6 +32,8 @@ import {
   ThumbsUp
 } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // Map icon strings to Lucide elements for preview
 const iconMap = {
   Settings,
@@ -77,6 +79,9 @@ export default function AdminPanel() {
     aboutText: '',
     aboutHeaderLight: '',
     aboutHeaderBold: '',
+    partnersBgColor1: '',
+    partnersBgColor2: '',
+    partnersBgColor3: '',
     journey: [],
     reasons: [],
     partners: [],
@@ -154,12 +159,7 @@ export default function AdminPanel() {
   const handleUpdatePartner = (index, field, value) => {
     setCustomizeForm(prev => {
       const newPartners = [...prev.partners];
-      if (field === 'scale') {
-        const val = parseFloat(value);
-        newPartners[index] = { ...newPartners[index], [field]: isNaN(val) ? 1.0 : val };
-      } else {
-        newPartners[index] = { ...newPartners[index], [field]: value };
-      }
+      newPartners[index] = { ...newPartners[index], [field]: value };
       return { ...prev, partners: newPartners };
     });
   };
@@ -182,12 +182,7 @@ export default function AdminPanel() {
   const handleUpdateCustomer = (index, field, value) => {
     setCustomizeForm(prev => {
       const newCustomers = [...prev.customers];
-      if (field === 'scale') {
-        const val = parseFloat(value);
-        newCustomers[index] = { ...newCustomers[index], [field]: isNaN(val) ? 1.0 : val };
-      } else {
-        newCustomers[index] = { ...newCustomers[index], [field]: value };
-      }
+      newCustomers[index] = { ...newCustomers[index], [field]: value };
       return { ...prev, customers: newCustomers };
     });
   };
@@ -213,23 +208,23 @@ export default function AdminPanel() {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       // Stats
-      const statsRes = await fetch('http://localhost:5000/api/admin/stats', { headers });
+      const statsRes = await fetch(`${API_BASE_URL}/api/admin/stats`, { headers });
       const statsData = await statsRes.json();
 
       // Inquiries
-      const inquiriesRes = await fetch('http://localhost:5000/api/admin/inquiries', { headers });
+      const inquiriesRes = await fetch(`${API_BASE_URL}/api/admin/inquiries`, { headers });
       const inquiriesData = await inquiriesRes.json();
 
       // Activities
-      const activitiesRes = await fetch('http://localhost:5000/api/portfolio/activities');
+      const activitiesRes = await fetch(`${API_BASE_URL}/api/portfolio/activities`);
       const activitiesData = await activitiesRes.json();
 
       // Services
-      const servicesRes = await fetch('http://localhost:5000/api/portfolio/services');
+      const servicesRes = await fetch(`${API_BASE_URL}/api/portfolio/services`);
       const servicesData = await servicesRes.json();
 
       // Portfolio Config
-      const configRes = await fetch('http://localhost:5000/api/portfolio/config');
+      const configRes = await fetch(`${API_BASE_URL}/api/portfolio/config?t=${Date.now()}`);
       const configData = await configRes.json();
 
       if (statsData.success && inquiriesData.success && activitiesData.success && servicesData.success && configData.success) {
@@ -244,6 +239,9 @@ export default function AdminPanel() {
           aboutText: configData.data.aboutText || '',
           aboutHeaderLight: configData.data.aboutHeaderLight || '',
           aboutHeaderBold: configData.data.aboutHeaderBold || '',
+          partnersBgColor1: configData.data.partnersBgColor1 || '#112A4F',
+          partnersBgColor2: configData.data.partnersBgColor2 || '#040C19',
+          partnersBgColor3: configData.data.partnersBgColor3 || '#02060C',
           journey: configData.data.journey || [],
           reasons: configData.data.reasons || [],
           partners: configData.data.partners || [],
@@ -266,14 +264,28 @@ export default function AdminPanel() {
     setSaveSuccess('');
     setError('');
     const token = localStorage.getItem('cts_token');
+    
+    // Parse scales to numbers before sending to API
+    const parsedForm = {
+      ...customizeForm,
+      partners: (customizeForm.partners || []).map(p => ({
+        ...p,
+        scale: p.scale === '' || isNaN(parseFloat(p.scale)) ? 1.0 : parseFloat(p.scale)
+      })),
+      customers: (customizeForm.customers || []).map(c => ({
+        ...c,
+        scale: c.scale === '' || isNaN(parseFloat(c.scale)) ? 1.0 : parseFloat(c.scale)
+      }))
+    };
+
     try {
-      const res = await fetch('http://localhost:5000/api/portfolio/config', {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/config`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(customizeForm)
+        body: JSON.stringify(parsedForm)
       });
       const data = await res.json();
       if (data.success) {
@@ -302,7 +314,7 @@ export default function AdminPanel() {
     setError('');
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -327,7 +339,7 @@ export default function AdminPanel() {
     try {
       const token = localStorage.getItem('cts_token');
       if (token) {
-        await fetch('http://localhost:5000/api/admin/logout', {
+        await fetch(`${API_BASE_URL}/api/admin/logout`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -345,7 +357,7 @@ export default function AdminPanel() {
   const handleToggleInquiryRead = async (id, currentReadStatus) => {
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/inquiries/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/inquiries/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -368,7 +380,7 @@ export default function AdminPanel() {
     if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/inquiries/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/inquiries/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -388,7 +400,7 @@ export default function AdminPanel() {
   const fetchStatsOnly = async () => {
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch('http://localhost:5000/api/admin/stats', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -403,7 +415,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch('http://localhost:5000/api/portfolio/activities', {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/activities`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -429,7 +441,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/activities/${selectedItem._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/activities/${selectedItem._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -455,7 +467,7 @@ export default function AdminPanel() {
     if (!window.confirm('Are you sure you want to delete this activity?')) return;
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/activities/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/activities/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -474,7 +486,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch('http://localhost:5000/api/portfolio/services', {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/services`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -500,7 +512,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/services/${selectedItem._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/services/${selectedItem._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -526,7 +538,7 @@ export default function AdminPanel() {
     if (!window.confirm('Are you sure you want to delete this product/service?')) return;
     const token = localStorage.getItem('cts_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/services/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/portfolio/services/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -1271,6 +1283,92 @@ export default function AdminPanel() {
 
                   {/* Partners & Customers Brand Logo Lists */}
                   <div className="grid grid-cols-1 gap-8">
+                    {/* Partners & Customers Section Background Card */}
+                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-white/5 pb-3">
+                        <h4 className="font-bold text-base text-[#2796a9]">Partners & Customers Section Background Gradient</h4>
+                        <p className="text-xs text-white/40 font-light mt-0.5">Customize the radial gradient background of the Partners and Customers sections. You can pick colors visually or type standard Hex/RGB color codes.</p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Color 1 */}
+                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
+                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Center Color (0%)</label>
+                          <div className="flex gap-3 items-center">
+                            <input 
+                              type="color" 
+                              value={customizeForm.partnersBgColor1 && customizeForm.partnersBgColor1.startsWith('#') && customizeForm.partnersBgColor1.length === 7 ? customizeForm.partnersBgColor1 : '#112A4F'} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor1: e.target.value }))}
+                              className="w-10 h-10 border-0 bg-transparent rounded cursor-pointer shrink-0" 
+                            />
+                            <input 
+                              type="text" 
+                              value={customizeForm.partnersBgColor1} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor1: e.target.value }))}
+                              placeholder="#112A4F" 
+                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Color 2 */}
+                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
+                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Middle Color (65%)</label>
+                          <div className="flex gap-3 items-center">
+                            <input 
+                              type="color" 
+                              value={customizeForm.partnersBgColor2 && customizeForm.partnersBgColor2.startsWith('#') && customizeForm.partnersBgColor2.length === 7 ? customizeForm.partnersBgColor2 : '#040C19'} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor2: e.target.value }))}
+                              className="w-10 h-10 border-0 bg-transparent rounded cursor-pointer shrink-0" 
+                            />
+                            <input 
+                              type="text" 
+                              value={customizeForm.partnersBgColor2} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor2: e.target.value }))}
+                              placeholder="#040C19" 
+                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Color 3 */}
+                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
+                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Outer Color (100%)</label>
+                          <div className="flex gap-3 items-center">
+                            <input 
+                              type="color" 
+                              value={customizeForm.partnersBgColor3 && customizeForm.partnersBgColor3.startsWith('#') && customizeForm.partnersBgColor3.length === 7 ? customizeForm.partnersBgColor3 : '#02060C'} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor3: e.target.value }))}
+                              className="w-10 h-10 border-0 bg-transparent rounded cursor-pointer shrink-0" 
+                            />
+                            <input 
+                              type="text" 
+                              value={customizeForm.partnersBgColor3} 
+                              onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor3: e.target.value }))}
+                              placeholder="#02060C" 
+                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Live Gradient Preview inside admin */}
+                      <div className="flex flex-col gap-2 mt-2">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Gradient Preview</label>
+                        <div 
+                          className="h-20 w-full rounded-xl border border-white/10 shadow-inner flex items-center justify-center font-bold text-xs tracking-wider text-white/70"
+                          style={{
+                            background: `radial-gradient(ellipse at center, ${customizeForm.partnersBgColor1 || '#112A4F'} 0%, ${customizeForm.partnersBgColor2 || '#040C19'} 65%, ${customizeForm.partnersBgColor3 || '#02060C'} 100%)`
+                          }}
+                        >
+                          Live Background Preview
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Partners List */}
                     <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
                       <div className="border-b border-white/5 pb-3 flex justify-between items-center">
@@ -1307,7 +1405,7 @@ export default function AdminPanel() {
                                 src={partner.src}
                                 alt={partner.name}
                                 className="max-w-full max-h-full object-contain brightness-0 invert opacity-70"
-                                style={{ transform: `scale(${partner.scale || 1})` }}
+                                style={{ transform: `scale(${parseFloat(partner.scale) || 1})` }}
                                 onError={(e) => { e.target.style.display = 'none'; }}
                               />
                             </div>
@@ -1337,7 +1435,7 @@ export default function AdminPanel() {
                                   step="0.05"
                                   min="0.1"
                                   max="5.0"
-                                  value={partner.scale || 1.0}
+                                  value={partner.scale ?? ''}
                                   onChange={e => handleUpdatePartner(idx, 'scale', e.target.value)}
                                   className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
                                   required
@@ -1391,7 +1489,7 @@ export default function AdminPanel() {
                                 src={customer.src}
                                 alt={customer.name}
                                 className="max-w-full max-h-full object-contain brightness-0 invert opacity-70"
-                                style={{ transform: `scale(${customer.scale || 1})` }}
+                                style={{ transform: `scale(${parseFloat(customer.scale) || 1})` }}
                                 onError={(e) => { e.target.style.display = 'none'; }}
                               />
                             </div>
@@ -1421,7 +1519,7 @@ export default function AdminPanel() {
                                   step="0.05"
                                   min="0.1"
                                   max="5.0"
-                                  value={customer.scale || 1.0}
+                                  value={customer.scale ?? ''}
                                   onChange={e => handleUpdateCustomer(idx, 'scale', e.target.value)}
                                   className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
                                   required

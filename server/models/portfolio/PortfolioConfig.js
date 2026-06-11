@@ -22,6 +22,18 @@ const PortfolioConfigSchema = new mongoose.Schema({
     type: String,
     default: 'Precision & Reliability'
   },
+  partnersBgColor1: {
+    type: String,
+    default: '#112A4F'
+  },
+  partnersBgColor2: {
+    type: String,
+    default: '#040C19'
+  },
+  partnersBgColor3: {
+    type: String,
+    default: '#02060C'
+  },
   journey: [{
     year: { type: String, required: true },
     event: { type: String, required: true }

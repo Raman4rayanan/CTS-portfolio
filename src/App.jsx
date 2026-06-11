@@ -18,7 +18,8 @@ function LandingPage() {
 
   // Fetch portfolio settings config
   useEffect(() => {
-    fetch('http://localhost:5000/api/portfolio/config')
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${apiBaseUrl}/api/portfolio/config?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -61,9 +62,19 @@ function LandingPage() {
         </div>
         
         {/* Layer 2: Partners (scrolls up, then sticks acting as a new background layer) */}
-        <div className="sticky top-0 z-10 w-full min-h-[100svh] bg-[radial-gradient(ellipse_at_center,_#112A4F_0%,_#040C19_65%,_#02060C_100%)] flex flex-col justify-center overflow-hidden">
-          <PartnersSection config={config} />
-        </div>
+        {(() => {
+          const c1 = config?.partnersBgColor1 || '#112A4F';
+          const c2 = config?.partnersBgColor2 || '#040C19';
+          const c3 = config?.partnersBgColor3 || '#02060C';
+          return (
+            <div 
+              className="sticky top-0 z-10 w-full min-h-[100svh] flex flex-col justify-center overflow-hidden"
+              style={{ background: `radial-gradient(ellipse at center, ${c1} 0%, ${c2} 65%, ${c3} 100%)` }}
+            >
+              <PartnersSection config={config} />
+            </div>
+          );
+        })()}
         
         {/* Layer 3: Slides over Partners */}
         <div className="relative z-30 shadow-[0_-20px_40px_rgba(0,0,0,0.5)] bg-white">
