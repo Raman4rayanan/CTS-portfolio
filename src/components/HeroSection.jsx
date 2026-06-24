@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
-  '/image1.png',
-  '/image2.png',
-  '/image3.png'
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278523/port/qssdgzsxxah2fteaiysb.png',
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278556/port/is9uae1dghh7jql2mjqz.png'
 ];
+
 
 export default function HeroSection({ isVisible, config }) {
   const [currentIndex, setCurrentIndex] = useState(0);

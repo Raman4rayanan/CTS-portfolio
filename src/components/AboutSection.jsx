@@ -37,7 +37,12 @@ export default function AboutSection({ config }) {
         icon: iconMap[r.icon] || ShieldCheck
       }))
     : reasons;
-  const aboutImages = ['/about 1.jpg', '/about 2.jpg', '/about 3.jpg', '/about 4.jpg'];
+  const aboutImages = [
+    'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278513/port/oeab1g6omyotxybrfr7z.jpg',
+    'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278513/port/duwpchjvbw0h88pdtvfj.jpg',
+    'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278514/port/u3tft0lgc4bjvdhvijt9.jpg',
+    'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278515/port/vyhmdtke8rcldddixwmb.jpg'
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {

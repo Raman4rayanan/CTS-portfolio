@@ -52,7 +52,7 @@ export default function IntroScreen({ onComplete }) {
           className="relative flex flex-col items-center"
         >
           <motion.img
-            src="/logo.png"
+            src="/admin/logo.png"
             alt="CTS Logo"
             className="w-[85vw] max-w-[500px] h-auto drop-shadow-xl"
             animate={{ y: [0, -5, 0] }}

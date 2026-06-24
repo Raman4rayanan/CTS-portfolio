@@ -85,7 +85,9 @@ export default function AdminPanel() {
     journey: [],
     reasons: [],
     partners: [],
-    customers: []
+    customers: [],
+    cloudinaryCloudName: '',
+    cloudinaryUploadPreset: ''
   });
   const [saveSuccess, setSaveSuccess] = useState('');
   
@@ -99,8 +101,43 @@ export default function AdminPanel() {
   const [viewingInquiry, setViewingInquiry] = useState(null);
 
   // Form states
-  const [activityForm, setActivityForm] = useState({ title: '', subtitle: '', image: '/image1.png', gradient: defaultGradients[0] });
-  const [serviceForm, setServiceForm] = useState({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
+  const [activityForm, setActivityForm] = useState({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
+  const [serviceForm, setServiceForm] = useState({ title: '', icon: 'Settings', image: '/port/pneumatic.png', desc: '' });
+
+  // Cloudinary Upload tracking & handler
+  const [uploadingField, setUploadingField] = useState(null);
+
+  const handleCloudinaryUpload = async (file, folder, callback, trackingKey) => {
+    if (!customizeForm.cloudinaryCloudName || !customizeForm.cloudinaryUploadPreset) {
+      alert('Please configure your Cloudinary Cloud Name and Upload Preset in the settings first!');
+      return;
+    }
+    
+    setUploadingField(trackingKey);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', customizeForm.cloudinaryUploadPreset);
+    formData.append('folder', folder);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${customizeForm.cloudinaryCloudName}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      if (data.secure_url) {
+        callback(data.secure_url);
+      } else {
+        alert(data.error?.message || 'Failed to upload image to Cloudinary.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error uploading image to Cloudinary.');
+    } finally {
+      setUploadingField(null);
+    }
+  };
 
   // Journey Mutations
   const handleAddJourney = () => {
@@ -245,7 +282,9 @@ export default function AdminPanel() {
           journey: configData.data.journey || [],
           reasons: configData.data.reasons || [],
           partners: configData.data.partners || [],
-          customers: configData.data.customers || []
+          customers: configData.data.customers || [],
+          cloudinaryCloudName: configData.data.cloudinaryCloudName || '',
+          cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || ''
         });
       } else {
         setError('Error retrieving data from one or more services.');
@@ -427,7 +466,7 @@ export default function AdminPanel() {
       if (data.success) {
         setActivities(prev => [data.data, ...prev]);
         setActiveModal(null);
-        setActivityForm({ title: '', subtitle: '', image: '/image1.png', gradient: defaultGradients[0] });
+        setActivityForm({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
         fetchStatsOnly();
       } else {
         alert(data.error);
@@ -454,7 +493,7 @@ export default function AdminPanel() {
         setActivities(prev => prev.map(item => item._id === selectedItem._id ? data.data : item));
         setActiveModal(null);
         setSelectedItem(null);
-        setActivityForm({ title: '', subtitle: '', image: '/image1.png', gradient: defaultGradients[0] });
+        setActivityForm({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
       } else {
         alert(data.error);
       }
@@ -498,7 +537,7 @@ export default function AdminPanel() {
       if (data.success) {
         setServices(prev => [data.data, ...prev]);
         setActiveModal(null);
-        setServiceForm({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
+        setServiceForm({ title: '', icon: 'Settings', image: '/port/pneumatic.png', desc: '' });
         fetchStatsOnly();
       } else {
         alert(data.error);
@@ -525,7 +564,7 @@ export default function AdminPanel() {
         setServices(prev => prev.map(item => item._id === selectedItem._id ? data.data : item));
         setActiveModal(null);
         setSelectedItem(null);
-        setServiceForm({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
+        setServiceForm({ title: '', icon: 'Settings', image: '/port/pneumatic.png', desc: '' });
       } else {
         alert(data.error);
       }
@@ -886,7 +925,7 @@ export default function AdminPanel() {
                     <h3 className="font-bold text-lg">Portfolio Activities List</h3>
                     <button
                       onClick={() => {
-                        setActivityForm({ title: '', subtitle: '', image: '/image1.png', gradient: defaultGradients[0] });
+                        setActivityForm({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
                         setActiveModal('create_activity');
                       }}
                       className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
@@ -1202,6 +1241,37 @@ export default function AdminPanel() {
                     </div>
                   </div>
 
+                  {/* Cloudinary Settings Card */}
+                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-white/5 pb-3">
+                      <h4 className="font-bold text-base text-[#2796a9]">Cloudinary Settings</h4>
+                      <p className="text-xs text-white/40 font-light mt-0.5">Configure your Cloudinary credentials to enable direct image uploads from this admin panel. Files will be organized under portfolio/e-commerce folders.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Cloudinary Cloud Name</label>
+                        <input
+                          type="text"
+                          value={customizeForm.cloudinaryCloudName || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, cloudinaryCloudName: e.target.value }))}
+                          placeholder="e.g., dxxabcde"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Unsigned Upload Preset</label>
+                        <input
+                          type="text"
+                          value={customizeForm.cloudinaryUploadPreset || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, cloudinaryUploadPreset: e.target.value }))}
+                          placeholder="e.g., unsigned_preset_name"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Why Choose Us Values Card */}
                   <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
                     <div className="border-b border-white/5 pb-3 flex justify-between items-center">
@@ -1420,14 +1490,35 @@ export default function AdminPanel() {
                                 className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
                                 required
                               />
-                              <input
-                                type="text"
-                                value={partner.src}
-                                onChange={e => handleUpdatePartner(idx, 'src', e.target.value)}
-                                placeholder="Image Path (e.g. /atlas.png)"
-                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all w-full font-light"
-                                required
-                              />
+                              <div className="flex gap-2 items-center">
+                                <input
+                                  type="text"
+                                  value={partner.src}
+                                  onChange={e => handleUpdatePartner(idx, 'src', e.target.value)}
+                                  placeholder="Image Path (e.g. /port/atlas.png)"
+                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  required
+                                />
+                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                  {uploadingField === `partner-${idx}` ? 'Uploading...' : 'Upload'}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    disabled={uploadingField !== null}
+                                    onChange={e => {
+                                      if (e.target.files && e.target.files[0]) {
+                                        handleCloudinaryUpload(
+                                          e.target.files[0],
+                                          'port',
+                                          (url) => handleUpdatePartner(idx, 'src', url),
+                                          `partner-${idx}`
+                                        );
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
                                 <input
@@ -1504,14 +1595,35 @@ export default function AdminPanel() {
                                 className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
                                 required
                               />
-                              <input
-                                type="text"
-                                value={customer.src}
-                                onChange={e => handleUpdateCustomer(idx, 'src', e.target.value)}
-                                placeholder="Image Path (e.g. /suzlon.png)"
-                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all w-full font-light"
-                                required
-                              />
+                              <div className="flex gap-2 items-center">
+                                <input
+                                  type="text"
+                                  value={customer.src}
+                                  onChange={e => handleUpdateCustomer(idx, 'src', e.target.value)}
+                                  placeholder="Image Path (e.g. /port/suzlon.png)"
+                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  required
+                                />
+                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                  {uploadingField === `customer-${idx}` ? 'Uploading...' : 'Upload'}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    disabled={uploadingField !== null}
+                                    onChange={e => {
+                                      if (e.target.files && e.target.files[0]) {
+                                        handleCloudinaryUpload(
+                                          e.target.files[0],
+                                          'port',
+                                          (url) => handleUpdateCustomer(idx, 'src', url),
+                                          `customer-${idx}`
+                                        );
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
                                 <input
@@ -1596,30 +1708,50 @@ export default function AdminPanel() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Image Resource Path</label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Image Resource Path</label>
+                    <div className="flex gap-2">
                       <input 
                         type="text" 
                         value={activityForm.image} 
                         onChange={e => setActivityForm(prev => ({ ...prev, image: e.target.value }))}
-                        placeholder="e.g., /image1.png" 
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                        placeholder="e.g., /port/image1.png" 
+                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
                         required
                       />
+                      <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                        {uploadingField === 'activity' ? 'Uploading...' : 'Upload'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={uploadingField !== null}
+                          onChange={e => {
+                            if (e.target.files && e.target.files[0]) {
+                              handleCloudinaryUpload(
+                                e.target.files[0],
+                                'port',
+                                (url) => setActivityForm(prev => ({ ...prev, image: url })),
+                                'activity'
+                              );
+                            }
+                          }}
+                        />
+                      </label>
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Select Theme Gradient</label>
-                      <select
-                        value={activityForm.gradient}
-                        onChange={e => setActivityForm(prev => ({ ...prev, gradient: e.target.value }))}
-                        className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
-                      >
-                        {defaultGradients.map((g, idx) => (
-                          <option key={idx} value={g}>Theme Gradient {idx + 1}</option>
-                        ))}
-                      </select>
-                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Select Theme Gradient</label>
+                    <select
+                      value={activityForm.gradient}
+                      onChange={e => setActivityForm(prev => ({ ...prev, gradient: e.target.value }))}
+                      className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+                    >
+                      {defaultGradients.map((g, idx) => (
+                        <option key={idx} value={g}>Theme Gradient {idx + 1}</option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Gradient Preview */}
@@ -1670,14 +1802,35 @@ export default function AdminPanel() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Image Path</label>
-                    <input 
-                      type="text" 
-                      value={serviceForm.image} 
-                      onChange={e => setServiceForm(prev => ({ ...prev, image: e.target.value }))}
-                      placeholder="e.g., /pneumatic.png" 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
-                      required
-                    />
+                    <div className="flex gap-2">
+                      <input 
+                        type="text" 
+                        value={serviceForm.image} 
+                        onChange={e => setServiceForm(prev => ({ ...prev, image: e.target.value }))}
+                        placeholder="e.g., /port/pneumatic.png" 
+                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                        required
+                      />
+                      <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                        {uploadingField === 'service' ? 'Uploading...' : 'Upload'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={uploadingField !== null}
+                          onChange={e => {
+                            if (e.target.files && e.target.files[0]) {
+                              handleCloudinaryUpload(
+                                e.target.files[0],
+                                'port',
+                                (url) => setServiceForm(prev => ({ ...prev, image: url })),
+                                'service'
+                              );
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">

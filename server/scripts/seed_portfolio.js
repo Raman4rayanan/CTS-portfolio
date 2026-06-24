@@ -10,94 +10,94 @@ const activities = [
   {
     title: 'Work Updates',
     subtitle: 'Latest developments and operational milestones from our daily industrial engagements.',
-    image: '/image1.png',
+    image: '/port/image1.png',
     gradient: 'linear-gradient(135deg, #0F4C81, #0B1F3A)',
   },
   {
     title: 'Project Highlights',
     subtitle: 'Showcasing our recent successful implementations and turnkey solutions.',
-    image: '/image2.png',
+    image: '/port/image2.png',
     gradient: 'linear-gradient(135deg, #198e9d, #0B1F3A)',
   },
   {
     title: 'Product Demonstrations',
     subtitle: 'On-site technical demonstrations of our newest power tools and equipment.',
-    image: '/image3.png',
+    image: '/port/image3.png',
     gradient: 'linear-gradient(135deg, #016A8A, #053b4d)',
   },
   {
     title: 'Client Visits',
     subtitle: 'Building lasting partnerships through on-site visits and collaborative consultations with our clients.',
-    image: '/image1.png',
+    image: '/port/image1.png',
     gradient: 'linear-gradient(135deg, #1a3a5c, #0B1F3A)',
   },
   {
     title: 'Training & Workshops',
     subtitle: 'Empowering our teams with the latest safety protocols, tool handling skills, and industry best practices.',
-    image: '/image2.png',
+    image: '/port/image2.png',
     gradient: 'linear-gradient(135deg, #0e5c6e, #0B1F3A)',
   },
   {
     title: 'Trade Exhibitions',
     subtitle: 'Representing CTS at premier industrial expos to showcase innovations and connect with global partners.',
-    image: '/image3.png',
+    image: '/port/image3.png',
     gradient: 'linear-gradient(135deg, #0a4a7a, #0B1F3A)',
   },
 ];
 
 const services = [
   { 
-    title: 'Pneumatic Tools', 
-    icon: 'Settings', 
-    image: '/pneumatic.png', 
-    desc: 'High-performance air-powered tools for heavy-duty applications.' 
+    title: 'Lifting Equipment', 
+    icon: 'ArrowUpSquare', 
+    image: '/port/lifting.jpg', 
+    desc: 'Safe and certified lifting gear for seamless material handling.' 
   },
   { 
-    title: 'Power Tools', 
-    icon: 'PenTool', 
-    image: '/power.jpeg', 
-    desc: 'Reliable and efficient electric tools for precision and power.' 
+    title: 'Pneumatic Tools', 
+    icon: 'Settings', 
+    image: '/port/pneumatic.png', 
+    desc: 'High-performance air-powered tools for heavy-duty applications.' 
   },
   { 
     title: 'Hand Tools', 
     icon: 'Wrench', 
-    image: '/hand.jpg', 
+    image: '/port/hand.jpg', 
     desc: 'Durable manual tools crafted for everyday industrial tasks.' 
   },
   { 
     title: 'Storage Cabinets', 
     icon: 'Archive', 
-    image: '/storage.jpg', 
+    image: '/port/storage.jpg', 
     desc: 'Robust industrial storage solutions to keep workspaces organized.' 
   },
   { 
-    title: 'Lifting Equipment', 
-    icon: 'ArrowUpSquare', 
-    image: '/lifting.jpg', 
-    desc: 'Safe and certified lifting gear for seamless material handling.' 
+    title: 'Power Tools', 
+    icon: 'PenTool', 
+    image: '/port/power.jpg', 
+    desc: 'Reliable and efficient electric tools for precision and power.' 
   },
   { 
     title: 'PPE (Personal Protective Equipment)', 
     icon: 'HardHat', 
-    image: '/personal.jpg', 
+    image: '/port/personal.jpg', 
     desc: 'Industry-standard safety gear to protect your workforce.' 
   },
   { 
     title: 'Environmental Protection Equipment', 
     icon: 'Leaf', 
-    image: '/environment.jpg', 
+    image: '/port/environment.jpg', 
     desc: 'Sustainable solutions for emission control and safe disposal.' 
   },
   { 
     title: 'Service Solutions', 
     icon: 'Wrench', 
-    image: '/services.jpg', 
+    image: '/port/services.jpg', 
     desc: 'Expert MRO support and repair services to minimize downtime.' 
   },
   { 
     title: 'Customized Tools', 
     icon: 'Cog', 
-    image: '/customized.jpg', 
+    image: '/port/customized.jpg', 
     desc: 'Bespoke tool designs tailored to your specific operational needs.' 
   },
 ];

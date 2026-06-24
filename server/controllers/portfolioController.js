@@ -12,6 +12,8 @@ const defaultConfig = {
   partnersBgColor1: '#112A4F',
   partnersBgColor2: '#040C19',
   partnersBgColor3: '#02060C',
+  cloudinaryCloudName: '',
+  cloudinaryUploadPreset: '',
   journey: [
     { year: '2021', event: 'Founded' },
     { year: '2022', event: 'Expanded Portfolio' },
@@ -25,24 +27,24 @@ const defaultConfig = {
     { title: 'Reliable Service', icon: 'ThumbsUp', desc: 'Consistent support you can count on.' }
   ],
   partners: [
-    { name: 'Bosch Power Tools', src: '/boach-Photoroom.png' },
-    { name: 'Ingersoll Rand', src: '/inger.png', scale: 1.35 },
-    { name: 'Stanley Black & Decker', src: '/stanley.png' },
-    { name: 'Kärcher', src: '/karcher.png' },
-    { name: 'Eibenstock', src: '/elbenstock.png', scale: 2.5 },
-    { name: 'Klingspor', src: '/Klingspor-Emblem.png' },
-    { name: 'Cromwell Tools Industries', src: '/comwell.png', scale: 1.8 },
-    { name: 'KOVAX Abrasive Solutions', src: '/kovax.png' },
-    { name: 'Atlas Protective Products', src: '/atlas.png', scale: 3.5 }
+    { name: 'Bosch Power Tools', src: '/port/boach-Photoroom.png' },
+    { name: 'Ingersoll Rand', src: '/port/inger.png', scale: 1.35 },
+    { name: 'Stanley Black & Decker', src: '/port/stanley.png' },
+    { name: 'Kärcher', src: '/port/karcher.png' },
+    { name: 'Eibenstock', src: '/port/elbenstock.png', scale: 2.5 },
+    { name: 'Klingspor', src: '/port/Klingspor-Emblem.png' },
+    { name: 'Cromwell Tools Industries', src: '/port/comwell.png', scale: 1.8 },
+    { name: 'KOVAX Abrasive Solutions', src: '/port/kovax.png' },
+    { name: 'Atlas Protective Products', src: '/port/atlas.png', scale: 3.5 }
   ],
   customers: [
-    { name: 'Nordex India', src: '/nordex-Photoroom.png' },
-    { name: 'Senvion India', src: '/Senvion-Photoroom.png' },
-    { name: 'Suzlon Energy', src: '/suzlon-Photoroom.png', scale: 1.35 },
-    { name: 'Gurit Wind', src: '/gurit-Photoroom.png' },
-    { name: 'Indocool Composites', src: '/indocool-Photoroom.png' },
-    { name: 'Stellantis Avtec Powertrain', src: '/Stellantis-Photoroom.png', scale: 1.35 },
-    { name: 'Exeraxis India', src: '/EVERAXIS-Photoroom.png', scale: 1.35 }
+    { name: 'Nordex India', src: '/port/nordex-Photoroom.png' },
+    { name: 'Senvion India', src: '/port/Senvion-Photoroom.png' },
+    { name: 'Suzlon Energy', src: '/port/suzlon-Photoroom.png', scale: 1.35 },
+    { name: 'Gurit Wind', src: '/port/gurit-Photoroom.png' },
+    { name: 'Indocool Composites', src: '/port/indocool-Photoroom.png' },
+    { name: 'Stellantis Avtec Powertrain', src: '/port/Stellantis-Photoroom.png', scale: 1.35 },
+    { name: 'Exeraxis India', src: '/port/EVERAXIS-Photoroom.png', scale: 1.35 }
   ]
 };
 
@@ -108,7 +110,7 @@ exports.deleteActivity = async (req, res) => {
 // ===== PRODUCT SERVICES CONTROLLER =====
 exports.getServices = async (req, res) => {
   try {
-    const services = await ProductService.find().sort({ createdAt: -1 });
+    const services = await ProductService.find().sort({ createdAt: 1 });
     res.json({ success: true, count: services.length, data: services });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -194,7 +196,7 @@ exports.getPortfolioConfig = async (req, res) => {
 
 exports.updatePortfolioConfig = async (req, res) => {
   try {
-    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers } = req.body;
+    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers, cloudinaryCloudName, cloudinaryUploadPreset } = req.body;
     
     let config = await PortfolioConfig.findOne();
     if (!config) {
@@ -213,6 +215,8 @@ exports.updatePortfolioConfig = async (req, res) => {
     if (reasons !== undefined) config.reasons = reasons;
     if (partners !== undefined) config.partners = partners;
     if (customers !== undefined) config.customers = customers;
+    if (cloudinaryCloudName !== undefined) config.cloudinaryCloudName = cloudinaryCloudName;
+    if (cloudinaryUploadPreset !== undefined) config.cloudinaryUploadPreset = cloudinaryUploadPreset;
 
     await config.save();
     res.json({ success: true, data: config });

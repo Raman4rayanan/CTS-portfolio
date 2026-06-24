@@ -52,7 +52,15 @@ const PortfolioConfigSchema = new mongoose.Schema({
     name: { type: String, required: true },
     src: { type: String, required: true },
     scale: { type: Number, default: 1 }
-  }]
+  }],
+  cloudinaryCloudName: {
+    type: String,
+    default: ''
+  },
+  cloudinaryUploadPreset: {
+    type: String,
+    default: ''
+  }
 }, { timestamps: true });
 
 // Bind to portfolioDb connection

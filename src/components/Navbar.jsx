@@ -113,7 +113,7 @@ export default function Navbar({ isVisible }) {
 
             {/* Logo */}
             <a href="#" onClick={() => setMobileOpen(false)} className="py-2 shrink-0 -translate-x-2 md:-translate-x-4">
-              <img src="/logo.png" alt="CTS Logo" className="h-12 md:h-20 lg:h-24 w-auto object-contain origin-left object-left" />
+              <img src="/admin/logo.png" alt="CTS Logo" className="h-12 md:h-20 lg:h-24 w-auto object-contain origin-left object-left" />
             </a>
 
             {/* Desktop Links */}
