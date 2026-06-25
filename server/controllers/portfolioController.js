@@ -45,6 +45,27 @@ const defaultConfig = {
     { name: 'Indocool Composites', src: '/port/indocool-Photoroom.png' },
     { name: 'Stellantis Avtec Powertrain', src: '/port/Stellantis-Photoroom.png', scale: 1.35 },
     { name: 'Exeraxis India', src: '/port/EVERAXIS-Photoroom.png', scale: 1.35 }
+  ],
+  ecommBannerText: 'CTS B2B Procurement Desk - Fast Quotations & Logistics',
+  ecommSlides: [
+    {
+      title: 'High-Performance Pneumatics',
+      subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+      tag: 'PNEUMATICS'
+    },
+    {
+      title: 'Precision German Engineering',
+      subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+      tag: 'POWER TOOLS'
+    },
+    {
+      title: 'HSE Safety Standard Gear',
+      subtitle: 'Full protective equipment for hazardous work sites',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg',
+      tag: 'SAFETY'
+    }
   ]
 };
 

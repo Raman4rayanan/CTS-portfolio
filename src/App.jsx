@@ -11,6 +11,8 @@ import PartnersSection from './components/PartnersSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
+import ShopPage from './components/ShopPage';
+
 
 function LandingPage() {
   const [showIntro, setShowIntro] = useState(true);
@@ -91,6 +93,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/admin" element={<AdminPanel />} />
+      <Route path="/shop" element={<ShopPage />} />
     </Routes>
   );
 }

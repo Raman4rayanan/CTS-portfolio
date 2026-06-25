@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sampleProducts } from '../data/sampleProducts';
 import { 
   LayoutDashboard, 
   Inbox, 
@@ -29,7 +30,12 @@ import {
   Cog,
   ShieldCheck,
   Cpu,
-  ThumbsUp
+  ThumbsUp,
+  ShoppingCart,
+  Search,
+  SlidersHorizontal,
+  Download,
+  Upload
 } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -97,12 +103,35 @@ export default function AdminPanel() {
 
   // CRUD Modals state
   const [activeModal, setActiveModal] = useState(null); // 'create_activity', 'edit_activity', 'create_service', 'edit_service'
+  const [deleteConfirmData, setDeleteConfirmData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [viewingInquiry, setViewingInquiry] = useState(null);
 
   // Form states
   const [activityForm, setActivityForm] = useState({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
   const [serviceForm, setServiceForm] = useState({ title: '', icon: 'Settings', image: '/port/pneumatic.png', desc: '' });
+
+  // E-commerce state variables
+  const [ecommProducts, setEcommProducts] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [quoteSearchQuery, setQuoteSearchQuery] = useState('');
+  const [quoteFilterStatus, setQuoteFilterStatus] = useState('All');
+  const [newInternalNote, setNewInternalNote] = useState('');
+  const [selectedQuote, setSelectedQuote] = useState(null);
+  const [csvText, setCsvText] = useState('');
+  const [ecommProductForm, setEcommProductForm] = useState({
+    product_id: '',
+    sku: '',
+    brand: 'Ingersoll Rand',
+    category: 'Power Tools',
+    type: '',
+    sub_type: '',
+    model: '',
+    product_name: '',
+    description: '',
+    specifications: '',
+    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+  });
 
   // Cloudinary Upload tracking & handler
   const [uploadingField, setUploadingField] = useState(null);
@@ -286,6 +315,30 @@ export default function AdminPanel() {
           cloudinaryCloudName: configData.data.cloudinaryCloudName || '',
           cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || ''
         });
+
+        // E-commerce items loading from backend API
+        try {
+          const ecommRes = await fetch(`${API_BASE_URL}/api/ecomm/products`);
+          const ecommData = await ecommRes.json();
+          if (ecommData.success) {
+            setEcommProducts(ecommData.data);
+            localStorage.setItem('cts_products', JSON.stringify(ecommData.data));
+          } else {
+            const savedProducts = localStorage.getItem('cts_products');
+            setEcommProducts(savedProducts ? JSON.parse(savedProducts) : sampleProducts);
+          }
+        } catch (ecommErr) {
+          console.error('Error fetching catalog products:', ecommErr);
+          const savedProducts = localStorage.getItem('cts_products');
+          setEcommProducts(savedProducts ? JSON.parse(savedProducts) : sampleProducts);
+        }
+
+        const savedQuotes = localStorage.getItem('cts_quotes');
+        if (savedQuotes) {
+          setQuotes(JSON.parse(savedQuotes));
+        } else {
+          setQuotes([]);
+        }
       } else {
         setError('Error retrieving data from one or more services.');
       }
@@ -415,25 +468,30 @@ export default function AdminPanel() {
     }
   };
 
-  const handleDeleteInquiry = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
-    const token = localStorage.getItem('cts_token');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/admin/inquiries/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setInquiries(prev => prev.filter(item => item._id !== id));
-        if (viewingInquiry && viewingInquiry._id === id) {
-          setViewingInquiry(null);
+  const handleDeleteInquiry = (id) => {
+    setDeleteConfirmData({
+      title: 'Delete Inquiry',
+      message: 'Are you sure you want to delete this inquiry? This action is permanent and cannot be undone.',
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/admin/inquiries/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setInquiries(prev => prev.filter(item => item._id !== id));
+            if (viewingInquiry && viewingInquiry._id === id) {
+              setViewingInquiry(null);
+            }
+            fetchStatsOnly();
+          }
+        } catch (err) {
+          console.error(err);
         }
-        fetchStatsOnly();
       }
-    } catch (err) {
-      console.error(err);
-    }
+    });
   };
 
   const fetchStatsOnly = async () => {
@@ -502,22 +560,27 @@ export default function AdminPanel() {
     }
   };
 
-  const handleDeleteActivity = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this activity?')) return;
-    const token = localStorage.getItem('cts_token');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/portfolio/activities/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setActivities(prev => prev.filter(item => item._id !== id));
-        fetchStatsOnly();
+  const handleDeleteActivity = (id) => {
+    setDeleteConfirmData({
+      title: 'Delete Portfolio Activity',
+      message: 'Are you sure you want to delete this activity? This action is permanent and cannot be undone.',
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/portfolio/activities/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setActivities(prev => prev.filter(item => item._id !== id));
+            fetchStatsOnly();
+          }
+        } catch (err) {
+          console.error(err);
+        }
       }
-    } catch (err) {
-      console.error(err);
-    }
+    });
   };
 
   // Services CRUD
@@ -573,22 +636,27 @@ export default function AdminPanel() {
     }
   };
 
-  const handleDeleteService = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this product/service?')) return;
-    const token = localStorage.getItem('cts_token');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/portfolio/services/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setServices(prev => prev.filter(item => item._id !== id));
-        fetchStatsOnly();
+  const handleDeleteService = (id) => {
+    setDeleteConfirmData({
+      title: 'Delete Product/Service Capability',
+      message: 'Are you sure you want to delete this capability? This action is permanent and cannot be undone.',
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/portfolio/services/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setServices(prev => prev.filter(item => item._id !== id));
+            fetchStatsOnly();
+          }
+        } catch (err) {
+          console.error(err);
+        }
       }
-    } catch (err) {
-      console.error(err);
-    }
+    });
   };
 
   // Login view if not logged in
@@ -646,6 +714,16 @@ export default function AdminPanel() {
             active={activeTab === 'customize'} 
             onClick={() => setActiveTab('customize')} 
           />
+
+          <div className="text-[10px] uppercase font-bold tracking-widest text-white/35 px-4 mt-6 mb-2">
+            E-commerce
+          </div>
+          <SidebarLink 
+            label="Catalog Manager" 
+            icon={<ShoppingCart size={18} />} 
+            active={activeTab === 'ecomm'} 
+            onClick={() => setActiveTab('ecomm')} 
+          />
         </nav>
 
         <div className="p-4 border-t border-white/5 flex flex-col gap-2">
@@ -673,7 +751,7 @@ export default function AdminPanel() {
         {/* Header */}
         <header className="h-24 border-b border-white/5 px-8 flex items-center justify-between bg-slate-950/20 backdrop-blur-md">
           <h2 className="text-2xl font-bold tracking-wide capitalize">
-            {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : `${activeTab} Management`}
+            {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog Management' : `${activeTab} Management`}
           </h2>
           <div className="flex items-center gap-4">
             <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-cyan-500/10 text-[#2796a9] border border-cyan-500/20 uppercase">
@@ -698,7 +776,7 @@ export default function AdminPanel() {
               {activeTab === 'dashboard' && stats && (
                 <div className="flex flex-col gap-8">
                   {/* Summary Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                     <DashboardCard 
                       title="Total Inquiries" 
                       value={stats.portfolio.inquiries} 
@@ -728,6 +806,12 @@ export default function AdminPanel() {
                       value={stats.portfolio.services} 
                       icon={<Hammer className="text-teal-400" />} 
                       color="from-teal-500/10 to-teal-500/5 border-teal-500/10"
+                    />
+                    <DashboardCard 
+                      title="E-comm Catalog" 
+                      value={stats.ecommerce?.products || 0} 
+                      icon={<ShoppingCart className="text-pink-400" />} 
+                      color="from-pink-500/10 to-pink-500/5 border-pink-500/10"
                     />
                   </div>
 
@@ -786,12 +870,16 @@ export default function AdminPanel() {
                           <span className="font-semibold text-white">Connected</span>
                         </div>
                         <div className="flex justify-between border-b border-white/5 pb-2">
+                          <span>E-commerce DB Connection (cts_ecomm)</span>
+                          <span className="font-semibold text-white">Connected</span>
+                        </div>
+                        <div className="flex justify-between border-b border-white/5 pb-2">
                           <span>Registered Admin Users</span>
                           <span className="font-semibold text-white">{stats.admin.users}</span>
                         </div>
                         <div className="flex justify-between pb-1">
                           <span>Total DB Entities Managed</span>
-                          <span className="font-semibold text-[#2796a9]">{stats.portfolio.inquiries + stats.portfolio.activities + stats.portfolio.services}</span>
+                          <span className="font-semibold text-[#2796a9]">{stats.portfolio.inquiries + stats.portfolio.activities + stats.portfolio.services + (stats.ecommerce?.products || 0)}</span>
                         </div>
                       </div>
                     </div>
@@ -1651,6 +1739,20 @@ export default function AdminPanel() {
                   </div>
                 </form>
               )}
+
+              {/* E-COMMERCE CATALOG TAB */}
+              {activeTab === 'ecomm' && (
+                <EcommCatalogManager 
+                  products={ecommProducts} 
+                  setProducts={setEcommProducts}
+                  setActiveModal={setActiveModal}
+                  setSelectedItem={setSelectedItem}
+                  setEcommProductForm={setEcommProductForm}
+                  API_BASE_URL={API_BASE_URL}
+                  fetchStatsOnly={fetchStatsOnly}
+                  setDeleteConfirmData={setDeleteConfirmData}
+                />
+              )}
             </>
           )}
         </div>
@@ -1666,15 +1768,23 @@ export default function AdminPanel() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative z-10 text-white"
+              className={`bg-slate-900 border border-white/10 rounded-2xl w-full overflow-hidden shadow-2xl relative z-10 text-white transition-all duration-300 ${
+                activeModal === 'import_ecomm_csv' || activeModal === 'create_ecomm_product' || activeModal === 'edit_ecomm_product'
+                  ? 'max-w-3xl'
+                  : 'max-w-lg'
+              }`}
             >
               {/* Modal Header */}
               <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-bold text-lg">
+                <h3 className="font-bold text-lg text-white">
                   {activeModal === 'create_activity' && 'Add New Activity'}
                   {activeModal === 'edit_activity' && 'Edit Activity'}
                   {activeModal === 'create_service' && 'Add Product/Service Capability'}
                   {activeModal === 'edit_service' && 'Edit Product/Service Capability'}
+                  {activeModal === 'create_ecomm_product' && 'Add E-commerce Product'}
+                  {activeModal === 'edit_ecomm_product' && 'Edit E-commerce Product'}
+                  {activeModal === 'import_ecomm_csv' && 'Import Catalog via CSV'}
+                  {activeModal === 'mass_delete_ecomm' && 'Mass Delete Catalog Products'}
                 </h3>
                 <button onClick={() => setActiveModal(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
                   <XCircle size={20} />
@@ -1852,6 +1962,84 @@ export default function AdminPanel() {
                   </div>
                 </form>
               )}
+
+              {/* E-COMMERCE PRODUCT MODAL */}
+              {(activeModal === 'create_ecomm_product' || activeModal === 'edit_ecomm_product') && (
+                <EcommProductFormModal
+                  activeModal={activeModal}
+                  selectedItem={selectedItem}
+                  ecommProductForm={ecommProductForm}
+                  setEcommProductForm={setEcommProductForm}
+                  setProducts={setEcommProducts}
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
+                  fetchStatsOnly={fetchStatsOnly}
+                  handleCloudinaryUpload={handleCloudinaryUpload}
+                  uploadingField={uploadingField}
+                  setUploadingField={setUploadingField}
+                  customizeForm={customizeForm}
+                />
+              )}
+
+              {/* CSV IMPORT MODAL */}
+              {activeModal === 'import_ecomm_csv' && (
+                <EcommCsvImportModal
+                  setProducts={setEcommProducts}
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
+                  fetchStatsOnly={fetchStatsOnly}
+                />
+              )}
+
+              {/* MASS DELETE MODAL */}
+              {activeModal === 'mass_delete_ecomm' && (
+                <EcommMassDeleteModal
+                  products={ecommProducts}
+                  setProducts={setEcommProducts}
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
+                  fetchStatsOnly={fetchStatsOnly}
+                />
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* CUSTOM DELETE CONFIRMATION DIALOG */}
+      <AnimatePresence>
+        {deleteConfirmData && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setDeleteConfirmData(null)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative z-10 text-white p-6 flex flex-col gap-4"
+            >
+              <h3 className="font-bold text-lg text-white tracking-wide">{deleteConfirmData.title}</h3>
+              <p className="text-sm font-light text-white/70 leading-relaxed">
+                {deleteConfirmData.message}
+              </p>
+              <div className="flex gap-3 justify-end mt-2 pt-2 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmData(null)}
+                  className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    deleteConfirmData.onConfirm();
+                    setDeleteConfirmData(null);
+                  }}
+                  className="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl text-xs font-semibold cursor-pointer text-white shadow-lg shadow-red-600/20"
+                >
+                  Confirm Delete
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
@@ -1984,5 +2172,1149 @@ function AdminLogin({ onSubmit, error, loading }) {
         </form>
       </motion.div>
     </div>
+  );
+}
+
+// ==========================================
+// E-COMMERCE SUB-COMPONENTS
+// ==========================================
+
+// EcommCatalogManager Component
+function EcommCatalogManager({ products, setProducts, setActiveModal, setSelectedItem, setEcommProductForm, API_BASE_URL, fetchStatsOnly, setDeleteConfirmData }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [brandFilter, setBrandFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const approvedBrands = [
+    'Atlas Protective Products',
+    'Bosch Power Tools',
+    'Cromwell Tools Industries',
+    'Eibenstock',
+    'Ingersoll Rand',
+    'Stanley Black & Decker'
+  ];
+
+  // Filtering products
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = !searchQuery.trim() || 
+      p.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.sku?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.product_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.model?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    const matchesBrand = brandFilter === 'All' || p.brand === brandFilter;
+    
+    return matchesSearch && matchesBrand;
+  });
+
+  // Pagination calculation
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleEditClick = (product) => {
+    setSelectedItem(product);
+    setEcommProductForm({
+      product_id: product.product_id || '',
+      sku: product.sku || '',
+      brand: product.brand || 'Ingersoll Rand',
+      category: product.category || 'Power Tools',
+      type: product.type || '',
+      sub_type: product.sub_type || '',
+      model: product.model || '',
+      product_name: product.product_name || '',
+      description: product.description || '',
+      specifications: product.specifications || '',
+      image: product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+    });
+    setActiveModal('edit_ecomm_product');
+  };
+
+  const handleAddClick = () => {
+    setSelectedItem(null);
+    setEcommProductForm({
+      product_id: '',
+      sku: '',
+      brand: 'Ingersoll Rand',
+      category: 'Power Tools',
+      type: '',
+      sub_type: '',
+      model: '',
+      product_name: '',
+      description: '',
+      specifications: '',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+    });
+    setActiveModal('create_ecomm_product');
+  };
+
+  const handleDeleteProduct = (id) => {
+    setDeleteConfirmData({
+      title: 'Delete Catalog Product',
+      message: 'Are you sure you want to delete this catalog product? This action is permanent and cannot be undone.',
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/ecomm/products/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setProducts(prev => prev.filter(p => p._id !== id));
+            fetchStatsOnly();
+            if (paginatedProducts.length === 1 && currentPage > 1) {
+              setCurrentPage(currentPage - 1);
+            }
+          } else {
+            alert(data.error || 'Failed to delete product.');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Connection error.');
+        }
+      }
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Header controls bar */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/20 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+        <div className="relative flex-1 w-full max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" size={16} />
+          <input
+            type="text"
+            placeholder="Search by name, SKU, ID, model..."
+            value={searchQuery}
+            onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:border-[#2796a9] outline-none text-white transition-all font-light"
+          />
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Brand select filter */}
+          <select
+            value={brandFilter}
+            onChange={e => { setBrandFilter(e.target.value); setCurrentPage(1); }}
+            className="bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none transition-all cursor-pointer"
+          >
+            <option value="All">All Brands</option>
+            {approvedBrands.map(b => (
+              <option key={b} value={b}>{b}</option>
+            ))}
+          </select>
+
+          {/* Mass Delete */}
+          <button
+            onClick={() => setActiveModal('mass_delete_ecomm')}
+            className="px-4 py-2.5 bg-red-600/10 hover:bg-red-650/20 text-red-400 border border-red-500/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Trash2 size={14} />
+            <span>Mass Delete</span>
+          </button>
+
+          {/* Import CSV */}
+          <button
+            onClick={() => setActiveModal('import_ecomm_csv')}
+            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/10 transition-all cursor-pointer text-white"
+          >
+            <Upload size={14} />
+            <span>CSV Import</span>
+          </button>
+
+          {/* Add Product */}
+          <button
+            onClick={handleAddClick}
+            className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-white"
+          >
+            <Plus size={16} />
+            <span>Add Product</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Products Table */}
+      <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr className="bg-white/5 border-b border-white/5 text-white/50 text-xs uppercase tracking-wider">
+                <th className="p-4">Image</th>
+                <th className="p-4">Product ID / SKU</th>
+                <th className="p-4">Name / Model</th>
+                <th className="p-4">Brand</th>
+                <th className="p-4">Category</th>
+                <th className="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedProducts.map(prod => (
+                <tr key={prod._id || prod.product_id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <td className="p-4">
+                    <div className="w-12 h-12 rounded-lg border border-white/10 overflow-hidden bg-slate-950 flex items-center justify-center p-1">
+                      <img 
+                        src={prod.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
+                        alt={prod.product_name} 
+                        className="max-w-full max-h-full object-contain"
+                        onError={(e) => { e.target.src = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'; }}
+                      />
+                    </div>
+                  </td>
+                  <td className="p-4 font-mono text-xs">
+                    <div className="text-white font-semibold">{prod.product_id}</div>
+                    <div className="text-white/40 mt-0.5">{prod.sku}</div>
+                  </td>
+                  <td className="p-4 max-w-[240px]">
+                    <div className="font-bold text-white truncate">{prod.product_name}</div>
+                    <div className="text-xs text-white/50 mt-0.5 truncate">{prod.model || 'No model'}</div>
+                  </td>
+                  <td className="p-4 text-xs font-semibold text-white/80">{prod.brand}</td>
+                  <td className="p-4 text-xs text-white/60">
+                    <div>{prod.category}</div>
+                    <div className="text-[10px] text-white/40 mt-0.5">{prod.type || '-'}</div>
+                  </td>
+                  <td className="p-4 text-right">
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={() => handleEditClick(prod)}
+                        className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                        title="Edit Product"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(prod._id)}
+                        className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                        title="Delete Product"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {paginatedProducts.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center py-16 text-white/30 text-sm">
+                    No products found matching filters.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-between items-center p-4 bg-slate-950/20 border-t border-white/5 text-xs text-white/50">
+            <span>Showing {Math.min(filteredProducts.length, (currentPage - 1) * itemsPerPage + 1)} to {Math.min(filteredProducts.length, currentPage * itemsPerPage)} of {filteredProducts.length} entries</span>
+            <div className="flex gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => prev - 1)}
+                className="px-3 py-1.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg disabled:opacity-30 disabled:hover:bg-white/5 cursor-pointer transition-all"
+              >
+                Previous
+              </button>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => prev + 1)}
+                className="px-3 py-1.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg disabled:opacity-30 disabled:hover:bg-white/5 cursor-pointer transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// EcommProductFormModal Component
+function EcommProductFormModal({
+  activeModal,
+  selectedItem,
+  ecommProductForm,
+  setEcommProductForm,
+  setProducts,
+  setActiveModal,
+  API_BASE_URL,
+  fetchStatsOnly,
+  handleCloudinaryUpload,
+  uploadingField,
+  setUploadingField,
+  customizeForm
+}) {
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const approvedBrands = [
+    'Atlas Protective Products',
+    'Bosch Power Tools',
+    'Cromwell Tools Industries',
+    'Eibenstock',
+    'Ingersoll Rand',
+    'Stanley Black & Decker'
+  ];
+
+  const categories = [
+    'Power Tools',
+    'Safety Equipment',
+    'Industrial Cleaning',
+    'Accessories'
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    
+    // Validations
+    if (!ecommProductForm.product_id.trim() || !ecommProductForm.sku.trim() || !ecommProductForm.product_name.trim()) {
+      setError('Product ID, SKU, and Product Name are required.');
+      return;
+    }
+
+    if (!approvedBrands.includes(ecommProductForm.brand)) {
+      setError('Please select a valid approved brand.');
+      return;
+    }
+
+    setSubmitting(true);
+    const token = localStorage.getItem('cts_token');
+
+    // Assemble payload
+    const payload = {
+      product_id: ecommProductForm.product_id.trim(),
+      sku: ecommProductForm.sku.trim(),
+      brand: ecommProductForm.brand,
+      category: ecommProductForm.category,
+      type: ecommProductForm.type.trim(),
+      sub_type: ecommProductForm.sub_type.trim(),
+      model: ecommProductForm.model.trim(),
+      product_name: ecommProductForm.product_name.trim(),
+      description: ecommProductForm.description.trim(),
+      specifications: ecommProductForm.specifications.trim(),
+      images: [ecommProductForm.image.trim()]
+    };
+
+    try {
+      const isEdit = activeModal === 'edit_ecomm_product';
+      const url = isEdit 
+        ? `${API_BASE_URL}/api/ecomm/products/${selectedItem._id}` 
+        : `${API_BASE_URL}/api/ecomm/products`;
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        if (isEdit) {
+          setProducts(prev => prev.map(p => p._id === selectedItem._id ? data.data : p));
+        } else {
+          setProducts(prev => [data.data, ...prev]);
+        }
+        fetchStatsOnly();
+        setActiveModal(null);
+      } else {
+        setError(data.error || 'Failed to save product details.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure. Could not reach server.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
+          {error}
+        </div>
+      )}
+
+      {/* Grid: ID and SKU */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product ID</label>
+          <input
+            type="text"
+            value={ecommProductForm.product_id}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, product_id: e.target.value }))}
+            disabled={activeModal === 'edit_ecomm_product'}
+            placeholder="FI-POW-005"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all disabled:opacity-50 text-white"
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">SKU</label>
+          <input
+            type="text"
+            value={ecommProductForm.sku}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, sku: e.target.value }))}
+            placeholder="GSB-18V-50"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            required
+          />
+        </div>
+      </div>
+
+      {/* Grid: Brand and Category */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Brand Name</label>
+          <select
+            value={ecommProductForm.brand}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, brand: e.target.value }))}
+            className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white cursor-pointer"
+          >
+            {approvedBrands.map(b => (
+              <option key={b} value={b}>{b}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Category</label>
+          <select
+            value={ecommProductForm.category}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, category: e.target.value }))}
+            className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white cursor-pointer"
+          >
+            {categories.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Grid: Type and Sub-type */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Type</label>
+          <input
+            type="text"
+            value={ecommProductForm.type}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, type: e.target.value }))}
+            placeholder="e.g. Drilling Machine"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Sub-Type</label>
+          <input
+            type="text"
+            value={ecommProductForm.sub_type}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, sub_type: e.target.value }))}
+            placeholder="e.g. Cordless Drills"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+          />
+        </div>
+      </div>
+
+      {/* Grid: Model and Name */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Model</label>
+          <input
+            type="text"
+            value={ecommProductForm.model}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, model: e.target.value }))}
+            placeholder="e.g. GSB 18V-50"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Name</label>
+          <input
+            type="text"
+            value={ecommProductForm.product_name}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, product_name: e.target.value }))}
+            placeholder="e.g. Bosch GSB 18V-50 Cordless Drill"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            required
+          />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Description</label>
+        <textarea
+          value={ecommProductForm.description}
+          onChange={e => setEcommProductForm(prev => ({ ...prev, description: e.target.value }))}
+          placeholder="Brief summary detailing specifications and applications..."
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none min-h-[80px] transition-all resize-none text-white font-light"
+        />
+      </div>
+
+      {/* Specifications */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Technical Specifications</label>
+        <textarea
+          value={ecommProductForm.specifications}
+          onChange={e => setEcommProductForm(prev => ({ ...prev, specifications: e.target.value }))}
+          placeholder="e.g. Voltage: 18 V | Weight: 1.10 kg | Chuck Capacity: 13 mm"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none min-h-[60px] transition-all resize-none text-white font-mono text-xs"
+        />
+      </div>
+
+      {/* Product Image URL and upload */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Image URL</label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={ecommProductForm.image}
+            onChange={e => setEcommProductForm(prev => ({ ...prev, image: e.target.value }))}
+            placeholder="Cloudinary resource link..."
+            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            required
+          />
+          <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+            {uploadingField === 'ecomm_prod' ? 'Uploading...' : 'Upload'}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              disabled={uploadingField !== null}
+              onChange={e => {
+                if (e.target.files && e.target.files[0]) {
+                  handleCloudinaryUpload(
+                    e.target.files[0],
+                    'ecomm',
+                    (url) => setEcommProductForm(prev => ({ ...prev, image: url })),
+                    'ecomm_prod'
+                  );
+                }
+              }}
+            />
+          </label>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
+        <button
+          type="button"
+          onClick={() => setActiveModal(null)}
+          className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="px-5 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-white disabled:opacity-50"
+        >
+          {submitting ? 'Saving...' : activeModal === 'create_ecomm_product' ? 'Save Product' : 'Update Product'}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// EcommCsvImportModal Component
+function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly }) {
+  const [csvText, setCsvText] = useState('');
+  const [parsedData, setParsedData] = useState([]);
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [error, setError] = useState('');
+  const [syncing, setSyncing] = useState(false);
+
+  const approvedBrands = [
+    'Atlas Protective Products',
+    'Bosch Power Tools',
+    'Cromwell Tools Industries',
+    'Eibenstock',
+    'Ingersoll Rand',
+    'Stanley Black & Decker'
+  ];
+
+  const parseCSV = (text) => {
+    setError('');
+    setValidationErrors([]);
+    setParsedData([]);
+    
+    if (!text.trim()) {
+      setError('Please paste or upload some CSV data first.');
+      return;
+    }
+
+    const lines = text.split(/\r?\n/);
+    if (lines.length < 2) {
+      setError('CSV requires at least a header row and one data row.');
+      return;
+    }
+
+    const parseLine = (line) => {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      return result;
+    };
+
+    const headers = parseLine(lines[0]);
+    
+    // Normalize header mapping
+    const headerMap = {};
+    headers.forEach((h, index) => {
+      const lower = h.toLowerCase().replace(/[\s_-]+/g, '');
+      if (lower === 'productid' || lower === 'id') headerMap.product_id = index;
+      else if (lower === 'sku') headerMap.sku = index;
+      else if (lower === 'brand') headerMap.brand = index;
+      else if (lower === 'category') headerMap.category = index;
+      else if (lower === 'type') headerMap.type = index;
+      else if (lower === 'subtype') headerMap.sub_type = index;
+      else if (lower === 'model') headerMap.model = index;
+      else if (lower === 'productname' || lower === 'name') headerMap.product_name = index;
+      else if (lower === 'description' || lower === 'desc') headerMap.description = index;
+      else if (lower === 'specifications' || lower === 'specs') headerMap.specifications = index;
+      else if (lower === 'images' || lower === 'image' || lower === 'img') headerMap.image = index;
+    });
+
+    // Check basic headers exist
+    if (headerMap.product_id === undefined || headerMap.sku === undefined || headerMap.brand === undefined || headerMap.product_name === undefined) {
+      setError('CSV must contain Product ID, SKU, Brand, and Product Name headers.');
+      return;
+    }
+
+    const rows = [];
+    const errors = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+
+      const cols = parseLine(line);
+      if (cols.length < 4) continue;
+
+      const rowProduct = {
+        product_id: cols[headerMap.product_id] || '',
+        sku: cols[headerMap.sku] || '',
+        brand: cols[headerMap.brand] || '',
+        category: headerMap.category !== undefined ? cols[headerMap.category] || 'Power Tools' : 'Power Tools',
+        type: headerMap.type !== undefined ? cols[headerMap.type] || '' : '',
+        sub_type: headerMap.sub_type !== undefined ? cols[headerMap.sub_type] || '' : '',
+        model: headerMap.model !== undefined ? cols[headerMap.model] || '' : '',
+        product_name: cols[headerMap.product_name] || '',
+        description: headerMap.description !== undefined ? cols[headerMap.description] || '' : '',
+        specifications: headerMap.specifications !== undefined ? cols[headerMap.specifications] || '' : '',
+        images: headerMap.image !== undefined && cols[headerMap.image] && cols[headerMap.image].trim() ? [cols[headerMap.image].trim()] : ['https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png']
+      };
+
+      // Validation check
+      const rowErrors = [];
+      if (!rowProduct.product_id) rowErrors.push('Missing Product ID');
+      if (!rowProduct.sku) rowErrors.push('Missing SKU');
+      if (!rowProduct.product_name) rowErrors.push('Missing Product Name');
+      
+      // Strict Brand validation
+      if (rowProduct.brand) {
+        const matchingBrand = approvedBrands.find(b => b.toLowerCase().replace(/[\s_-]+/g, '') === rowProduct.brand.toLowerCase().replace(/[\s_-]+/g, ''));
+        if (matchingBrand) {
+          rowProduct.brand = matchingBrand;
+        } else {
+          rowErrors.push(`Disallowed Brand: "${rowProduct.brand}" (Must be one of the 6 MRO partners)`);
+        }
+      } else {
+        rowErrors.push('Missing Brand');
+      }
+
+      if (rowErrors.length > 0) {
+        errors.push({ rowIndex: i, errors: rowErrors, data: rowProduct });
+      } else {
+        rows.push(rowProduct);
+      }
+    }
+
+    setParsedData(rows);
+    setValidationErrors(errors);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      setCsvText(evt.target.result);
+      parseCSV(evt.target.result);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleSync = async () => {
+    if (parsedData.length === 0) {
+      setError('No valid rows to synchronize.');
+      return;
+    }
+
+    setSyncing(true);
+    const token = localStorage.getItem('cts_token');
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ecomm/products/bulk`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ products: parsedData })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const refreshRes = await fetch(`${API_BASE_URL}/api/ecomm/products`);
+        const refreshData = await refreshRes.json();
+        if (refreshData.success) {
+          setProducts(refreshData.data);
+          localStorage.setItem('cts_products', JSON.stringify(refreshData.data));
+        }
+        fetchStatsOnly();
+        setActiveModal(null);
+      } else {
+        setError(data.error || 'Bulk upload sync failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure.');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  return (
+    <div className="p-6 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
+          {error}
+        </div>
+      )}
+
+      {parsedData.length === 0 && validationErrors.length === 0 && (
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-semibold">Paste CSV Spreadsheet Data</span>
+            <label className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold border border-white/10 cursor-pointer transition-all flex items-center gap-1.5">
+              <Upload size={12} />
+              <span>Choose CSV File</span>
+              <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+            </label>
+          </div>
+
+          <textarea
+            value={csvText}
+            onChange={e => setCsvText(e.target.value)}
+            placeholder={`Product ID, SKU, Brand, Category, Type, Sub-Type, Model, Product Name, Description, Specifications, Images
+FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordless Drills, GSB 18V-50, Bosch Cordless Drill, Heavy-duty drill, Chuck capacity: 13mm, https://image-url.jpg`}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#2796a9] outline-none min-h-[160px] font-mono text-white resize-y placeholder:text-white/20"
+          />
+
+          <button
+            type="button"
+            onClick={() => parseCSV(csvText)}
+            className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl border border-white/10 transition-colors cursor-pointer"
+          >
+            Parse Catalog CSV Data
+          </button>
+        </div>
+      )}
+
+      {(parsedData.length > 0 || validationErrors.length > 0) && (
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">Valid Entries</span>
+              <span className="text-3xl font-extrabold text-white mt-2">{parsedData.length}</span>
+              <span className="text-[10px] text-white/50 mt-1">Ready for database synchronization</span>
+            </div>
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs text-red-400 font-semibold uppercase tracking-wider">Failed Validation</span>
+              <span className="text-3xl font-extrabold text-white mt-2">{validationErrors.length}</span>
+              <span className="text-[10px] text-white/50 mt-1">Contains invalid brands or empty keys</span>
+            </div>
+          </div>
+
+          {validationErrors.length > 0 && (
+            <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-3 max-h-[120px] overflow-y-auto">
+              <div className="text-xs font-bold text-red-400 mb-1">Rejected Rows Summary:</div>
+              <ul className="text-[10px] text-white/70 list-disc pl-4 space-y-1">
+                {validationErrors.map((err, idx) => (
+                  <li key={idx}>
+                    Row {err.rowIndex}: {err.errors.join(' | ')} (SKU: {err.data.sku || 'N/A'})
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {parsedData.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <span className="text-xs text-white/50 font-bold uppercase tracking-wider">Valid Parsed Catalog Preview</span>
+              <div className="border border-white/5 rounded-xl max-h-[180px] overflow-y-auto bg-slate-950/20">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-white/5 border-b border-white/5 text-white/40 font-semibold">
+                      <th className="p-2">Product ID</th>
+                      <th className="p-2">SKU</th>
+                      <th className="p-2">Name</th>
+                      <th className="p-2">Brand</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {parsedData.slice(0, 10).map((row, idx) => (
+                      <tr key={idx} className="border-b border-white/5">
+                        <td className="p-2 font-mono text-white/80">{row.product_id}</td>
+                        <td className="p-2 font-mono text-white/50">{row.sku}</td>
+                        <td className="p-2 truncate max-w-[120px] text-white/90">{row.product_name}</td>
+                        <td className="p-2 text-white/70">{row.brand}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {parsedData.length > 10 && (
+                  <div className="text-center py-1.5 bg-white/5 text-[10px] text-white/40">
+                    ...and {parsedData.length - 10} more rows
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-3 justify-end mt-2">
+            <button
+              type="button"
+              onClick={() => { setParsedData([]); setValidationErrors([]); }}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl border border-white/10 transition-colors cursor-pointer"
+            >
+              Reset / Edit Text
+            </button>
+            <button
+              type="button"
+              disabled={parsedData.length === 0 || syncing}
+              onClick={handleSync}
+              className="px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white text-xs font-semibold rounded-xl cursor-pointer disabled:opacity-30 transition-all flex items-center gap-1.5"
+            >
+              {syncing ? 'Syncing...' : 'Sync Valid Rows to DB'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// EcommMassDeleteModal Component
+function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly }) {
+  const [deleteType, setDeleteType] = useState('brand'); // 'brand', 'category', 'type', 'sub_type', 'all'
+  const [selectedValue, setSelectedValue] = useState('');
+  const [confirmText, setConfirmText] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const approvedBrands = [
+    'Atlas Protective Products',
+    'Bosch Power Tools',
+    'Cromwell Tools Industries',
+    'Eibenstock',
+    'Ingersoll Rand',
+    'Stanley Black & Decker'
+  ];
+
+  const categories = [
+    'Power Tools',
+    'Safety Equipment',
+    'Industrial Cleaning',
+    'Accessories'
+  ];
+
+  // Dynamically extract unique product types and sub-types from products array
+  const uniqueTypes = React.useMemo(() => {
+    const types = new Set();
+    products.forEach(p => {
+      if (p.type && p.type.trim()) types.add(p.type.trim());
+    });
+    return Array.from(types).sort();
+  }, [products]);
+
+  const uniqueSubTypes = React.useMemo(() => {
+    const subTypes = new Set();
+    products.forEach(p => {
+      if (p.sub_type && p.sub_type.trim()) subTypes.add(p.sub_type.trim());
+    });
+    return Array.from(subTypes).sort();
+  }, [products]);
+
+  // Determine selectable values based on selection type
+  useEffect(() => {
+    if (deleteType === 'brand') {
+      setSelectedValue(approvedBrands[0] || '');
+    } else if (deleteType === 'category') {
+      setSelectedValue(categories[0] || '');
+    } else if (deleteType === 'type') {
+      setSelectedValue(uniqueTypes[0] || '');
+    } else if (deleteType === 'sub_type') {
+      setSelectedValue(uniqueSubTypes[0] || '');
+    } else {
+      setSelectedValue('');
+    }
+  }, [deleteType, uniqueTypes, uniqueSubTypes]);
+
+  // Calculate matching products that will be deleted
+  const matchingCount = React.useMemo(() => {
+    if (deleteType === 'all') {
+      return products.length;
+    }
+    if (!selectedValue) return 0;
+    
+    return products.filter(p => {
+      if (deleteType === 'brand') {
+        return p.brand?.toLowerCase() === selectedValue.toLowerCase();
+      }
+      if (deleteType === 'category') {
+        return p.category?.toLowerCase() === selectedValue.toLowerCase();
+      }
+      if (deleteType === 'type') {
+        return p.type?.toLowerCase() === selectedValue.toLowerCase();
+      }
+      if (deleteType === 'sub_type') {
+        return p.sub_type?.toLowerCase() === selectedValue.toLowerCase();
+      }
+      return false;
+    }).length;
+  }, [deleteType, selectedValue, products]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (confirmText !== 'DELETE') {
+      setError('Please type DELETE to confirm.');
+      return;
+    }
+
+    if (deleteType !== 'all' && !selectedValue) {
+      setError('Please select a valid filter value.');
+      return;
+    }
+
+    setSubmitting(true);
+    const token = localStorage.getItem('cts_token');
+
+    // Build filter payload matching database fields exactly
+    const filter = {};
+    if (deleteType === 'brand') filter.brand = selectedValue;
+    if (deleteType === 'category') filter.category = selectedValue;
+    if (deleteType === 'type') filter.type = selectedValue;
+    if (deleteType === 'sub_type') filter.sub_type = selectedValue;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ecomm/products/bulk-delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          filter,
+          deleteAll: deleteType === 'all'
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Update client products list
+        if (deleteType === 'all') {
+          setProducts([]);
+        } else {
+          setProducts(prev => prev.filter(p => {
+            if (deleteType === 'brand') return p.brand?.toLowerCase() !== selectedValue.toLowerCase();
+            if (deleteType === 'category') return p.category?.toLowerCase() !== selectedValue.toLowerCase();
+            if (deleteType === 'type') return p.type?.toLowerCase() !== selectedValue.toLowerCase();
+            if (deleteType === 'sub_type') return p.sub_type?.toLowerCase() !== selectedValue.toLowerCase();
+            return true;
+          }));
+        }
+        fetchStatsOnly();
+        setActiveModal(null);
+      } else {
+        setError(data.error || 'Failed to complete mass deletion.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure. Could not contact the server.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 text-white">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
+          {error}
+        </div>
+      )}
+
+      <div className="bg-amber-500/10 border border-amber-500/25 text-amber-400 p-4 rounded-xl text-xs leading-relaxed flex flex-col gap-1.5">
+        <span className="font-bold">⚠️ Warning: Bulk Deletion is Permanent!</span>
+        <span>
+          Products deleted cannot be recovered. Ensure you select the correct filter criteria before proceeding.
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Deletion Method</label>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          {[
+            { value: 'brand', label: 'By Brand' },
+            { value: 'category', label: 'By Category' },
+            { value: 'type', label: 'By Type' },
+            { value: 'sub_type', label: 'By Sub-Type' },
+            { value: 'all', label: 'All Products' }
+          ].map(opt => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setDeleteType(opt.value)}
+              className={`py-2 px-1 text-center rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                deleteType === opt.value
+                  ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/15'
+                  : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {deleteType !== 'all' && (
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">
+            Select {deleteType === 'brand' ? 'Brand' : deleteType === 'category' ? 'Category' : deleteType === 'type' ? 'Product Type' : 'Sub-Type'}
+          </label>
+          
+          {deleteType === 'brand' && (
+            <select
+              value={selectedValue}
+              onChange={e => setSelectedValue(e.target.value)}
+              className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+            >
+              {approvedBrands.map(b => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          )}
+
+          {deleteType === 'category' && (
+            <select
+              value={selectedValue}
+              onChange={e => setSelectedValue(e.target.value)}
+              className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+            >
+              {categories.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          )}
+
+          {deleteType === 'type' && (
+            uniqueTypes.length > 0 ? (
+              <select
+                value={selectedValue}
+                onChange={e => setSelectedValue(e.target.value)}
+                className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+              >
+                {uniqueTypes.map(t => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            ) : (
+              <div className="text-white/40 text-xs py-2">No product types found in local catalog list.</div>
+            )
+          )}
+
+          {deleteType === 'sub_type' && (
+            uniqueSubTypes.length > 0 ? (
+              <select
+                value={selectedValue}
+                onChange={e => setSelectedValue(e.target.value)}
+                className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+              >
+                {uniqueSubTypes.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            ) : (
+              <div className="text-white/40 text-xs py-2">No product sub-types found in local catalog list.</div>
+            )
+          )}
+        </div>
+      )}
+
+      {/* Stats preview */}
+      <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between text-sm">
+        <span className="text-white/60">Products to be deleted:</span>
+        <span className="font-bold text-red-400 font-mono text-base">{matchingCount}</span>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs text-red-400 font-bold uppercase tracking-wider">
+          Verification Required
+        </label>
+        <p className="text-xs text-white/50 mb-1">
+          Type <span className="text-white font-mono bg-white/10 px-1 py-0.5 rounded">DELETE</span> below to confirm bulk deletion:
+        </p>
+        <input
+          type="text"
+          value={confirmText}
+          onChange={e => setConfirmText(e.target.value)}
+          placeholder="Type DELETE"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 focus:bg-white/10 outline-none transition-all text-white font-mono"
+          required
+        />
+      </div>
+
+      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
+        <button
+          type="button"
+          onClick={() => setActiveModal(null)}
+          className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={submitting || confirmText !== 'DELETE' || (deleteType !== 'all' && !selectedValue) || matchingCount === 0}
+          className="px-5 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:hover:bg-red-600 rounded-xl text-xs font-semibold cursor-pointer text-white shadow-lg shadow-red-600/20 transition-all"
+        >
+          {submitting ? 'Deleting...' : `Confirm Bulk Delete (${matchingCount})`}
+        </button>
+      </div>
+    </form>
   );
 }
