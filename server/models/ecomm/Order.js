@@ -20,12 +20,32 @@ const OrderSchema = new mongoose.Schema({
     product_name: { type: String, required: true },
     brand: { type: String, required: true },
     model: { type: String, default: '' },
-    quantity: { type: Number, required: true, min: 1 }
+    quantity: { type: Number, required: true, min: 1 },
+    unitPrice: { type: Number, default: 0 }
   }],
   status: {
     type: String,
     enum: ['Pending', 'Approved', 'Processing', 'Completed', 'Cancelled'],
     default: 'Pending'
+  },
+  shippingCost: {
+    type: Number,
+    default: 0
+  },
+  taxRate: {
+    type: Number,
+    default: 0 // percentage
+  },
+  adminComments: {
+    type: String,
+    default: ''
+  },
+  paymentTerms: {
+    type: String,
+    default: 'Net 30'
+  },
+  validUntil: {
+    type: Date
   },
   date: {
     type: Date,

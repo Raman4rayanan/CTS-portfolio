@@ -35,30 +35,37 @@ const brandLogos = [
   { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
 ];
 
-// Carousel items
-const carouselSlides = [
-  {
-    title: 'High-Performance Pneumatics',
-    subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
-    tag: 'PNEUMATICS'
-  },
-  {
-    title: 'Precision German Engineering',
-    subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
-    tag: 'POWER TOOLS'
-  },
-  {
-    title: 'HSE Safety Standard Gear',
-    subtitle: 'Full protective equipment for hazardous work sites',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg',
-    tag: 'SAFETY'
-  }
-];
+// Carousel items placeholder (will be replaced by state on mount)
 
 export default function ShopPage() {
   const [config, setConfig] = useState(null);
+  const [brandsList, setBrandsList] = useState([]);
+  const [carouselSlides, setCarouselSlides] = useState([
+    {
+      title: 'High-Performance Pneumatics',
+      subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+      tag: 'PNEUMATICS'
+    },
+    {
+      title: 'Precision German Engineering',
+      subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+      tag: 'POWER TOOLS'
+    },
+    {
+      title: 'HSE Safety Standard Gear',
+      subtitle: 'Full protective equipment for hazardous work sites',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg',
+      tag: 'SAFETY'
+    }
+  ]);
+
+  const currentBrandsList = (brandsList.length > 0 ? brandsList : brandLogos).map(b => ({
+    name: b.name,
+    src: b.logoUrl || b.src || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+    scale: b.scale || 1
+  }));
 
   // Fetch portfolio settings config
   useEffect(() => {
@@ -68,6 +75,9 @@ export default function ShopPage() {
       .then(data => {
         if (data.success) {
           setConfig(data.data);
+          if (data.data.ecommSlides && data.data.ecommSlides.length > 0) {
+            setCarouselSlides(data.data.ecommSlides);
+          }
         }
       })
       .catch(err => console.error('Error fetching portfolio config:', err));
@@ -126,41 +136,33 @@ export default function ShopPage() {
   // References for scrolling
   const catalogRef = useRef(null);
 
-  // Initialize products list (loading from backend API with localStorage caching fallback)
+  // Initialize products and brands list from backend API
   useEffect(() => {
-    const approvedBrands = [
-      'Atlas Protective Products',
-      'Bosch Power Tools',
-      'Cromwell Tools Industries',
-      'Eibenstock',
-      'Ingersoll Rand',
-      'Stanley Black & Decker'
-    ];
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    const loadLocalFallback = () => {
-      const saved = localStorage.getItem('cts_products');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          const filtered = parsed.filter(p => approvedBrands.includes(p.brand));
-          if (filtered.length === 0) {
-            localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
+    const loadProducts = async (approvedBrands) => {
+      const loadLocalFallback = () => {
+        const saved = localStorage.getItem('cts_products');
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            const filtered = parsed.filter(p => approvedBrands.includes(p.brand));
+            if (filtered.length === 0) {
+              localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
+              setProducts(sampleProducts);
+            } else {
+              setProducts(filtered);
+            }
+          } catch (e) {
             setProducts(sampleProducts);
-          } else {
-            setProducts(filtered);
           }
-        } catch (e) {
+        } else {
+          localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
           setProducts(sampleProducts);
         }
-      } else {
-        localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
-        setProducts(sampleProducts);
-      }
-    };
+      };
 
-    const fetchProducts = async () => {
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
         const res = await fetch(`${apiBaseUrl}/api/ecomm/products`);
         const result = await res.json();
         if (result.success && Array.isArray(result.data)) {
@@ -180,7 +182,26 @@ export default function ShopPage() {
       }
     };
 
-    fetchProducts();
+    const fetchBrandsAndProducts = async () => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/ecomm/brands`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setBrandsList(data.data);
+          const names = data.data.map(b => b.name);
+          loadProducts(names);
+        } else {
+          const defaultNames = brandLogos.map(b => b.name);
+          loadProducts(defaultNames);
+        }
+      } catch (e) {
+        console.error(e);
+        const defaultNames = brandLogos.map(b => b.name);
+        loadProducts(defaultNames);
+      }
+    };
+
+    fetchBrandsAndProducts();
   }, []);
 
   // Update localStorage quote cart whenever it changes
@@ -435,8 +456,8 @@ export default function ShopPage() {
     setUser(null);
   };
 
-  // Submit quote request simulation
-  const handleQuoteSubmit = (e) => {
+  // Submit quote request to backend DB
+  const handleQuoteSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
       setAuthTab('login');
@@ -457,23 +478,46 @@ export default function ShopPage() {
         product_name: item.product_name,
         brand: item.brand,
         model: item.model,
-        quantity: item.quantity
+        quantity: item.quantity,
+        unitPrice: 0
       })),
       date: new Date().toISOString(),
-      status: 'Pending',
-      notes: []
+      status: 'Pending'
     };
 
-    // Save to global list in localStorage
-    const savedQuotes = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
-    savedQuotes.push(quoteObj);
-    localStorage.setItem('cts_quotes', JSON.stringify(savedQuotes));
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiBaseUrl}/api/ecomm/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quoteObj)
+      });
+      const data = await res.json();
+      if (data.success) {
+        const savedQuotes = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
+        savedQuotes.push(data.data);
+        localStorage.setItem('cts_quotes', JSON.stringify(savedQuotes));
 
-    // Clear cart
-    setCart([]);
-    setIsCartOpen(false);
-    setIsCheckingOut(false);
-    setQuoteSuccessData(quoteObj);
+        setCart([]);
+        setIsCartOpen(false);
+        setIsCheckingOut(false);
+        setQuoteSuccessData(data.data);
+      } else {
+        alert(data.error || 'Failed to submit quote request.');
+      }
+    } catch (err) {
+      console.error(err);
+      const savedQuotes = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
+      savedQuotes.push(quoteObj);
+      localStorage.setItem('cts_quotes', JSON.stringify(savedQuotes));
+
+      setCart([]);
+      setIsCartOpen(false);
+      setIsCheckingOut(false);
+      setQuoteSuccessData(quoteObj);
+    }
   };
 
   // Simulate print/download details
@@ -842,8 +886,8 @@ export default function ShopPage() {
         const c2 = config?.partnersBgColor2 || '#040C19';
         const c3 = config?.partnersBgColor3 || '#02060C';
         
-        // Combine brandLogos into a single repeated scrolling marquee track
-        const row = [...brandLogos, ...brandLogos, ...brandLogos];
+        // Combine currentBrandsList into a single repeated scrolling marquee track
+        const row = [...currentBrandsList, ...currentBrandsList, ...currentBrandsList];
 
         return (
           <div

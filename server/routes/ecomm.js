@@ -224,14 +224,20 @@ router.post('/orders', async (req, res) => {
 
 router.put('/orders/:id', protectAdmin, async (req, res) => {
   try {
-    const { status } = req.body;
-    if (!status) {
-      return res.status(400).json({ success: false, error: 'Status is required.' });
-    }
+    const { status, items, shippingCost, taxRate, adminComments, paymentTerms, validUntil } = req.body;
+
+    const updateObj = {};
+    if (status) updateObj.status = status;
+    if (items && Array.isArray(items)) updateObj.items = items;
+    if (shippingCost !== undefined) updateObj.shippingCost = Number(shippingCost) || 0;
+    if (taxRate !== undefined) updateObj.taxRate = Number(taxRate) || 0;
+    if (adminComments !== undefined) updateObj.adminComments = adminComments;
+    if (paymentTerms !== undefined) updateObj.paymentTerms = paymentTerms;
+    if (validUntil !== undefined) updateObj.validUntil = validUntil;
 
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      { status },
+      updateObj,
       { new: true, runValidators: true }
     );
 

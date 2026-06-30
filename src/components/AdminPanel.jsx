@@ -78,6 +78,8 @@ export default function AdminPanel() {
   const [inquiries, setInquiries] = useState([]);
   const [activities, setActivities] = useState([]);
   const [services, setServices] = useState([]);
+  const [brandsList, setBrandsList] = useState([]);
+  const [ordersList, setOrdersList] = useState([]);
   const [config, setConfig] = useState(null);
   const [customizeForm, setCustomizeForm] = useState({
     heroTitle: '',
@@ -93,7 +95,9 @@ export default function AdminPanel() {
     partners: [],
     customers: [],
     cloudinaryCloudName: '',
-    cloudinaryUploadPreset: ''
+    cloudinaryUploadPreset: '',
+    ecommBannerText: '',
+    ecommSlides: []
   });
   const [saveSuccess, setSaveSuccess] = useState('');
   
@@ -260,6 +264,38 @@ export default function AdminPanel() {
     }));
   };
 
+  // E-commerce Slider Slide Mutations
+  const handleUpdateEcommSlide = (idx, field, value) => {
+    setCustomizeForm(prev => {
+      const updated = [...(prev.ecommSlides || [])];
+      if (!updated[idx]) return prev;
+      updated[idx] = { ...updated[idx], [field]: value };
+      return { ...prev, ecommSlides: updated };
+    });
+  };
+
+  const handleAddEcommSlide = () => {
+    setCustomizeForm(prev => ({
+      ...prev,
+      ecommSlides: [
+        ...(prev.ecommSlides || []),
+        {
+          title: 'New Slider Title',
+          subtitle: 'New slider description text',
+          image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+          tag: 'TAG'
+        }
+      ]
+    }));
+  };
+
+  const handleRemoveEcommSlide = (idx) => {
+    setCustomizeForm(prev => ({
+      ...prev,
+      ecommSlides: (prev.ecommSlides || []).filter((_, i) => i !== idx)
+    }));
+  };
+
   // Fetch all data helper
   const fetchData = async () => {
     setLoading(true);
@@ -313,7 +349,9 @@ export default function AdminPanel() {
           partners: configData.data.partners || [],
           customers: configData.data.customers || [],
           cloudinaryCloudName: configData.data.cloudinaryCloudName || '',
-          cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || ''
+          cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || '',
+          ecommBannerText: configData.data.ecommBannerText || '',
+          ecommSlides: configData.data.ecommSlides || []
         });
 
         // E-commerce items loading from backend API
@@ -333,11 +371,31 @@ export default function AdminPanel() {
           setEcommProducts(savedProducts ? JSON.parse(savedProducts) : sampleProducts);
         }
 
-        const savedQuotes = localStorage.getItem('cts_quotes');
-        if (savedQuotes) {
-          setQuotes(JSON.parse(savedQuotes));
-        } else {
-          setQuotes([]);
+        // Fetch brands list from backend
+        try {
+          const brandsRes = await fetch(`${API_BASE_URL}/api/ecomm/brands`);
+          const brandsData = await brandsRes.json();
+          if (brandsData.success) {
+            setBrandsList(brandsData.data);
+          }
+        } catch (brandsErr) {
+          console.error('Error fetching partner brands:', brandsErr);
+        }
+
+        // Fetch orders/RFQs from backend
+        try {
+          const ordersRes = await fetch(`${API_BASE_URL}/api/ecomm/orders`, { headers });
+          const ordersData = await ordersRes.json();
+          if (ordersData.success) {
+            setOrdersList(ordersData.data);
+          } else {
+            const savedQuotes = localStorage.getItem('cts_quotes');
+            setOrdersList(savedQuotes ? JSON.parse(savedQuotes) : []);
+          }
+        } catch (ordersErr) {
+          console.error('Error fetching RFQ orders:', ordersErr);
+          const savedQuotes = localStorage.getItem('cts_quotes');
+          setOrdersList(savedQuotes ? JSON.parse(savedQuotes) : []);
         }
       } else {
         setError('Error retrieving data from one or more services.');
@@ -724,6 +782,13 @@ export default function AdminPanel() {
             active={activeTab === 'ecomm'} 
             onClick={() => setActiveTab('ecomm')} 
           />
+          <SidebarLink 
+            label="Quotes & Orders" 
+            icon={<FileText size={18} />} 
+            badge={ordersList.filter(o => o.status === 'Pending').length} 
+            active={activeTab === 'orders'} 
+            onClick={() => setActiveTab('orders')} 
+          />
         </nav>
 
         <div className="p-4 border-t border-white/5 flex flex-col gap-2">
@@ -776,7 +841,7 @@ export default function AdminPanel() {
               {activeTab === 'dashboard' && stats && (
                 <div className="flex flex-col gap-8">
                   {/* Summary Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <DashboardCard 
                       title="Total Inquiries" 
                       value={stats.portfolio.inquiries} 
@@ -808,10 +873,22 @@ export default function AdminPanel() {
                       color="from-teal-500/10 to-teal-500/5 border-teal-500/10"
                     />
                     <DashboardCard 
-                      title="E-comm Catalog" 
+                      title="E-comm Products" 
                       value={stats.ecommerce?.products || 0} 
                       icon={<ShoppingCart className="text-pink-400" />} 
                       color="from-pink-500/10 to-pink-500/5 border-pink-500/10"
+                    />
+                    <DashboardCard 
+                      title="Partner Brands" 
+                      value={stats.ecommerce?.brands || 0} 
+                      icon={<SlidersHorizontal className="text-[#2796a9]" />} 
+                      color="from-[#2796a9]/10 to-[#2796a9]/5 border-[#2796a9]/10"
+                    />
+                    <DashboardCard 
+                      title="Quote Requests" 
+                      value={stats.ecommerce?.orders || 0} 
+                      icon={<FileText className="text-emerald-400" />} 
+                      color="from-emerald-500/10 to-emerald-500/5 border-emerald-500/10"
                     />
                   </div>
 
@@ -879,7 +956,115 @@ export default function AdminPanel() {
                         </div>
                         <div className="flex justify-between pb-1">
                           <span>Total DB Entities Managed</span>
-                          <span className="font-semibold text-[#2796a9]">{stats.portfolio.inquiries + stats.portfolio.activities + stats.portfolio.services + (stats.ecommerce?.products || 0)}</span>
+                          <span className="font-semibold text-[#2796a9]">
+                            {stats.portfolio.inquiries + 
+                             stats.portfolio.activities + 
+                             stats.portfolio.services + 
+                             (stats.ecommerce?.products || 0) + 
+                             (stats.ecommerce?.brands || 0) + 
+                             (stats.ecommerce?.orders || 0)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* B2B Procurement & Quotations Insights Panel */}
+                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mt-2">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                      <div>
+                        <h3 className="font-bold text-lg text-[#2796a9]">B2B RFQ Sales Pipeline Insights</h3>
+                        <p className="text-xs text-white/40 font-light mt-0.5">Overview of live customer RFQ requests, status distribution, and sales worksheets.</p>
+                      </div>
+                      <button 
+                        onClick={() => setActiveTab('orders')} 
+                        className="px-4 py-2 bg-[#2796a9]/10 hover:bg-[#2796a9] text-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#2796a9]/20 cursor-pointer"
+                      >
+                        View All Quotes ({ordersList.length})
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                      {/* Pipeline breakdown */}
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
+                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">RFQ Status Pipeline</span>
+                        <div className="flex flex-col gap-2 mt-3">
+                          {[
+                            { name: 'Pending Review', status: 'Pending', color: 'bg-yellow-500' },
+                            { name: 'Approved / Priced', status: 'Approved', color: 'bg-emerald-400' },
+                            { name: 'Processing', status: 'Processing', color: 'bg-blue-400' },
+                            { name: 'Completed', status: 'Completed', color: 'bg-[#2796a9]' },
+                            { name: 'Cancelled', status: 'Cancelled', color: 'bg-white/20' }
+                          ].map(st => {
+                            const count = ordersList.filter(o => o.status === st.status).length;
+                            return (
+                              <div key={st.status} className="flex justify-between items-center text-xs">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-2.5 h-2.5 rounded-full ${st.color}`} />
+                                  <span>{st.name}</span>
+                                </div>
+                                <span className="font-bold font-mono">{count}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Financial statistics */}
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
+                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Estimated pipeline value</span>
+                        <div className="flex flex-col gap-3 mt-3">
+                          <div className="flex justify-between items-center text-xs">
+                            <span>Pending Quote Requests:</span>
+                            <span className="font-bold font-mono text-yellow-500">
+                              {ordersList.filter(o => o.status === 'Pending').length} requests
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center text-xs border-b border-white/5 pb-2">
+                            <span>Total Priced & Approved Quotes:</span>
+                            <span className="font-bold font-mono text-emerald-400">
+                              {ordersList.filter(o => o.status === 'Approved').length} requests
+                            </span>
+                          </div>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] text-white/40">TOTAL PIPELINE CONTRACT VALUE</span>
+                            <span className="text-2xl font-bold font-mono text-white mt-1">
+                              ${ordersList.reduce((acc, order) => {
+                                const subtotal = (order.items || []).reduce((sum, it) => sum + (it.quantity * (it.unitPrice || 0)), 0);
+                                const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
+                                return acc + subtotal + taxAmount + (order.shippingCost || 0);
+                              }, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Recent quote list */}
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
+                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Latest B2B RFQs</span>
+                        <div className="flex flex-col gap-2 mt-2 max-h-[160px] overflow-y-auto pr-1">
+                          {ordersList.slice(0, 3).map(order => (
+                            <div key={order._id} className="p-2 bg-slate-950/40 rounded border border-white/5 flex justify-between items-center gap-3 text-[11px]">
+                              <div className="flex flex-col truncate">
+                                <span className="font-bold font-mono text-white">{order.referenceId}</span>
+                                <span className="text-white/45 truncate">{order.customerDetails?.name} • {order.customerDetails?.company || 'No Company'}</span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setSelectedItem(order);
+                                  setActiveModal('edit_order_ecomm');
+                                }}
+                                className="px-2.5 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded text-[10px] font-bold shrink-0 transition-colors cursor-pointer"
+                              >
+                                View RFQ
+                              </button>
+                            </div>
+                          ))}
+                          {ordersList.length === 0 && (
+                            <div className="text-center py-6 text-white/30 text-xs">
+                              No quote inquiries received yet.
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1737,6 +1922,128 @@ export default function AdminPanel() {
                       </div>
                     </div>
                   </div>
+
+                  {/* E-commerce Settings & Hero Carousel Slider Customization */}
+                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                    <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                      <div>
+                        <h4 className="font-bold text-base text-[#2796a9]">E-commerce Customization & Carousels</h4>
+                        <p className="text-xs text-white/40 font-light mt-0.5">Control the slides and headline text displayed in the storefront hero section.</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleAddEcommSlide}
+                        className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20"
+                      >
+                        + Add Slider Slide
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 max-w-xl">
+                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Top Banner News / Announcement Text</label>
+                      <input
+                        type="text"
+                        value={customizeForm.ecommBannerText || ''}
+                        onChange={e => setCustomizeForm(prev => ({ ...prev, ecommBannerText: e.target.value }))}
+                        placeholder="e.g. CTS B2B Procurement Desk - Fast Quotations & Logistics"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {(customizeForm.ecommSlides || []).map((slide, idx) => (
+                        <div key={idx} className="p-5 rounded-xl border border-white/5 bg-white/5 relative flex flex-col gap-4">
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveEcommSlide(idx)}
+                            className="absolute top-4 right-4 text-white/40 hover:text-red-400 transition-colors cursor-pointer"
+                            title="Remove slide"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+
+                          <div className="text-xs font-bold text-white/60 uppercase tracking-wider">
+                            Hero Slide #{idx + 1}
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] text-white/50 uppercase">Tag (Category / Highlight)</label>
+                              <input
+                                type="text"
+                                value={slide.tag || ''}
+                                onChange={e => handleUpdateEcommSlide(idx, 'tag', e.target.value)}
+                                placeholder="POWER TOOLS"
+                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                required
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] text-white/50 uppercase">Title</label>
+                              <input
+                                type="text"
+                                value={slide.title || ''}
+                                onChange={e => handleUpdateEcommSlide(idx, 'title', e.target.value)}
+                                placeholder="Precision German Engineering"
+                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] text-white/50 uppercase">Subtitle Description</label>
+                            <input
+                              type="text"
+                              value={slide.subtitle || ''}
+                              onChange={e => handleUpdateEcommSlide(idx, 'subtitle', e.target.value)}
+                              placeholder="Heavy duty drilling and core machines..."
+                              className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                              required
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] text-white/50 uppercase">Image URL / Resource Path</label>
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                value={slide.image || ''}
+                                onChange={e => handleUpdateEcommSlide(idx, 'image', e.target.value)}
+                                placeholder="Cloudinary URL or local path"
+                                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                required
+                              />
+                              <label className="shrink-0 px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                                {uploadingField === `slide-${idx}` ? 'Uploading...' : 'Upload'}
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  disabled={uploadingField !== null}
+                                  onChange={e => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      handleCloudinaryUpload(
+                                        e.target.files[0],
+                                        'ecomm',
+                                        (url) => handleUpdateEcommSlide(idx, 'image', url),
+                                        `slide-${idx}`
+                                      );
+                                    }
+                                  }}
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {(customizeForm.ecommSlides || []).length === 0 && (
+                        <div className="col-span-2 text-center py-12 text-white/30 text-xs border border-dashed border-white/10 rounded-xl">
+                          No slides configured. Click Add Slider Slide.
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </form>
               )}
 
@@ -1745,11 +2052,25 @@ export default function AdminPanel() {
                 <EcommCatalogManager 
                   products={ecommProducts} 
                   setProducts={setEcommProducts}
+                  brands={brandsList}
+                  setBrands={setBrandsList}
                   setActiveModal={setActiveModal}
                   setSelectedItem={setSelectedItem}
                   setEcommProductForm={setEcommProductForm}
                   API_BASE_URL={API_BASE_URL}
                   fetchStatsOnly={fetchStatsOnly}
+                  setDeleteConfirmData={setDeleteConfirmData}
+                />
+              )}
+
+              {/* E-COMMERCE ORDERS & RFQ TAB */}
+              {activeTab === 'orders' && (
+                <EcommOrdersManager
+                  orders={ordersList}
+                  setOrders={setOrdersList}
+                  setActiveModal={setActiveModal}
+                  setSelectedItem={setSelectedItem}
+                  API_BASE_URL={API_BASE_URL}
                   setDeleteConfirmData={setDeleteConfirmData}
                 />
               )}
@@ -1769,7 +2090,7 @@ export default function AdminPanel() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className={`bg-slate-900 border border-white/10 rounded-2xl w-full overflow-hidden shadow-2xl relative z-10 text-white transition-all duration-300 ${
-                activeModal === 'import_ecomm_csv' || activeModal === 'create_ecomm_product' || activeModal === 'edit_ecomm_product'
+                activeModal === 'import_ecomm_csv' || activeModal === 'create_ecomm_product' || activeModal === 'edit_ecomm_product' || activeModal === 'edit_order_ecomm' || activeModal === 'manage_brands_ecomm'
                   ? 'max-w-3xl'
                   : 'max-w-lg'
               }`}
@@ -1785,6 +2106,8 @@ export default function AdminPanel() {
                   {activeModal === 'edit_ecomm_product' && 'Edit E-commerce Product'}
                   {activeModal === 'import_ecomm_csv' && 'Import Catalog via CSV'}
                   {activeModal === 'mass_delete_ecomm' && 'Mass Delete Catalog Products'}
+                  {activeModal === 'manage_brands_ecomm' && 'Partner Brand Manager'}
+                  {activeModal === 'edit_order_ecomm' && 'Process RFQ & Price Quotation Worksheet'}
                 </h3>
                 <button onClick={() => setActiveModal(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
                   <XCircle size={20} />
@@ -1978,6 +2301,7 @@ export default function AdminPanel() {
                   uploadingField={uploadingField}
                   setUploadingField={setUploadingField}
                   customizeForm={customizeForm}
+                  brands={brandsList}
                 />
               )}
 
@@ -1988,6 +2312,7 @@ export default function AdminPanel() {
                   setActiveModal={setActiveModal}
                   API_BASE_URL={API_BASE_URL}
                   fetchStatsOnly={fetchStatsOnly}
+                  brands={brandsList}
                 />
               )}
 
@@ -1999,6 +2324,31 @@ export default function AdminPanel() {
                   setActiveModal={setActiveModal}
                   API_BASE_URL={API_BASE_URL}
                   fetchStatsOnly={fetchStatsOnly}
+                  brands={brandsList}
+                />
+              )}
+
+              {/* BRAND MANAGER MODAL */}
+              {activeModal === 'manage_brands_ecomm' && (
+                <EcommBrandManagerModal
+                  brands={brandsList}
+                  setBrands={setBrandsList}
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
+                  handleCloudinaryUpload={handleCloudinaryUpload}
+                  uploadingField={uploadingField}
+                  setUploadingField={setUploadingField}
+                  setDeleteConfirmData={setDeleteConfirmData}
+                />
+              )}
+
+              {/* ORDER EDIT / QUOTATION PROPOSAL MODAL */}
+              {activeModal === 'edit_order_ecomm' && (
+                <EcommOrderEditModal
+                  order={selectedItem}
+                  setOrders={setOrdersList}
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
                 />
               )}
             </motion.div>
@@ -2180,20 +2530,22 @@ function AdminLogin({ onSubmit, error, loading }) {
 // ==========================================
 
 // EcommCatalogManager Component
-function EcommCatalogManager({ products, setProducts, setActiveModal, setSelectedItem, setEcommProductForm, API_BASE_URL, fetchStatsOnly, setDeleteConfirmData }) {
+function EcommCatalogManager({ products, setProducts, brands, setBrands, setActiveModal, setSelectedItem, setEcommProductForm, API_BASE_URL, fetchStatsOnly, setDeleteConfirmData }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [brandFilter, setBrandFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const approvedBrands = [
-    'Atlas Protective Products',
-    'Bosch Power Tools',
-    'Cromwell Tools Industries',
-    'Eibenstock',
-    'Ingersoll Rand',
-    'Stanley Black & Decker'
-  ];
+  const approvedBrands = brands && brands.length > 0 
+    ? brands.map(b => b.name)
+    : [
+        'Atlas Protective Products',
+        'Bosch Power Tools',
+        'Cromwell Tools Industries',
+        'Eibenstock',
+        'Ingersoll Rand',
+        'Stanley Black & Decker'
+      ];
 
   // Filtering products
   const filteredProducts = products.filter(p => {
@@ -2326,6 +2678,15 @@ function EcommCatalogManager({ products, setProducts, setActiveModal, setSelecte
             <span>CSV Import</span>
           </button>
 
+          {/* Manage Brands */}
+          <button
+            onClick={() => setActiveModal('manage_brands_ecomm')}
+            className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+          >
+            <SlidersHorizontal size={14} />
+            <span>Manage Brands</span>
+          </button>
+
           {/* Add Product */}
           <button
             onClick={handleAddClick}
@@ -2448,19 +2809,22 @@ function EcommProductFormModal({
   handleCloudinaryUpload,
   uploadingField,
   setUploadingField,
-  customizeForm
+  customizeForm,
+  brands
 }) {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const approvedBrands = [
-    'Atlas Protective Products',
-    'Bosch Power Tools',
-    'Cromwell Tools Industries',
-    'Eibenstock',
-    'Ingersoll Rand',
-    'Stanley Black & Decker'
-  ];
+  const approvedBrands = brands && brands.length > 0
+    ? brands.map(b => b.name)
+    : [
+        'Atlas Protective Products',
+        'Bosch Power Tools',
+        'Cromwell Tools Industries',
+        'Eibenstock',
+        'Ingersoll Rand',
+        'Stanley Black & Decker'
+      ];
 
   const categories = [
     'Power Tools',
@@ -2727,21 +3091,51 @@ function EcommProductFormModal({
 }
 
 // EcommCsvImportModal Component
-function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly }) {
+function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly, brands }) {
   const [csvText, setCsvText] = useState('');
   const [parsedData, setParsedData] = useState([]);
   const [validationErrors, setValidationErrors] = useState([]);
   const [error, setError] = useState('');
   const [syncing, setSyncing] = useState(false);
+  const [hasDuplicates, setHasDuplicates] = useState(false);
+  const [duplicateList, setDuplicateList] = useState([]);
 
-  const approvedBrands = [
-    'Atlas Protective Products',
-    'Bosch Power Tools',
-    'Cromwell Tools Industries',
-    'Eibenstock',
-    'Ingersoll Rand',
-    'Stanley Black & Decker'
-  ];
+  const handleRearrangeSKUs = () => {
+    const skuTrackers = {};
+    const skuCounts = {};
+    
+    parsedData.forEach(p => {
+      if (p.sku) {
+        skuCounts[p.sku] = (skuCounts[p.sku] || 0) + 1;
+      }
+    });
+
+    const rearranged = parsedData.map(p => {
+      if (p.sku && skuCounts[p.sku] > 1) {
+        skuTrackers[p.sku] = (skuTrackers[p.sku] || 0) + 1;
+        return {
+          ...p,
+          sku: `${p.sku}${skuTrackers[p.sku]}`
+        };
+      }
+      return p;
+    });
+
+    setParsedData(rearranged);
+    setHasDuplicates(false);
+    setDuplicateList([]);
+  };
+
+  const approvedBrands = brands && brands.length > 0
+    ? brands.map(b => b.name)
+    : [
+        'Atlas Protective Products',
+        'Bosch Power Tools',
+        'Cromwell Tools Industries',
+        'Eibenstock',
+        'Ingersoll Rand',
+        'Stanley Black & Decker'
+      ];
 
   const parseCSV = (text) => {
     setError('');
@@ -2852,8 +3246,23 @@ function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchS
       }
     }
 
+    const skuCounts = {};
+    rows.forEach(r => {
+      if (r.sku) {
+        skuCounts[r.sku] = (skuCounts[r.sku] || 0) + 1;
+      }
+    });
+    const duplicates = Object.keys(skuCounts).filter(sku => skuCounts[sku] > 1);
+
     setParsedData(rows);
     setValidationErrors(errors);
+    if (duplicates.length > 0) {
+      setHasDuplicates(true);
+      setDuplicateList(duplicates);
+    } else {
+      setHasDuplicates(false);
+      setDuplicateList([]);
+    }
   };
 
   const handleFileUpload = (e) => {
@@ -2959,6 +3368,24 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
             </div>
           </div>
 
+          {hasDuplicates && (
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col gap-0.5 text-left">
+                <span className="text-xs text-amber-400 font-semibold uppercase tracking-wider">⚠️ Repeated SKUs Detected</span>
+                <span className="text-xs text-white/70 mt-1">
+                  The following SKUs are repeated in the CSV: <span className="font-mono text-amber-300 font-bold">{duplicateList.join(', ')}</span>. Click Rearrange to auto-format them.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleRearrangeSKUs}
+                className="px-4 py-2 bg-amber-500 text-slate-950 hover:brightness-110 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg shadow-amber-500/10 shrink-0"
+              >
+                Rearrange SKUs
+              </button>
+            </div>
+          )}
+
           {validationErrors.length > 0 && (
             <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-3 max-h-[120px] overflow-y-auto">
               <div className="text-xs font-bold text-red-400 mb-1">Rejected Rows Summary:</div>
@@ -3008,7 +3435,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
           <div className="flex gap-3 justify-end mt-2">
             <button
               type="button"
-              onClick={() => { setParsedData([]); setValidationErrors([]); }}
+              onClick={() => { setParsedData([]); setValidationErrors([]); setHasDuplicates(false); setDuplicateList([]); }}
               className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl border border-white/10 transition-colors cursor-pointer"
             >
               Reset / Edit Text
@@ -3029,21 +3456,23 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
 }
 
 // EcommMassDeleteModal Component
-function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly }) {
+function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_URL, fetchStatsOnly, brands }) {
   const [deleteType, setDeleteType] = useState('brand'); // 'brand', 'category', 'type', 'sub_type', 'all'
   const [selectedValue, setSelectedValue] = useState('');
   const [confirmText, setConfirmText] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const approvedBrands = [
-    'Atlas Protective Products',
-    'Bosch Power Tools',
-    'Cromwell Tools Industries',
-    'Eibenstock',
-    'Ingersoll Rand',
-    'Stanley Black & Decker'
-  ];
+  const approvedBrands = brands && brands.length > 0
+    ? brands.map(b => b.name)
+    : [
+        'Atlas Protective Products',
+        'Bosch Power Tools',
+        'Cromwell Tools Industries',
+        'Eibenstock',
+        'Ingersoll Rand',
+        'Stanley Black & Decker'
+      ];
 
   const categories = [
     'Power Tools',
@@ -3316,5 +3745,671 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
         </button>
       </div>
     </form>
+  );
+}
+
+// EcommBrandManagerModal Component
+function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_URL, handleCloudinaryUpload, uploadingField, setUploadingField, setDeleteConfirmData }) {
+  const [newBrandName, setNewBrandName] = useState('');
+  const [newBrandLogo, setNewBrandLogo] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!newBrandName.trim()) {
+      setError('Brand name is required.');
+      return;
+    }
+
+    setSubmitting(true);
+    const token = localStorage.getItem('cts_token');
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ecomm/brands`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: newBrandName.trim(),
+          logoUrl: newBrandLogo.trim()
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setBrands(prev => [...prev, data.data].sort((a, b) => a.name.localeCompare(b.name)));
+        setNewBrandName('');
+        setNewBrandLogo('');
+      } else {
+        setError(data.error || 'Failed to create brand.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteBrandClick = (id, name) => {
+    setDeleteConfirmData({
+      title: 'Delete Partner Brand',
+      message: `Are you sure you want to delete the brand "${name}"? This action is permanent and cannot be undone.`,
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/ecomm/brands/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setBrands(prev => prev.filter(b => b._id !== id));
+          } else {
+            alert(data.error || 'Failed to delete brand.');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Connection error.');
+        }
+      }
+    });
+  };
+
+  return (
+    <div className="p-6 flex flex-col gap-6 text-white max-h-[85vh] overflow-y-auto">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
+          {error}
+        </div>
+      )}
+
+      {/* Add New Brand Card */}
+      <form onSubmit={handleSubmit} className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-4">
+        <h4 className="text-xs font-bold text-[#2796a9] uppercase tracking-wider">Add New Partner Brand</h4>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] text-white/50 uppercase">Brand Name</label>
+            <input
+              type="text"
+              value={newBrandName}
+              onChange={e => setNewBrandName(e.target.value)}
+              placeholder="e.g. Milwaukee Tools"
+              className="bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] text-white/50 uppercase">Logo URL / Resource Path</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newBrandLogo}
+                onChange={e => setNewBrandLogo(e.target.value)}
+                placeholder="Cloudinary URL"
+                className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+              />
+              <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                {uploadingField === 'brand_logo' ? 'Uploading...' : 'Upload'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={uploadingField !== null}
+                  onChange={e => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleCloudinaryUpload(
+                        e.target.files[0],
+                        'ecomm',
+                        (url) => setNewBrandLogo(url),
+                        'brand_logo'
+                      );
+                    }
+                  }}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="self-end px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+        >
+          {submitting ? 'Adding Brand...' : 'Save Brand'}
+        </button>
+      </form>
+
+      {/* Brands List Table */}
+      <div className="flex flex-col gap-3">
+        <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">Active Partner Brands ({brands.length})</h4>
+        <div className="border border-white/5 rounded-xl overflow-hidden bg-slate-950/20 max-h-[300px] overflow-y-auto">
+          <table className="w-full border-collapse text-left text-xs">
+            <thead>
+              <tr className="bg-white/5 border-b border-white/5 text-white/50 text-[10px] uppercase tracking-wider">
+                <th className="p-3">Logo</th>
+                <th className="p-3">Brand Name</th>
+                <th className="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {brands.map(brand => (
+                <tr key={brand._id} className="hover:bg-white/5 transition-colors">
+                  <td className="p-3">
+                    <div className="w-12 h-8 rounded border border-white/10 bg-slate-950 p-1 flex items-center justify-center">
+                      <img src={brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} alt={brand.name} className="max-w-full max-h-full object-contain" />
+                    </div>
+                  </td>
+                  <td className="p-3 font-semibold text-white">{brand.name}</td>
+                  <td className="p-3 text-right">
+                    <button
+                      onClick={() => handleDeleteBrandClick(brand._id, brand.name)}
+                      className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
+                      title="Delete brand"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {brands.length === 0 && (
+                <tr>
+                  <td colSpan="3" className="p-8 text-center text-white/30 text-xs">No brands found. Add a partner brand above.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="flex justify-end pt-2 border-t border-white/5">
+        <button
+          type="button"
+          onClick={() => setActiveModal(null)}
+          className="px-5 py-2 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+        >
+          Close Manager
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// EcommOrdersManager Component
+function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem, API_BASE_URL, setDeleteConfirmData }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const filteredOrders = orders.filter(o => {
+    const matchesSearch = !searchQuery.trim() ||
+      o.referenceId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.customerDetails?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.customerDetails?.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.customerDetails?.email?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleEditClick = (order) => {
+    setSelectedItem(order);
+    setActiveModal('edit_order_ecomm');
+  };
+
+  const handleDeleteOrder = (id, refId) => {
+    setDeleteConfirmData({
+      title: 'Delete Quotation Request',
+      message: `Are you sure you want to delete quote request "${refId}"? This action is permanent and cannot be undone.`,
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/ecomm/orders/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setOrders(prev => prev.filter(o => o._id !== id));
+            if (paginatedOrders.length === 1 && currentPage > 1) {
+              setCurrentPage(currentPage - 1);
+            }
+          } else {
+            alert(data.error || 'Failed to delete quote request.');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Connection error.');
+        }
+      }
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Header controls bar */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/20 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+        <div className="relative flex-1 w-full max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" size={16} />
+          <input
+            type="text"
+            placeholder="Search by Ref ID, customer name, company..."
+            value={searchQuery}
+            onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:border-[#2796a9] outline-none text-white transition-all font-light"
+          />
+        </div>
+        
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          {/* Status select filter */}
+          <select
+            value={statusFilter}
+            onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+            className="bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none transition-all cursor-pointer"
+          >
+            <option value="All">All Statuses</option>
+            <option value="Pending">Pending Review</option>
+            <option value="Approved">Approved / Priced</option>
+            <option value="Processing">Processing</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Orders Table */}
+      <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-left text-xs">
+            <thead>
+              <tr className="bg-white/5 border-b border-white/5 text-white/55 text-[10px] uppercase font-bold tracking-wider">
+                <th className="p-4">Reference ID</th>
+                <th className="p-4">Customer Details</th>
+                <th className="p-4">Requested Items</th>
+                <th className="p-4">Quote Value</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {paginatedOrders.map(order => {
+                const subtotal = (order.items || []).reduce((acc, item) => acc + (item.quantity * (item.unitPrice || 0)), 0);
+                const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
+                const grandTotal = subtotal + taxAmount + (order.shippingCost || 0);
+                const hasPricedItems = (order.items || []).some(item => item.unitPrice > 0);
+
+                return (
+                  <tr key={order._id} className="hover:bg-white/5 transition-colors group">
+                    <td className="p-4 font-bold text-white font-mono text-sm">
+                      {order.referenceId}
+                      <span className="text-[10px] text-white/30 block font-normal font-sans mt-0.5">
+                        {new Date(order.date || order.createdAt).toLocaleDateString()}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span className="font-semibold text-white block text-sm">{order.customerDetails?.name}</span>
+                      <span className="text-white/45 text-[11px] block mt-0.5 truncate max-w-[200px]" title={`${order.customerDetails?.email} | ${order.customerDetails?.company}`}>
+                        {order.customerDetails?.company ? `${order.customerDetails.company} • ` : ''}{order.customerDetails?.email}
+                      </span>
+                    </td>
+                    <td className="p-4 font-medium text-white/80">
+                      {order.items?.length || 0} items
+                      <span className="text-[10px] text-white/40 block mt-0.5">
+                        Qty total: {order.items?.reduce((acc, it) => acc + it.quantity, 0) || 0}
+                      </span>
+                    </td>
+                    <td className="p-4 font-bold font-mono text-white text-sm">
+                      {hasPricedItems ? `$${grandTotal.toFixed(2)}` : <span className="text-yellow-500 font-sans font-normal text-xs">Unpriced RFQ</span>}
+                    </td>
+                    <td className="p-4">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                        order.status === 'Pending' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' :
+                        order.status === 'Approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                        order.status === 'Processing' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                        order.status === 'Completed' ? 'bg-[#2796a9]/10 border-[#2796a9]/20 text-[#2796a9]' :
+                        'bg-white/5 border-white/10 text-white/50'
+                      }`}>
+                        {order.status || 'Pending'}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={() => handleEditClick(order)}
+                          className="px-3 py-1.5 bg-[#2796a9]/10 hover:bg-[#2796a9] text-[#2796a9] hover:text-white rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20"
+                        >
+                          Process RFQ
+                        </button>
+                        <button
+                          onClick={() => handleDeleteOrder(order._id, order.referenceId)}
+                          className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                          title="Delete request"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+              {filteredOrders.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="p-12 text-center text-white/30 text-xs">
+                    No quotation requests or orders found matching the filter.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination footer */}
+        {totalPages > 1 && (
+          <div className="p-4 border-t border-white/5 bg-slate-950/20 flex justify-between items-center text-xs">
+            <span className="text-white/40 font-light">
+              Showing page {currentPage} of {totalPages} ({filteredOrders.length} total orders)
+            </span>
+            <div className="flex gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white disabled:opacity-30 disabled:hover:bg-white/5 transition-all cursor-pointer font-semibold"
+              >
+                Previous
+              </button>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white disabled:opacity-30 disabled:hover:bg-white/5 transition-all cursor-pointer font-semibold"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// EcommOrderEditModal Component
+function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL }) {
+  const [status, setStatus] = useState(order.status || 'Pending');
+  const [shippingCost, setShippingCost] = useState(order.shippingCost || 0);
+  const [taxRate, setTaxRate] = useState(order.taxRate || 0);
+  const [paymentTerms, setPaymentTerms] = useState(order.paymentTerms || 'Net 30');
+  const [validUntil, setValidUntil] = useState(order.validUntil ? order.validUntil.split('T')[0] : '');
+  const [adminComments, setAdminComments] = useState(order.adminComments || '');
+  const [items, setItems] = useState(order.items || []);
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleItemPriceChange = (idx, value) => {
+    const updated = [...items];
+    updated[idx] = { ...updated[idx], unitPrice: parseFloat(value) || 0 };
+    setItems(updated);
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSubmitting(true);
+
+    const token = localStorage.getItem('cts_token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ecomm/orders/${order._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          status,
+          items,
+          shippingCost: Number(shippingCost) || 0,
+          taxRate: Number(taxRate) || 0,
+          paymentTerms,
+          validUntil: validUntil ? new Date(validUntil).toISOString() : null,
+          adminComments
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(prev => prev.map(o => o._id === order._id ? data.data : o));
+        setActiveModal(null);
+      } else {
+        setError(data.error || 'Failed to update order.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const subtotal = items.reduce((acc, item) => acc + (item.quantity * (item.unitPrice || 0)), 0);
+  const taxAmount = (subtotal * (Number(taxRate) || 0)) / 100;
+  const total = subtotal + taxAmount + (Number(shippingCost) || 0);
+
+  return (
+    <div className="p-6 flex flex-col gap-6 text-white max-h-[85vh] overflow-y-auto">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSave} className="flex flex-col gap-6">
+        {/* Customer Info Card */}
+        <div className="p-4 rounded-xl border border-white/5 bg-white/5 grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <span className="text-white/40 block">Customer Name</span>
+            <span className="font-semibold text-white">{order.customerDetails?.name}</span>
+          </div>
+          <div>
+            <span className="text-white/40 block">Company / Enterprise</span>
+            <span className="font-semibold text-white">{order.customerDetails?.company || 'N/A'}</span>
+          </div>
+          <div>
+            <span className="text-white/40 block">Email Address</span>
+            <span className="font-semibold text-white">{order.customerDetails?.email}</span>
+          </div>
+          <div>
+            <span className="text-white/40 block">Phone Contact</span>
+            <span className="font-semibold text-white">{order.customerDetails?.phone || 'N/A'}</span>
+          </div>
+          {order.customerDetails?.message && (
+            <div className="col-span-2 border-t border-white/5 pt-2 mt-1">
+              <span className="text-white/40 block">Customer Notes/Instructions</span>
+              <span className="italic text-white/80">{order.customerDetails?.message}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Status Dropdown */}
+        <div className="flex flex-col gap-1.5 max-w-xs">
+          <label className="text-[10px] text-white/50 uppercase">Order / RFQ Status</label>
+          <select
+            value={status}
+            onChange={e => setStatus(e.target.value)}
+            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+          >
+            <option value="Pending">Pending Review</option>
+            <option value="Approved">Approved / Priced</option>
+            <option value="Processing">Processing Quote</option>
+            <option value="Completed">Completed / Dispatched</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        {/* Items Listing & Unit Price Setting */}
+        <div className="flex flex-col gap-3">
+          <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">Item Worksheet & Pricing</h4>
+          <div className="border border-white/5 rounded-xl overflow-hidden bg-slate-950/20">
+            <table className="w-full border-collapse text-left text-xs">
+              <thead>
+                <tr className="bg-white/5 border-b border-white/5 text-white/55 text-[10px] uppercase tracking-wider">
+                  <th className="p-3">Product details</th>
+                  <th className="p-3 text-center">Qty</th>
+                  <th className="p-3">Unit Price ($)</th>
+                  <th className="p-3 text-right">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {items.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-white/5 transition-colors">
+                    <td className="p-3">
+                      <span className="font-semibold block text-white">{item.product_name}</span>
+                      <span className="text-[10px] text-white/45">
+                        Brand: {item.brand} | SKU: {item.sku} | Model: {item.model || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="p-3 text-center font-bold text-white/70">{item.quantity}</td>
+                    <td className="p-3">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={item.unitPrice || ''}
+                        onChange={e => handleItemPriceChange(idx, e.target.value)}
+                        placeholder="0.00"
+                        className="w-24 bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white focus:border-[#2796a9] outline-none text-right font-mono"
+                        required
+                      />
+                    </td>
+                    <td className="p-3 text-right font-mono text-white/80 font-bold">
+                      ${((item.quantity || 1) * (item.unitPrice || 0)).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Costing Summary & Quote Terms Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-white/5 pt-6">
+          {/* Quote Settings Form */}
+          <div className="flex flex-col gap-4 text-xs">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] text-white/50 uppercase">Shipping & Handling ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={shippingCost}
+                  onChange={e => setShippingCost(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] text-white/50 uppercase">Tax Rate (%)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="100"
+                  value={taxRate}
+                  onChange={e => setTaxRate(e.target.value)}
+                  placeholder="0.0"
+                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] text-white/50 uppercase">Payment Terms</label>
+                <input
+                  type="text"
+                  value={paymentTerms}
+                  onChange={e => setPaymentTerms(e.target.value)}
+                  placeholder="Net 30, COD, etc."
+                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] text-white/50 uppercase">Quote Validity Date</label>
+                <input
+                  type="date"
+                  value={validUntil}
+                  onChange={e => setValidUntil(e.target.value)}
+                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono text-white/80"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] text-white/50 uppercase">Procurement Officer Comments / Notes</label>
+              <textarea
+                value={adminComments}
+                onChange={e => setAdminComments(e.target.value)}
+                placeholder="Add special terms, lead time details, shipping estimates..."
+                rows={3}
+                className="w-full bg-slate-900 border border-white/10 rounded-lg p-3 text-xs text-white focus:border-[#2796a9] outline-none resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Pricing Worksheet Totals Panel */}
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-3 text-xs justify-center">
+            <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest border-b border-white/5 pb-2">
+              Worksheet Cost Summary
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/60">Subtotal:</span>
+              <span className="font-mono text-white font-semibold">${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/60">Shipping cost:</span>
+              <span className="font-mono text-white font-semibold">${Number(shippingCost).toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/60">Tax / GST ({taxRate}%):</span>
+              <span className="font-mono text-white font-semibold">${taxAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between border-t border-white/5 pt-3 font-bold text-sm text-[#2796a9]">
+              <span>RFQ Grand Total:</span>
+              <span className="font-mono text-white">${total.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-between pt-4 border-t border-white/5">
+          <button
+            type="button"
+            onClick={() => setActiveModal(null)}
+            className="px-5 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
+          >
+            {submitting ? 'Saving Changes...' : 'Save & Approve Quote'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

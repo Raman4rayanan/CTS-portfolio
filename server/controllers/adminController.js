@@ -9,6 +9,8 @@ const ProductService = require('../models/portfolio/ProductService');
 const Category = require('../models/ecomm/Category');
 const Product = require('../models/ecomm/Product');
 const Company = require('../models/ecomm/Company');
+const Brand = require('../models/ecomm/Brand');
+const Order = require('../models/ecomm/Order');
 
 const User = require('../models/admin/User');
 const Role = require('../models/admin/Role');
@@ -140,6 +142,8 @@ exports.getCrossDatabaseStats = async (req, res) => {
     const categoryCount = await Category.countDocuments();
     const productCount = await Product.countDocuments();
     const companyCount = await Company.countDocuments();
+    const brandCount = await Brand.countDocuments();
+    const orderCount = await Order.countDocuments();
 
     // 3. Fetch count/metrics from cts_admin
     const userCount = await User.countDocuments();
@@ -158,7 +162,9 @@ exports.getCrossDatabaseStats = async (req, res) => {
         ecommerce: {
           categories: categoryCount,
           products: productCount,
-          companies: companyCount
+          companies: companyCount,
+          brands: brandCount,
+          orders: orderCount
         },
         admin: {
           users: userCount,

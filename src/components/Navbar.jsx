@@ -29,28 +29,59 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
     try {
       const saved = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
       setLocalQuotes(saved);
+
+      const syncStatus = async () => {
+        const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const updated = await Promise.all(saved.map(async (q) => {
+          try {
+            const res = await fetch(`${apiBaseUrl}/api/ecomm/orders/track/${q.referenceId}`);
+            const data = await res.json();
+            if (data.success) {
+              return data.data;
+            }
+          } catch (e) {}
+          return q;
+        }));
+        setLocalQuotes(updated);
+        localStorage.setItem('cts_quotes', JSON.stringify(updated));
+      };
+
+      if (saved.length > 0) {
+        syncStatus();
+      }
     } catch (err) {
       console.error(err);
     }
   }, [isRfqModalOpen]);
 
-  const handleRfqSearch = (e) => {
+  const handleRfqSearch = async (e) => {
     e.preventDefault();
     setRfqSearchError('');
     setRfqSearchResult(null);
     if (!rfqSearchQuery.trim()) return;
 
     try {
-      const savedQuotes = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
-      const found = savedQuotes.find(q => q.referenceId.toLowerCase() === rfqSearchQuery.trim().toLowerCase());
-      if (found) {
-        setRfqSearchResult(found);
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiBaseUrl}/api/ecomm/orders/track/${rfqSearchQuery.trim()}`);
+      const data = await res.json();
+      if (data.success) {
+        setRfqSearchResult(data.data);
       } else {
-        setRfqSearchError('RFQ Reference ID not found. Verify formatting (e.g., CTS-2026-XXXX).');
+        setRfqSearchError(data.error || 'RFQ Reference ID not found. Verify formatting (e.g., CTS-2026-XXXX).');
       }
     } catch (err) {
       console.error(err);
-      setRfqSearchError('Failed to read quote tracking storage.');
+      try {
+        const savedQuotes = JSON.parse(localStorage.getItem('cts_quotes') || '[]');
+        const found = savedQuotes.find(q => q.referenceId.toLowerCase() === rfqSearchQuery.trim().toLowerCase());
+        if (found) {
+          setRfqSearchResult(found);
+        } else {
+          setRfqSearchError('RFQ Reference ID not found. Verify formatting (e.g., CTS-2026-XXXX).');
+        }
+      } catch (localErr) {
+        setRfqSearchError('Connection failure. Could not reach server.');
+      }
     }
   };
 
@@ -499,26 +530,94 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                         {rfqSearchResult.customerDetails?.name} / {rfqSearchResult.customerDetails?.company}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="border-t border-slate-800 pt-3">
+                  </div>                  <div className="border-t border-slate-800 pt-3">
                     <span className="text-[10px] text-slate-500 uppercase block font-semibold mb-2">Requested Items ({rfqSearchResult.items?.length || 0})</span>
-                    <div className="max-h-48 overflow-y-auto divide-y divide-slate-850/60 pr-1 text-xs flex flex-col">
-                      {rfqSearchResult.items?.map((item, idx) => (
-                        <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 text-slate-305 border-b border-slate-850/40 last:border-0">
-                          <div className="flex flex-col gap-0.5 text-left">
-                            <span className="font-semibold text-slate-200">{item.product_name}</span>
-                            <span className="text-[10px] text-slate-500 font-medium tracking-wide">
-                              Brand: {item.brand} | Model: {item.model} | SKU: {item.sku}
-                            </span>
+                    <div className="max-h-48 overflow-y-auto divide-y divide-slate-850/60 pr-1 text-xs flex flex-col mb-4">
+                      {rfqSearchResult.items?.map((item, idx) => {
+                        const hasPrice = item.unitPrice && item.unitPrice > 0;
+                        return (
+                          <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 text-slate-300 border-b border-slate-850/40 last:border-0">
+                            <div className="flex flex-col gap-0.5 text-left">
+                              <span className="font-semibold text-slate-200">{item.product_name}</span>
+                              <span className="text-[10px] text-slate-505 font-medium tracking-wide">
+                                Brand: {item.brand} | Model: {item.model} | SKU: {item.sku}
+                              </span>
+                              {hasPrice && (
+                                <span className="text-[11px] text-slate-400 mt-0.5">
+                                  Price: <span className="text-[#2796a9] font-medium font-mono">${item.unitPrice.toFixed(2)}</span> per unit
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-3 self-start sm:self-center mt-1 sm:mt-0">
+                              <span className="font-semibold text-white/50 text-[10px]">
+                                Qty: {item.quantity}
+                              </span>
+                              {hasPrice && (
+                                <span className="font-bold text-white text-xs bg-slate-950 border border-slate-850 px-2 py-1 rounded font-mono">
+                                  ${(item.quantity * item.unitPrice).toFixed(2)}
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          <span className="font-bold text-white text-xs bg-slate-950 border border-slate-850 px-2.5 py-1 rounded-lg self-start sm:self-center mt-1 sm:mt-0">
-                            Qty: {item.quantity}
-                          </span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
+
+                  {/* Cost Summary Breakdown */}
+                  {rfqSearchResult.items?.some(item => item.unitPrice > 0) ? (
+                    <div className="border-t border-slate-800 pt-3 flex flex-col gap-1.5 text-xs text-slate-400">
+                      <div className="flex justify-between">
+                        <span>Items Subtotal:</span>
+                        <span className="font-mono text-white">
+                          ${rfqSearchResult.items.reduce((acc, item) => acc + (item.quantity * (item.unitPrice || 0)), 0).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Shipping & Handling:</span>
+                        <span className="font-mono text-white">${(rfqSearchResult.shippingCost || 0).toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Estimated Tax / GST ({rfqSearchResult.taxRate || 0}%):</span>
+                        <span className="font-mono text-white">
+                          ${(rfqSearchResult.items.reduce((acc, item) => acc + (item.quantity * (item.unitPrice || 0)), 0) * (rfqSearchResult.taxRate || 0) / 100).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between border-t border-slate-800 pt-2 font-bold text-sm text-[#2796a9]">
+                        <span>Grand Total:</span>
+                        <span className="font-mono text-white">
+                          ${(
+                            rfqSearchResult.items.reduce((acc, item) => acc + (item.quantity * (item.unitPrice || 0)), 0) * (1 + (rfqSearchResult.taxRate || 0) / 100) + 
+                            (rfqSearchResult.shippingCost || 0)
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3 mt-2 p-3 bg-white/5 border border-white/5 rounded-xl text-[11px] leading-relaxed">
+                        <div>
+                          <span className="text-slate-500 block text-[9px] uppercase font-semibold">Payment Terms</span>
+                          <span className="text-slate-300 font-semibold">{rfqSearchResult.paymentTerms || 'Net 30'}</span>
+                        </div>
+                        {rfqSearchResult.validUntil && (
+                          <div>
+                            <span className="text-slate-505 block text-[9px] uppercase font-semibold">Quote Valid Until</span>
+                            <span className="text-slate-300 font-semibold">{new Date(rfqSearchResult.validUntil).toLocaleDateString()}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {rfqSearchResult.adminComments && (
+                        <div className="mt-2 p-3 bg-blue-500/5 border border-blue-500/10 rounded-xl text-[11px] text-slate-300 leading-relaxed text-left">
+                          <span className="text-[#2796a9] font-bold block mb-1">Procurement Officer Note:</span>
+                          {rfqSearchResult.adminComments}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="p-3.5 bg-slate-950 border border-slate-850 rounded-xl text-[11px] text-slate-400 text-center leading-relaxed">
+                      💡 Pricing worksheets are currently being prepared by the procurement desk. Once approved, details will display here in real-time.
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>
