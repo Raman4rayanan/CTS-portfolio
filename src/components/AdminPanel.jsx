@@ -99,6 +99,18 @@ export default function AdminPanel() {
     ecommBannerText: '',
     ecommSlides: []
   });
+  const [ecommCustomizeForm, setEcommCustomizeForm] = useState({
+    showBrandSpotlight: true,
+    brandSpotlightTag: 'Partners',
+    brandSpotlightTitle: 'Brand Spotlight',
+    showNewlyAdded: true,
+    newlyAddedTag: 'Latest Arrivals',
+    newlyAddedTitle: 'Newly Added Products',
+    newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
+    newlyAddedLimit: 8
+  });
+  const [ecommBrandsLocal, setEcommBrandsLocal] = useState([]);
+  
   const [saveSuccess, setSaveSuccess] = useState('');
   
   // UI Loading/Error states
@@ -296,6 +308,26 @@ export default function AdminPanel() {
     }));
   };
 
+  // E-commerce Brands Mutations
+  const handleAddEcommBrand = () => {
+    setEcommBrandsLocal(prev => [
+      { name: 'New Brand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png', scale: 1.0 },
+      ...prev
+    ]);
+  };
+
+  const handleUpdateEcommBrand = (index, field, value) => {
+    setEcommBrandsLocal(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const handleRemoveEcommBrand = (index) => {
+    setEcommBrandsLocal(prev => prev.filter((_, i) => i !== index));
+  };
+
   // Fetch all data helper
   const fetchData = async () => {
     setLoading(true);
@@ -386,9 +418,31 @@ export default function AdminPanel() {
           const brandsData = await brandsRes.json();
           if (brandsData.success) {
             setBrandsList(brandsData.data);
+            setEcommBrandsLocal(brandsData.data);
           }
         } catch (brandsErr) {
           console.error('Error fetching partner brands:', brandsErr);
+        }
+
+        // Fetch ecomm config
+        try {
+          const ecommConfigRes = await fetch(`${API_BASE_URL}/api/ecomm/config`);
+          const ecommConfigData = await ecommConfigRes.json();
+          if (ecommConfigData.success && ecommConfigData.data) {
+            setEcommCustomizeForm(prev => ({
+              ...prev,
+              showBrandSpotlight: ecommConfigData.data.showBrandSpotlight ?? true,
+              brandSpotlightTag: ecommConfigData.data.brandSpotlightTag || 'Partners',
+              brandSpotlightTitle: ecommConfigData.data.brandSpotlightTitle || 'Brand Spotlight',
+              showNewlyAdded: ecommConfigData.data.showNewlyAdded ?? true,
+              newlyAddedTag: ecommConfigData.data.newlyAddedTag || 'Latest Arrivals',
+              newlyAddedTitle: ecommConfigData.data.newlyAddedTitle || 'Newly Added Products',
+              newlyAddedSubtitle: ecommConfigData.data.newlyAddedSubtitle || 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
+              newlyAddedLimit: ecommConfigData.data.newlyAddedLimit ?? 8
+            }));
+          }
+        } catch (e) {
+          console.error('Error fetching ecomm config:', e);
         }
 
         // Fetch orders/RFQs from backend
@@ -446,13 +500,39 @@ export default function AdminPanel() {
         },
         body: JSON.stringify(parsedForm)
       });
+      
+      const ecommConfigRes = await fetch(`${API_BASE_URL}/api/ecomm/config`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(ecommCustomizeForm)
+      });
+
+      const ecommBrandsRes = await fetch(`${API_BASE_URL}/api/ecomm/brands/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ brands: ecommBrandsLocal })
+      });
+
       const data = await res.json();
-      if (data.success) {
+      const ecommConfigData = await ecommConfigRes.json();
+      const ecommBrandsData = await ecommBrandsRes.json();
+
+      if (data.success && ecommConfigData.success && ecommBrandsData.success) {
         setConfig(data.data);
-        setSaveSuccess('Configuration saved successfully! The changes are now live.');
+        setSaveSuccess('All changes saved successfully! The updates are now live.');
+        if (ecommBrandsData.data) {
+          setEcommBrandsLocal(ecommBrandsData.data);
+          setBrandsList(ecommBrandsData.data);
+        }
         setTimeout(() => setSaveSuccess(''), 5000);
       } else {
-        setError(data.error || 'Failed to update configuration.');
+        setError(data.error || ecommConfigData.error || ecommBrandsData.error || 'Failed to update configuration.');
       }
     } catch (err) {
       console.error(err);
@@ -2091,6 +2171,212 @@ export default function AdminPanel() {
                         </div>
                       )}
                     </div>
+
+                    {/* E-COMMERCE STOREFRONT SETTINGS */}
+                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                      <div className="border-b border-white/5 pb-3">
+                        <h4 className="font-bold text-base text-[#2796a9]">Storefront Dynamic Sections</h4>
+                        <p className="text-xs text-white/40 font-light mt-0.5">Toggle and customize the Brand Spotlight and Newly Added sections on your E-commerce shop page.</p>
+                      </div>
+
+                      <div className="flex flex-col gap-4">
+                        {/* Brand Spotlight */}
+                        <div className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-3">
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={ecommCustomizeForm.showBrandSpotlight}
+                              onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, showBrandSpotlight: e.target.checked })}
+                              className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9] focus:ring-offset-slate-900"
+                            />
+                            <span className="text-sm font-semibold">Show Brand Spotlight Section</span>
+                          </label>
+
+                          {ecommCustomizeForm.showBrandSpotlight && (
+                            <div className="flex gap-4 ml-7">
+                              <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] text-white/50 uppercase">Tagline</label>
+                                <input
+                                  type="text"
+                                  value={ecommCustomizeForm.brandSpotlightTag || ''}
+                                  onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, brandSpotlightTag: e.target.value })}
+                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none"
+                                />
+                              </div>
+                              <div className="flex-2 flex flex-col gap-1.5">
+                                <label className="text-[10px] text-white/50 uppercase">Title</label>
+                                <input
+                                  type="text"
+                                  value={ecommCustomizeForm.brandSpotlightTitle || ''}
+                                  onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, brandSpotlightTitle: e.target.value })}
+                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Newly Added */}
+                        <div className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-3">
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={ecommCustomizeForm.showNewlyAdded}
+                              onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, showNewlyAdded: e.target.checked })}
+                              className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9] focus:ring-offset-slate-900"
+                            />
+                            <span className="text-sm font-semibold">Show Newly Added Products Section</span>
+                          </label>
+
+                          {ecommCustomizeForm.showNewlyAdded && (
+                            <div className="flex flex-col gap-3 ml-7">
+                              <div className="flex gap-4">
+                                <div className="flex-1 flex flex-col gap-1.5">
+                                  <label className="text-[10px] text-white/50 uppercase">Tagline</label>
+                                  <input
+                                    type="text"
+                                    value={ecommCustomizeForm.newlyAddedTag || ''}
+                                    onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedTag: e.target.value })}
+                                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none"
+                                  />
+                                </div>
+                                <div className="flex-2 flex flex-col gap-1.5">
+                                  <label className="text-[10px] text-white/50 uppercase">Title</label>
+                                  <input
+                                    type="text"
+                                    value={ecommCustomizeForm.newlyAddedTitle || ''}
+                                    onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedTitle: e.target.value })}
+                                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                  />
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1.5">
+                                <label className="text-[10px] text-white/50 uppercase">Subtitle / Description</label>
+                                <textarea
+                                  value={ecommCustomizeForm.newlyAddedSubtitle || ''}
+                                  onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedSubtitle: e.target.value })}
+                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none resize-none h-16"
+                                />
+                              </div>
+                              <div className="flex items-center gap-4 mt-2">
+                                <label className="text-[10px] text-white/50 uppercase tracking-wide">Number of Products to Display</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max="50"
+                                  value={ecommCustomizeForm.newlyAddedLimit}
+                                  onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedLimit: parseInt(e.target.value) || 8 })}
+                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none w-24 font-mono"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* E-COMMERCE BRANDS / PARTNER LOGOS */}
+                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                      <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                        <div className="flex flex-col">
+                          <h4 className="font-bold text-base text-[#2796a9]">E-Commerce Brand Partner Logos</h4>
+                          <p className="text-xs text-white/40 font-light mt-0.5">Manage the brand logos displayed in the "Brand Spotlight" slider.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleAddEcommBrand}
+                          className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20 flex items-center gap-2"
+                        >
+                          <Plus size={14} />
+                          <span>Add Brand Logo</span>
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {ecommBrandsLocal.map((brand, idx) => (
+                          <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-center group">
+                            {/* Delete Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveEcommBrand(idx)}
+                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
+                              title="Delete Brand Logo"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+
+                            {/* Logo Preview */}
+                            <div className="w-16 h-16 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
+                              <img
+                                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
+                                alt={brand.name}
+                                className="max-w-full max-h-full object-contain opacity-80"
+                                style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            </div>
+
+                            {/* Logo Fields */}
+                            <div className="flex-1 flex flex-col gap-2 pt-1">
+                              <input
+                                type="text"
+                                value={brand.name}
+                                onChange={e => handleUpdateEcommBrand(idx, 'name', e.target.value)}
+                                placeholder="Brand Name"
+                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+                                required
+                              />
+                              <div className="flex gap-2 items-center">
+                                <input
+                                  type="text"
+                                  value={brand.src || brand.logoUrl || ''}
+                                  onChange={e => handleUpdateEcommBrand(idx, 'src', e.target.value)}
+                                  placeholder="Image Path"
+                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  required
+                                />
+                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                  {uploadingField === `ecomm_brand_${idx}` ? 'Uploading...' : 'Upload'}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    disabled={uploadingField !== null}
+                                    onChange={e => {
+                                      if (e.target.files && e.target.files[0]) {
+                                        handleCloudinaryUpload(
+                                          e.target.files[0],
+                                          'ecomm',
+                                          (url) => handleUpdateEcommBrand(idx, 'src', url),
+                                          `ecomm_brand_${idx}`
+                                        );
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
+                                <input
+                                  type="number"
+                                  step="0.05"
+                                  min="0.1"
+                                  max="5.0"
+                                  value={brand.scale ?? 1.0}
+                                  onChange={e => handleUpdateEcommBrand(idx, 'scale', e.target.value)}
+                                  className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {ecommBrandsLocal.length === 0 && (
+                          <div className="col-span-3 text-center py-12 text-white/30 text-xs border border-dashed border-white/10 rounded-xl mt-4">
+                            No brands configured. Click Add Brand Logo to create one.
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </form>
               )}
@@ -2155,6 +2441,7 @@ export default function AdminPanel() {
                   {activeModal === 'import_ecomm_csv' && 'Import Catalog via CSV'}
                   {activeModal === 'mass_delete_ecomm' && 'Mass Delete Catalog Products'}
                   {activeModal === 'manage_brands_ecomm' && 'Partner Brand Manager'}
+                  {activeModal === 'storefront_settings_ecomm' && 'E-Commerce Storefront Settings'}
                   {activeModal === 'edit_order_ecomm' && 'Process RFQ & Price Quotation Worksheet'}
                 </h3>
                 <button onClick={() => setActiveModal(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
@@ -2387,6 +2674,14 @@ export default function AdminPanel() {
                   uploadingField={uploadingField}
                   setUploadingField={setUploadingField}
                   setDeleteConfirmData={setDeleteConfirmData}
+                />
+              )}
+
+              {/* STOREFRONT SETTINGS MODAL */}
+              {activeModal === 'storefront_settings_ecomm' && (
+                <EcommStorefrontSettingsModal
+                  setActiveModal={setActiveModal}
+                  API_BASE_URL={API_BASE_URL}
                 />
               )}
 
@@ -2733,6 +3028,15 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           >
             <SlidersHorizontal size={14} />
             <span>Manage Brands</span>
+          </button>
+
+          {/* Storefront Settings */}
+          <button
+            onClick={() => setActiveModal('storefront_settings_ecomm')}
+            className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Cog size={14} />
+            <span>Storefront Settings</span>
           </button>
 
           {/* Add Product */}
@@ -3796,198 +4100,6 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
   );
 }
 
-// EcommBrandManagerModal Component
-function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_URL, handleCloudinaryUpload, uploadingField, setUploadingField, setDeleteConfirmData }) {
-  const [newBrandName, setNewBrandName] = useState('');
-  const [newBrandLogo, setNewBrandLogo] = useState('');
-  const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-
-    if (!newBrandName.trim()) {
-      setError('Brand name is required.');
-      return;
-    }
-
-    setSubmitting(true);
-    const token = localStorage.getItem('cts_token');
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/ecomm/brands`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: newBrandName.trim(),
-          logoUrl: newBrandLogo.trim()
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setBrands(prev => [...prev, data.data].sort((a, b) => a.name.localeCompare(b.name)));
-        setNewBrandName('');
-        setNewBrandLogo('');
-      } else {
-        setError(data.error || 'Failed to create brand.');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Connection failure.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleDeleteBrandClick = (id, name) => {
-    setDeleteConfirmData({
-      title: 'Delete Partner Brand',
-      message: `Are you sure you want to delete the brand "${name}"? This action is permanent and cannot be undone.`,
-      onConfirm: async () => {
-        const token = localStorage.getItem('cts_token');
-        try {
-          const res = await fetch(`${API_BASE_URL}/api/ecomm/brands/${id}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          const data = await res.json();
-          if (data.success) {
-            setBrands(prev => prev.filter(b => b._id !== id));
-          } else {
-            alert(data.error || 'Failed to delete brand.');
-          }
-        } catch (err) {
-          console.error(err);
-          alert('Connection error.');
-        }
-      }
-    });
-  };
-
-  return (
-    <div className="p-6 flex flex-col gap-6 text-white max-h-[85vh] overflow-y-auto">
-      {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
-          {error}
-        </div>
-      )}
-
-      {/* Add New Brand Card */}
-      <form onSubmit={handleSubmit} className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-4">
-        <h4 className="text-xs font-bold text-[#2796a9] uppercase tracking-wider">Add New Partner Brand</h4>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] text-white/50 uppercase">Brand Name</label>
-            <input
-              type="text"
-              value={newBrandName}
-              onChange={e => setNewBrandName(e.target.value)}
-              placeholder="e.g. Milwaukee Tools"
-              className="bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] text-white/50 uppercase">Logo URL / Resource Path</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newBrandLogo}
-                onChange={e => setNewBrandLogo(e.target.value)}
-                placeholder="Cloudinary URL"
-                className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
-              />
-              <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
-                {uploadingField === 'brand_logo' ? 'Uploading...' : 'Upload'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  disabled={uploadingField !== null}
-                  onChange={e => {
-                    if (e.target.files && e.target.files[0]) {
-                      handleCloudinaryUpload(
-                        e.target.files[0],
-                        'ecomm',
-                        (url) => setNewBrandLogo(url),
-                        'brand_logo'
-                      );
-                    }
-                  }}
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="self-end px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-95 transition-all cursor-pointer"
-        >
-          {submitting ? 'Adding Brand...' : 'Save Brand'}
-        </button>
-      </form>
-
-      {/* Brands List Table */}
-      <div className="flex flex-col gap-3">
-        <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">Active Partner Brands ({brands.length})</h4>
-        <div className="border border-white/5 rounded-xl overflow-hidden bg-slate-950/20 max-h-[300px] overflow-y-auto">
-          <table className="w-full border-collapse text-left text-xs">
-            <thead>
-              <tr className="bg-white/5 border-b border-white/5 text-white/50 text-[10px] uppercase tracking-wider">
-                <th className="p-3">Logo</th>
-                <th className="p-3">Brand Name</th>
-                <th className="p-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {brands.map(brand => (
-                <tr key={brand._id} className="hover:bg-white/5 transition-colors">
-                  <td className="p-3">
-                    <div className="w-12 h-8 rounded border border-white/10 bg-slate-950 p-1 flex items-center justify-center">
-                      <img src={brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} alt={brand.name} className="max-w-full max-h-full object-contain" />
-                    </div>
-                  </td>
-                  <td className="p-3 font-semibold text-white">{brand.name}</td>
-                  <td className="p-3 text-right">
-                    <button
-                      onClick={() => handleDeleteBrandClick(brand._id, brand.name)}
-                      className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors cursor-pointer"
-                      title="Delete brand"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {brands.length === 0 && (
-                <tr>
-                  <td colSpan="3" className="p-8 text-center text-white/30 text-xs">No brands found. Add a partner brand above.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="flex justify-end pt-2 border-t border-white/5">
-        <button
-          type="button"
-          onClick={() => setActiveModal(null)}
-          className="px-5 py-2 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
-        >
-          Close Manager
-        </button>
-      </div>
-    </div>
-  );
-}
 
 // EcommOrdersManager Component
 function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem, API_BASE_URL, setDeleteConfirmData }) {
@@ -4461,3 +4573,4 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
     </div>
   );
 }
+

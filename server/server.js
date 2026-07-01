@@ -8,6 +8,7 @@ require('./config/db');
 // Import Route Handlers
 const portfolioRoutes = require('./routes/portfolio');
 const ecommRoutes = require('./routes/ecomm');
+const ecommConfigRoutes = require('./routes/ecommConfig');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Routes
 app.use('/api/portfolio', portfolioRoutes);
+app.use('/api/ecomm/config', ecommConfigRoutes);
 app.use('/api/ecomm', ecommRoutes);
 app.use('/api/admin', adminRoutes);
 

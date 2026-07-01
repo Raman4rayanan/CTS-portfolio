@@ -157,6 +157,32 @@ router.get('/brands', async (req, res) => {
   }
 });
 
+router.post('/brands/sync', protectAdmin, async (req, res) => {
+  try {
+    const { brands } = req.body;
+    if (!Array.isArray(brands)) {
+      return res.status(400).json({ success: false, error: 'Brands array is required.' });
+    }
+
+    // Drop all existing brands and insert the new array
+    await Brand.deleteMany({});
+    
+    const formattedBrands = brands.map(b => ({
+      name: b.name.trim(),
+      logoUrl: b.src || b.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+    }));
+
+    if (formattedBrands.length > 0) {
+      await Brand.insertMany(formattedBrands);
+    }
+    
+    const updatedBrands = await Brand.find().sort({ name: 1 });
+    res.json({ success: true, count: updatedBrands.length, data: updatedBrands });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 router.post('/brands', protectAdmin, async (req, res) => {
   try {
     const { name, logoUrl } = req.body;
@@ -174,6 +200,37 @@ router.post('/brands', protectAdmin, async (req, res) => {
     });
     await brand.save();
     res.status(201).json({ success: true, data: brand });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.put('/brands/:id', protectAdmin, async (req, res) => {
+  try {
+    const { name, logoUrl } = req.body;
+    if (!name) {
+      return res.status(400).json({ success: false, error: 'Brand name is required.' });
+    }
+    const duplicate = await Brand.findOne({ 
+      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
+      _id: { $ne: req.params.id }
+    });
+    if (duplicate) {
+      return res.status(400).json({ success: false, error: 'Brand with this name already exists.' });
+    }
+
+    const brand = await Brand.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: name.trim(),
+        logoUrl: logoUrl ? logoUrl.trim() : 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+      },
+      { new: true, runValidators: true }
+    );
+    if (!brand) {
+      return res.status(404).json({ success: false, error: 'Brand not found.' });
+    }
+    res.json({ success: true, data: brand });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

@@ -144,11 +144,25 @@ export default function ShopPage() {
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedSubTypes, setSelectedSubTypes] = useState([]);
   const [selectedModels, setSelectedModels] = useState([]);
+  const [typeSearch, setTypeSearch] = useState('');
+  const [subTypeSearch, setSubTypeSearch] = useState('');
+  const [modelSearch, setModelSearch] = useState('');
   const [displayLimit, setDisplayLimit] = useState(12);
   const [sortBy, setSortBy] = useState('name-asc'); // name-asc, newest
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  
+  const [ecommConfig, setEcommConfig] = useState({
+    showBrandSpotlight: true,
+    brandSpotlightTag: 'Partners',
+    brandSpotlightTitle: 'Brand Spotlight',
+    showNewlyAdded: true,
+    newlyAddedTag: 'Latest Arrivals',
+    newlyAddedTitle: 'Newly Added Products',
+    newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
+    newlyAddedLimit: 8
+  });
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -232,7 +246,29 @@ export default function ShopPage() {
       }
     };
 
+    const fetchConfig = async () => {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/ecomm/config`);
+        const data = await res.json();
+        if (data.success && data.data) {
+          setEcommConfig({
+            showBrandSpotlight: data.data.showBrandSpotlight ?? true,
+            brandSpotlightTag: data.data.brandSpotlightTag || 'Partners',
+            brandSpotlightTitle: data.data.brandSpotlightTitle || 'Brand Spotlight',
+            showNewlyAdded: data.data.showNewlyAdded ?? true,
+            newlyAddedTag: data.data.newlyAddedTag || 'Latest Arrivals',
+            newlyAddedTitle: data.data.newlyAddedTitle || 'Newly Added Products',
+            newlyAddedSubtitle: data.data.newlyAddedSubtitle || 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
+            newlyAddedLimit: data.data.newlyAddedLimit ?? 8
+          });
+        }
+      } catch (e) {
+        console.error('Failed to fetch ecomm config:', e);
+      }
+    };
+
     fetchBrandsAndProducts();
+    fetchConfig();
   }, []);
 
   useEffect(() => {
@@ -717,170 +753,78 @@ export default function ShopPage() {
               </div>
 
               {/* Type Filter */}
-              <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Type</label>
-                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                  {filterOptions.types.map(t => (
-                    <label key={t} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
-                      <div className="relative flex items-center justify-center w-4 h-4">
-                        <input
-                          type="checkbox"
-                          checked={selectedTypes.includes(t)}
-                          onChange={(e) => {
-                            if (e.target.checked) setSelectedTypes([...selectedTypes, t]);
-                            else setSelectedTypes(selectedTypes.filter(x => x !== t));
-                            setCurrentView('products');
-                            scrollToCatalog();
-                          }}
-                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
-                        />
-                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
-                      </div>
-                      <span className="group-hover:text-white">{t}</span>
-                    </label>
-                  ))}
+              {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
+                <div>
+                  <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Type</label>
+                  <input
+                    type="text"
+                    placeholder="Search type..."
+                    value={typeSearch}
+                    onChange={e => setTypeSearch(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none mb-3 placeholder:text-slate-600"
+                  />
+                  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                    {filterOptions.types
+                      .filter(t => t.toLowerCase().includes(typeSearch.toLowerCase()))
+                      .map(t => (
+                      <label key={t} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                        <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
+                          <input
+                            type="checkbox"
+                            checked={selectedTypes.includes(t)}
+                            onChange={(e) => {
+                              if (e.target.checked) setSelectedTypes([...selectedTypes, t]);
+                              else setSelectedTypes(selectedTypes.filter(x => x !== t));
+                              setCurrentView('products');
+                              scrollToCatalog();
+                            }}
+                            className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                          />
+                          <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                        </div>
+                        <span className="group-hover:text-white truncate">{t}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Sub-Type Filter */}
-              <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Sub-Type</label>
-                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                  {filterOptions.subTypes.map(st => (
-                    <label key={st} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
-                      <div className="relative flex items-center justify-center w-4 h-4">
-                        <input
-                          type="checkbox"
-                          checked={selectedSubTypes.includes(st)}
-                          onChange={(e) => {
-                            if (e.target.checked) setSelectedSubTypes([...selectedSubTypes, st]);
-                            else setSelectedSubTypes(selectedSubTypes.filter(x => x !== st));
-                            setCurrentView('products');
-                            scrollToCatalog();
-                          }}
-                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
-                        />
-                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
-                      </div>
-                      <span className="group-hover:text-white">{st}</span>
-                    </label>
-                  ))}
+              {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
+                <div>
+                  <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Sub-Type</label>
+                  <input
+                    type="text"
+                    placeholder="Search sub-type..."
+                    value={subTypeSearch}
+                    onChange={e => setSubTypeSearch(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none mb-3 placeholder:text-slate-600"
+                  />
+                  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                    {filterOptions.subTypes
+                      .filter(st => st.toLowerCase().includes(subTypeSearch.toLowerCase()))
+                      .map(st => (
+                      <label key={st} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                        <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
+                          <input
+                            type="checkbox"
+                            checked={selectedSubTypes.includes(st)}
+                            onChange={(e) => {
+                              if (e.target.checked) setSelectedSubTypes([...selectedSubTypes, st]);
+                              else setSelectedSubTypes(selectedSubTypes.filter(x => x !== st));
+                              setCurrentView('products');
+                              scrollToCatalog();
+                            }}
+                            className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                          />
+                          <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                        </div>
+                        <span className="group-hover:text-white truncate">{st}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Model Filter */}
-              <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Model</label>
-                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                  {filterOptions.models.map(m => (
-                    <label key={m} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
-                      <div className="relative flex items-center justify-center w-4 h-4">
-                        <input
-                          type="checkbox"
-                          checked={selectedModels.includes(m)}
-                          onChange={(e) => {
-                            if (e.target.checked) setSelectedModels([...selectedModels, m]);
-                            else setSelectedModels(selectedModels.filter(x => x !== m));
-                            setCurrentView('products');
-                            scrollToCatalog();
-                          }}
-                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
-                        />
-                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
-                      </div>
-                      <span className="group-hover:text-white">{m}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Collapsed Icons View (Desktop Only) */}
-            <div className={`hidden lg:flex flex-col items-center gap-8 w-full mt-2 ${isSidebarHovered ? 'lg:hidden' : ''}`}>
-              {/* Category Icon */}
-              <div className="relative group flex flex-col items-center">
-                <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedCategories.length > 0 
-                    ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}>
-                  <Grid size={18} />
-                </div>
-                {selectedCategories.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
-                )}
-                <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Categories: {selectedCategories.length} selected
-                </div>
-              </div>
-
-              {/* Brand Icon */}
-              <div className="relative group flex flex-col items-center">
-                <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedBrands.length > 0 
-                    ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}>
-                  <Award size={18} />
-                </div>
-                {selectedBrands.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
-                )}
-                <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Brands: {selectedBrands.length} selected
-                </div>
-              </div>
-
-              {/* Type Icon */}
-              <div className="relative group flex flex-col items-center">
-                <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedTypes.length > 0 
-                    ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}>
-                  <Wrench size={18} />
-                </div>
-                {selectedTypes.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
-                )}
-                <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Types: {selectedTypes.length} selected
-                </div>
-              </div>
-
-              {/* Sub-Type Icon */}
-              <div className="relative group flex flex-col items-center">
-                <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedSubTypes.length > 0 
-                    ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}>
-                  <Sliders size={18} />
-                </div>
-                {selectedSubTypes.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
-                )}
-                <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Sub-Types: {selectedSubTypes.length} selected
-                </div>
-              </div>
-
-              {/* Model Icon */}
-              <div className="relative group flex flex-col items-center">
-                <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedModels.length > 0 
-                    ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}>
-                  <Cpu size={18} />
-                </div>
-                {selectedModels.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
-                )}
-                <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Models: {selectedModels.length} selected
-                </div>
-              </div>
+              )}
             </div>
           </aside>
         </div>
@@ -1003,7 +947,7 @@ export default function ShopPage() {
       </div>
 
       {/* Layer 2: Brand Spotlight Sticky Parallax Background */}
-      {(() => {
+      {ecommConfig.showBrandSpotlight && (() => {
         const c1 = config?.partnersBgColor1 || '#112A4F';
         const c2 = config?.partnersBgColor2 || '#040C19';
         const c3 = config?.partnersBgColor3 || '#02060C';
@@ -1040,8 +984,8 @@ export default function ShopPage() {
 
             <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col gap-12">
               <div className="text-center">
-                <span className="text-[#2796a9] text-xs font-bold tracking-[0.20em] uppercase">Partners</span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">Brand Spotlight</h3>
+                <span className="text-[#2796a9] text-xs font-bold tracking-[0.20em] uppercase">{ecommConfig.brandSpotlightTag}</span>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">{ecommConfig.brandSpotlightTitle}</h3>
               </div>
 
               {/* Single Row Infinite Marquee Carousel */}
@@ -1057,26 +1001,17 @@ export default function ShopPage() {
                     {/* Set 1 */}
                     <div className="flex gap-8 md:gap-16 items-center flex-shrink-0 px-8">
                       {row.map((brand, idx) => {
-                        const isSelected = selectedBrands.includes(brand.name);
                         return (
                           <div
                             key={`b-set1-${idx}`}
                             onClick={() => handleBrandSelect(brand.name)}
-                            className={`group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 ${
-                              isSelected 
-                                ? 'border border-[#2796a9]/60 bg-slate-950/80 shadow-[0_0_20px_rgba(39,150,169,0.4)] rounded-2xl scale-105' 
-                                : 'border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl'
-                            }`}
+                            className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
                             title={`Click to filter by ${brand.name}`}
                           >
                             <img
                               src={brand.src}
                               alt={brand.name}
-                              className={`max-w-full max-h-full object-contain transition-all duration-500 logo-img ${
-                                isSelected 
-                                  ? 'brightness-100 invert-0 opacity-100' 
-                                  : 'brightness-0 invert opacity-60 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100'
-                              }`}
+                              className="max-w-full max-h-full object-contain transition-all duration-500 logo-img brightness-0 invert opacity-60 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100"
                               style={{ '--base-scale': String(brand.scale || 1) }}
                             />
                           </div>
@@ -1086,26 +1021,17 @@ export default function ShopPage() {
                     {/* Set 2 */}
                     <div className="flex gap-8 md:gap-16 items-center flex-shrink-0 px-8">
                       {row.map((brand, idx) => {
-                        const isSelected = selectedBrands.includes(brand.name);
                         return (
                           <div
                             key={`b-set2-${idx}`}
                             onClick={() => handleBrandSelect(brand.name)}
-                            className={`group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 ${
-                              isSelected 
-                                ? 'border border-[#2796a9]/60 bg-slate-950/80 shadow-[0_0_20px_rgba(39,150,169,0.4)] rounded-2xl scale-105' 
-                                : 'border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl'
-                            }`}
+                            className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
                             title={`Click to filter by ${brand.name}`}
                           >
                             <img
                               src={brand.src}
                               alt={brand.name}
-                              className={`max-w-full max-h-full object-contain transition-all duration-500 logo-img ${
-                                isSelected 
-                                  ? 'brightness-100 invert-0 opacity-100' 
-                                  : 'brightness-0 invert opacity-60 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100'
-                              }`}
+                              className="max-w-full max-h-full object-contain transition-all duration-500 logo-img brightness-0 invert opacity-60 group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100"
                               style={{ '--base-scale': String(brand.scale || 1) }}
                             />
                           </div>
@@ -1119,6 +1045,72 @@ export default function ShopPage() {
           </div>
         );
       })()}
+
+      {/* NEWLY ADDED SECTION */}
+      {ecommConfig.showNewlyAdded && (
+        <section className="relative z-20 py-24 px-6 md:px-16 lg:px-28 bg-slate-900 border-t border-b border-white/5 shadow-2xl">
+          <div className="max-w-7xl mx-auto w-full flex flex-col gap-12">
+            <div className="text-center">
+              <span className="text-[#2796a9] text-xs font-bold tracking-[0.20em] uppercase">{ecommConfig.newlyAddedTag}</span>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-white mt-2">{ecommConfig.newlyAddedTitle}</h3>
+              <p className="text-slate-400 text-sm font-light mt-3 max-w-xl mx-auto">
+                {ecommConfig.newlyAddedSubtitle}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products
+                .slice()
+                .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+                .slice(0, ecommConfig.newlyAddedLimit)
+                .map((product, idx) => (
+                  <motion.div
+                    key={`new-${product._id || product.product_id}`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    className="group flex flex-col bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden hover:border-[#2796a9]/50 hover:shadow-[0_10px_30px_rgba(39,150,169,0.15)] transition-all duration-300"
+                  >
+                    <div className="relative h-56 bg-white flex items-center justify-center p-6 overflow-hidden">
+                      <img 
+                        src={product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
+                        alt={product.product_name}
+                        className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {/* NEW Badge */}
+                      <div className="absolute top-3 left-3 bg-[#2796a9] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded shadow-md">
+                        NEW
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1 p-5 flex flex-col gap-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="flex flex-col">
+                          <span className="text-[#2796a9] text-xs font-bold uppercase tracking-wider">{product.brand}</span>
+                          <h4 className="text-sm font-bold text-white leading-snug line-clamp-2 mt-1 group-hover:text-[#2796a9] transition-colors">{product.product_name}</h4>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-auto pt-4 flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addToCart(product);
+                          }}
+                          className="flex-1 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[#2796a9]/20"
+                        >
+                          <ShoppingCart size={14} /> Add to Quote
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
           </>
           )}
 
@@ -1304,7 +1296,9 @@ export default function ShopPage() {
       )}
 
       {/* FOOTER */}
-      <Footer />
+      <div className="relative z-30 bg-slate-950 w-full">
+        <Footer />
+      </div>
       </main>
       </div>
 
