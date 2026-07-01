@@ -798,6 +798,12 @@ export default function AdminPanel() {
             active={activeTab === 'orders'} 
             onClick={() => setActiveTab('orders')} 
           />
+          <SidebarLink 
+            label="Customize Store" 
+            icon={<Settings size={18} />} 
+            active={activeTab === 'ecommCustomize'} 
+            onClick={() => setActiveTab('ecommCustomize')} 
+          />
         </nav>
 
         <div className="p-4 border-t border-white/5 flex flex-col gap-2">
@@ -1930,6 +1936,39 @@ export default function AdminPanel() {
                         )}
                       </div>
                     </div>
+                  </div>
+
+                </form>
+              )}
+
+              {/* E-COMMERCE CUSTOMIZE TAB */}
+              {activeTab === 'ecommCustomize' && (
+                <form onSubmit={handleUpdateConfig} className="flex flex-col gap-8">
+                  {/* Status Notification Alerts */}
+                  {saveSuccess && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-xl text-sm font-semibold animate-pulse">
+                      {saveSuccess}
+                    </div>
+                  )}
+                  {error && (
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm font-semibold">
+                      {error}
+                    </div>
+                  )}
+
+                  {/* Actions Header Bar */}
+                  <div className="flex justify-between items-center bg-slate-900/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                    <div className="flex flex-col">
+                      <h3 className="font-bold text-lg">E-Commerce Storefront Customization</h3>
+                      <p className="text-xs text-white/50 font-light mt-0.5">Customize your storefront banners, marquees, and carousels. Make sure to click save to push updates live.</p>
+                    </div>
+                    <button
+                      type="submit"
+                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-white"
+                    >
+                      <CheckCircle size={16} />
+                      <span>Save All Changes</span>
+                    </button>
                   </div>
 
                   {/* E-commerce Settings & Hero Carousel Slider Customization */}

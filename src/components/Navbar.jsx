@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Menu, X, User, Eye, EyeOff, LogOut, Mail, Lock, Search, History } from 'lucide-react';
+import { Menu, X, User, Eye, EyeOff, LogOut, Mail, Lock, Search, History, ShoppingCart } from 'lucide-react';
 
 const navLinks = [
   { label: 'Home', href: '#' },
@@ -11,7 +11,7 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery, onOpenCart, cartCount }) {
+export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery, onOpenCart, cartCount, currentEcommView, onNavigateEcomm }) {
   const isShopPage = isShop || window.location.pathname === '/shop';
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -220,7 +220,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                     ))}
                     <Link
                       to="/shop"
-                      className="cta-button px-5 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)] hover:-translate-y-0.5 transform"
+                      className="cta-button px-5 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)] hover:-translate-y-0.5 transform whitespace-nowrap shrink-0"
                     >
                       Shop Now
                     </Link>
@@ -229,13 +229,20 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                   /* E-commerce MRO Navbar Actions */
                   <div className="flex items-center gap-6">
                     {/* B2B Navigation Links */}
-                    <div className="hidden lg:flex items-center gap-6 mr-2">
+                    <div className="hidden lg:flex items-center gap-8 mr-4">
                       <button
-                        onClick={() => setIsRfqModalOpen(true)}
-                        className="text-xs font-semibold tracking-wider uppercase text-white/70 hover:text-[#2796a9] transition-colors duration-200 bg-transparent border-none cursor-pointer outline-none flex items-center gap-1.5"
+                        onClick={() => onNavigateEcomm ? onNavigateEcomm('home') : null}
+                        className={`text-sm font-medium tracking-[0.3px] normal-case antialiased transition-colors duration-200 relative group ${currentEcommView === 'home' ? 'text-[#2796a9] font-bold' : 'text-white/80 hover:text-white'}`}
                       >
-                        <History size={14} className="text-[#2796a9]" />
-                        History
+                        HOME
+                        <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#2796a9] transition-all duration-300 rounded-full ${currentEcommView === 'home' ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                      </button>
+                      <button
+                        onClick={() => onNavigateEcomm ? onNavigateEcomm('products') : null}
+                        className={`text-sm font-medium tracking-[0.3px] normal-case antialiased transition-colors duration-200 relative group ${currentEcommView === 'products' ? 'text-[#2796a9] font-bold' : 'text-white/80 hover:text-white'}`}
+                      >
+                        PRODUCTS
+                        <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#2796a9] transition-all duration-300 rounded-full ${currentEcommView === 'products' ? 'w-full' : 'w-0 group-hover:w-full'}`} />
                       </button>
                     </div>
 
@@ -243,7 +250,8 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                       onClick={onOpenCart}
                       className="cta-button px-5 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)] hover:-translate-y-0.5 transform flex items-center gap-2 shrink-0"
                     >
-                      Request a Quote
+                      <ShoppingCart size={16} />
+                      Cart
                       {cartCount > 0 && (
                         <span className="bg-[#2796a9] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white/20">
                           {cartCount}
@@ -316,20 +324,6 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                         className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white"
                       />
                     </div>
-                    {/* Mobile B2B Links */}
-                    <div className="flex flex-col gap-3 py-3 border-y border-white/5 text-sm font-medium text-white/70">
-                      <button
-                        onClick={() => {
-                          setMobileOpen(false);
-                          setIsRfqModalOpen(true);
-                        }}
-                        className="text-left hover:text-[#2796a9] transition-colors py-1.5 bg-transparent border-none cursor-pointer outline-none flex items-center gap-2"
-                      >
-                        <History size={16} className="text-[#2796a9]" />
-                        Quotation History
-                      </button>
-                    </div>
-
                     <div className="flex flex-col gap-3 mt-2">
                       <div className="flex items-center gap-3">
                         <button
@@ -339,7 +333,8 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                           }}
                           className="cta-button flex-1 px-5 py-3 bg-[#063543] hover:bg-[#052b36] text-white text-sm font-semibold tracking-[0.3px] rounded-lg text-center transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] flex items-center justify-center gap-2"
                         >
-                          Request a Quote
+                          <ShoppingCart size={16} />
+                          Cart
                           {cartCount > 0 && (
                             <span className="bg-[#2796a9] text-white text-xs font-bold px-2 py-0.5 rounded-full">
                               {cartCount}

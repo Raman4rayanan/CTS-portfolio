@@ -19,7 +19,8 @@ import {
   Award,
   Wrench,
   Sliders,
-  Cpu
+  Cpu,
+  ArrowUp
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -117,6 +118,7 @@ export default function ShopPage() {
 
   // UI state
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentView, setCurrentView] = useState('home');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // grid or list
@@ -137,13 +139,21 @@ export default function ShopPage() {
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedBrand, setSelectedBrand] = useState('All');
-  const [selectedType, setSelectedType] = useState('All');
-  const [selectedSubType, setSelectedSubType] = useState('All');
-  const [selectedModel, setSelectedModel] = useState('All');
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedSubTypes, setSelectedSubTypes] = useState([]);
+  const [selectedModels, setSelectedModels] = useState([]);
+  const [displayLimit, setDisplayLimit] = useState(12);
   const [sortBy, setSortBy] = useState('name-asc'); // name-asc, newest
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Checkout form state
   const [checkoutForm, setCheckoutForm] = useState({
@@ -225,6 +235,14 @@ export default function ShopPage() {
     fetchBrandsAndProducts();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Update localStorage quote cart whenever it changes
   useEffect(() => {
     localStorage.setItem('cts_quote_cart', JSON.stringify(cart));
@@ -265,6 +283,7 @@ export default function ShopPage() {
     });
 
     // 2. Brands depend on Category selection
+    const selectedCategory = selectedCategories[0] || 'All';
     const productsForBrand = products.filter(p => {
       return selectedCategory === 'All' || p.category === selectedCategory;
     });
@@ -273,6 +292,7 @@ export default function ShopPage() {
     });
 
     // 3. Types depend on Category and Brand selections
+    const selectedBrand = selectedBrands[0] || 'All';
     const productsForType = productsForBrand.filter(p => {
       return selectedBrand === 'All' || p.brand === selectedBrand;
     });
@@ -281,6 +301,7 @@ export default function ShopPage() {
     });
 
     // 4. Sub-Types depend on Category, Brand, and Type selections
+    const selectedType = selectedTypes[0] || 'All';
     const productsForSubType = productsForType.filter(p => {
       return selectedType === 'All' || p.type === selectedType;
     });
@@ -289,6 +310,7 @@ export default function ShopPage() {
     });
 
     // 5. Models depend on Category, Brand, Type, and Sub-Type selections
+    const selectedSubType = selectedSubTypes[0] || 'All';
     const productsForModel = productsForSubType.filter(p => {
       return selectedSubType === 'All' || p.sub_type === selectedSubType;
     });
@@ -303,7 +325,7 @@ export default function ShopPage() {
       subTypes: Array.from(options.subTypes),
       models: Array.from(options.models)
     };
-  }, [products, selectedCategory, selectedBrand, selectedType, selectedSubType]);
+  }, [products, selectedCategories, selectedBrands, selectedTypes, selectedSubTypes]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -323,26 +345,31 @@ export default function ShopPage() {
     }
 
     // Category filter
+    const selectedCategory = selectedCategories[0] || 'All';
     if (selectedCategory !== 'All') {
       result = result.filter(p => p.category === selectedCategory);
     }
 
     // Brand filter
+    const selectedBrand = selectedBrands[0] || 'All';
     if (selectedBrand !== 'All') {
       result = result.filter(p => p.brand === selectedBrand);
     }
 
     // Type filter
+    const selectedType = selectedTypes[0] || 'All';
     if (selectedType !== 'All') {
       result = result.filter(p => p.type === selectedType);
     }
 
     // Sub-type filter
+    const selectedSubType = selectedSubTypes[0] || 'All';
     if (selectedSubType !== 'All') {
       result = result.filter(p => p.sub_type === selectedSubType);
     }
 
     // Model filter
+    const selectedModel = selectedModels[0] || 'All';
     if (selectedModel !== 'All') {
       result = result.filter(p => p.model === selectedModel);
     }
@@ -356,7 +383,7 @@ export default function ShopPage() {
     }
 
     return result;
-  }, [products, searchQuery, selectedCategory, selectedBrand, selectedType, selectedSubType, selectedModel, sortBy]);
+  }, [products, searchQuery, selectedCategories, selectedBrands, selectedTypes, selectedSubTypes, selectedModels, sortBy]);
 
   // Specifications parser helper
   const parseSpecifications = (specsString) => {
@@ -371,6 +398,10 @@ export default function ShopPage() {
     });
   };
 
+  const displayedProducts = useMemo(() => {
+    return filteredProducts.slice(0, displayLimit);
+  }, [filteredProducts, displayLimit]);
+
   // Cart operations
   const addToQuote = (product) => {
     setCart(prev => {
@@ -384,24 +415,47 @@ export default function ShopPage() {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    // Open cart automatically to show feedback
+    showToast(`"${product.product_name}" is now added to the cart`);
     setIsCartOpen(true);
   };
 
   const updateCartQty = (productId, amount) => {
-    setCart(prev =>
-      prev.map(item => {
-        if (item.product_id === productId) {
-          const newQty = item.quantity + amount;
-          return { ...item, quantity: Math.max(1, newQty) };
+    setCart(prev => {
+      const itemIndex = prev.findIndex(item => item.product_id === productId);
+      if (itemIndex === -1) return prev;
+      
+      const newQty = prev[itemIndex].quantity + amount;
+      if (newQty < 1) {
+        const remaining = prev.filter(item => item.product_id !== productId);
+        if (remaining.length === 0) {
+          showToast("Cart is empty");
+        } else {
+          showToast(`"${prev[itemIndex].product_name}" removed from cart`);
         }
-        return item;
-      })
-    );
+        return remaining;
+      }
+      
+      return prev.map(item =>
+        item.product_id === productId
+          ? { ...item, quantity: newQty }
+          : item
+      );
+    });
   };
 
   const removeFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item.product_id !== productId));
+    setCart(prev => {
+      const itemIndex = prev.findIndex(item => item.product_id === productId);
+      if (itemIndex === -1) return prev;
+      
+      const remaining = prev.filter(item => item.product_id !== productId);
+      if (remaining.length === 0) {
+        showToast("Cart is empty");
+      } else {
+        showToast(`"${prev[itemIndex].product_name}" removed from cart`);
+      }
+      return remaining;
+    });
   };
 
   const totalCartCount = useMemo(() => {
@@ -415,42 +469,56 @@ export default function ShopPage() {
     }, 100);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategories([category]);
     // Reset all child filters to avoid impossible states
-    setSelectedBrand('All');
-    setSelectedType('All');
-    setSelectedSubType('All');
-    setSelectedModel('All');
+    setSelectedBrands([]);
+    setSelectedTypes([]);
+    setSelectedSubTypes([]);
+    setSelectedModels([]);
+    setCurrentView('products');
     scrollToCatalog();
   };
 
   const handleBrandSelect = (brand) => {
-    setSelectedBrand(brand);
+    if (currentView === 'home') {
+      setCurrentView('products');
+      scrollToCatalog();
+      return;
+    }
+    setSelectedBrands([brand]);
     // Reset lower child filters
-    setSelectedType('All');
-    setSelectedSubType('All');
-    setSelectedModel('All');
+    setSelectedTypes([]);
+    setSelectedSubTypes([]);
+    setSelectedModels([]);
+    setCurrentView('products');
     scrollToCatalog();
   };
 
   const handleTypeSelect = (type) => {
-    setSelectedType(type);
+    setSelectedTypes([type]);
     // Reset lower child filters
-    setSelectedSubType('All');
-    setSelectedModel('All');
+    setSelectedSubTypes([]);
+    setSelectedModels([]);
+    setCurrentView('products');
     scrollToCatalog();
   };
 
   const handleSubTypeSelect = (subType) => {
-    setSelectedSubType(subType);
+    setSelectedSubTypes([subType]);
     // Reset lower child filters
-    setSelectedModel('All');
+    setSelectedModels([]);
+    setCurrentView('products');
     scrollToCatalog();
   };
 
   const handleModelSelect = (model) => {
-    setSelectedModel(model);
+    setSelectedModels([model]);
+    setCurrentView('products');
     scrollToCatalog();
   };
 
@@ -556,52 +624,35 @@ export default function ShopPage() {
         setSearchQuery={setSearchQuery}
         onOpenCart={() => setIsCartOpen(true)}
         cartCount={totalCartCount}
+        currentEcommView={currentView}
+        onNavigateEcomm={(view) => setCurrentView(view)}
       />
-
-      {/* Floating Quote Cart Button */}
-      <motion.button
-        onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-16 h-16 rounded-full bg-gradient-to-tr from-[#016A8A] to-[#2796a9] flex items-center justify-center shadow-[0_0_25px_rgba(39,150,169,0.5)] border border-white/20 hover:scale-105 active:scale-95 transition-transform"
-        whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
-      >
-        <ShoppingCart className="text-white" size={24} />
-        {totalCartCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white font-bold text-xs w-6 h-6 rounded-full flex items-center justify-center border-2 border-slate-950">
-            {totalCartCount}
-          </span>
-        )}
-      </motion.button>
 
       {/* Main Page Layout Container: Sidebar on Left, Sections on Right */}
       <div className="flex flex-col lg:flex-row min-h-screen pt-24">
         
-        {/* SIDEBAR FILTERS WRAPPER (Persistent throughout the eCommerce page, hover-expand on desktop) */}
+        {/* SIDEBAR FILTERS WRAPPER (Persistent throughout the eCommerce page, expanded on desktop) */}
+        {currentView === 'products' && (
         <div 
-          className="relative w-full lg:w-20 shrink-0 z-30 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col"
-          onMouseEnter={() => setIsSidebarHovered(true)}
-          onMouseLeave={() => setIsSidebarHovered(false)}
+          className="relative w-full lg:w-80 shrink-0 z-30 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col"
         >
           <aside 
-            className={`w-full lg:absolute lg:top-0 lg:left-0 lg:h-full border-b lg:border-r border-slate-800 bg-slate-900/90 backdrop-blur-md transition-all duration-300 ease-in-out z-30 flex flex-col ${
-              isSidebarHovered 
-                ? 'lg:w-80 p-6 lg:overflow-y-auto' 
-                : 'lg:w-20 p-4 lg:items-center lg:overflow-visible'
-            }`}
+            className="w-full lg:absolute lg:top-0 lg:left-0 lg:h-full border-b lg:border-r border-slate-800 bg-slate-900/90 backdrop-blur-md z-30 flex flex-col lg:w-80 p-6 lg:overflow-y-auto"
           >
             {/* Expanded Sidebar Header */}
-            <div className={`flex items-center justify-between mb-6 pb-4 border-b border-slate-800 w-full ${!isSidebarHovered ? 'lg:hidden' : ''}`}>
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800 w-full">
               <h3 className="font-bold text-lg text-white flex items-center gap-2">
                 <SlidersHorizontal size={18} />
                 Filters
               </h3>
-              {(selectedCategory !== 'All' || selectedBrand !== 'All' || selectedType !== 'All' || selectedSubType !== 'All' || selectedModel !== 'All' || searchQuery !== '') && (
+              {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedTypes.length > 0 || selectedSubTypes.length > 0 || selectedModels.length > 0 || searchQuery !== '') && (
                 <button
                   onClick={() => {
-                    setSelectedCategory('All');
-                    setSelectedBrand('All');
-                    setSelectedType('All');
-                    setSelectedSubType('All');
-                    setSelectedModel('All');
+                    setSelectedCategories([]);
+                    setSelectedBrands([]);
+                    setSelectedTypes([]);
+                    setSelectedSubTypes([]);
+                    setSelectedModels([]);
                     setSearchQuery('');
                   }}
                   className="text-xs text-red-400 hover:text-red-300 font-medium cursor-pointer"
@@ -611,88 +662,135 @@ export default function ShopPage() {
               )}
             </div>
 
-            {/* Collapsed Sidebar Header (Desktop Only) */}
-            <div className={`hidden lg:flex flex-col items-center gap-4 mb-6 pb-4 border-b border-slate-850 w-full ${isSidebarHovered ? 'lg:hidden' : ''}`}>
-              <SlidersHorizontal size={20} className="text-[#2796a9] animate-pulse" />
-              {(selectedCategory !== 'All' || selectedBrand !== 'All' || selectedType !== 'All' || selectedSubType !== 'All' || selectedModel !== 'All' || searchQuery !== '') && (
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500 ring-4 ring-red-500/20" title="Active filters applied" />
-              )}
-            </div>
-
-            {/* Expanded Filters Dropdowns */}
-            <div className={`flex flex-col gap-6 w-full text-left ${!isSidebarHovered ? 'lg:hidden' : ''}`}>
+            {/* Expanded Filters Checkboxes */}
+            <div className="flex flex-col gap-6 w-full text-left">
               {/* Category Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-2">Category</label>
-                <div className="relative">
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => handleCategorySelect(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer appearance-none"
-                  >
-                    {filterOptions.categories.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 top-4 text-slate-500 pointer-events-none" />
+                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Category</label>
+                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  {filterOptions.categories.map(c => (
+                    <label key={c} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(c)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedCategories([...selectedCategories, c]);
+                            else setSelectedCategories(selectedCategories.filter(x => x !== c));
+                            setCurrentView('products');
+                            scrollToCatalog();
+                          }}
+                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                        />
+                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                      </div>
+                      <span className="group-hover:text-white">{c}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
               {/* Brand Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-2">Brand</label>
-                <div className="relative">
-                  <select
-                    value={selectedBrand}
-                    onChange={(e) => handleBrandSelect(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer appearance-none"
-                  >
-                    {filterOptions.brands.map(b => <option key={b} value={b}>{b}</option>)}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 top-4 text-slate-500 pointer-events-none" />
+                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Brand</label>
+                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  {filterOptions.brands.map(b => (
+                    <label key={b} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedBrands.includes(b)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedBrands([...selectedBrands, b]);
+                            else setSelectedBrands(selectedBrands.filter(x => x !== b));
+                            setCurrentView('products');
+                            scrollToCatalog();
+                          }}
+                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                        />
+                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                      </div>
+                      <span className="group-hover:text-white">{b}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
               {/* Type Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-2">Type</label>
-                <div className="relative">
-                  <select
-                    value={selectedType}
-                    onChange={(e) => handleTypeSelect(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer appearance-none"
-                  >
-                    {filterOptions.types.map(t => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 top-4 text-slate-500 pointer-events-none" />
+                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Type</label>
+                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  {filterOptions.types.map(t => (
+                    <label key={t} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedTypes.includes(t)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedTypes([...selectedTypes, t]);
+                            else setSelectedTypes(selectedTypes.filter(x => x !== t));
+                            setCurrentView('products');
+                            scrollToCatalog();
+                          }}
+                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                        />
+                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                      </div>
+                      <span className="group-hover:text-white">{t}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
               {/* Sub-Type Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-2">Sub-Type</label>
-                <div className="relative">
-                  <select
-                    value={selectedSubType}
-                    onChange={(e) => handleSubTypeSelect(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer appearance-none"
-                  >
-                    {filterOptions.subTypes.map(st => <option key={st} value={st}>{st}</option>)}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 top-4 text-slate-500 pointer-events-none" />
+                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Sub-Type</label>
+                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  {filterOptions.subTypes.map(st => (
+                    <label key={st} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedSubTypes.includes(st)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedSubTypes([...selectedSubTypes, st]);
+                            else setSelectedSubTypes(selectedSubTypes.filter(x => x !== st));
+                            setCurrentView('products');
+                            scrollToCatalog();
+                          }}
+                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                        />
+                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                      </div>
+                      <span className="group-hover:text-white">{st}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
               {/* Model Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-2">Model</label>
-                <div className="relative">
-                  <select
-                    value={selectedModel}
-                    onChange={(e) => handleModelSelect(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer appearance-none"
-                  >
-                    {filterOptions.models.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 top-4 text-slate-500 pointer-events-none" />
+                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Model</label>
+                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  {filterOptions.models.map(m => (
+                    <label key={m} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedModels.includes(m)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedModels([...selectedModels, m]);
+                            else setSelectedModels(selectedModels.filter(x => x !== m));
+                            setCurrentView('products');
+                            scrollToCatalog();
+                          }}
+                          className="peer appearance-none w-4 h-4 border border-slate-700 rounded bg-slate-950 checked:bg-[#2796a9] checked:border-[#2796a9] transition-all cursor-pointer"
+                        />
+                        <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                      </div>
+                      <span className="group-hover:text-white">{m}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
@@ -702,95 +800,98 @@ export default function ShopPage() {
               {/* Category Icon */}
               <div className="relative group flex flex-col items-center">
                 <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedCategory !== 'All' 
+                  selectedCategories.length > 0 
                     ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}>
                   <Grid size={18} />
                 </div>
-                {selectedCategory !== 'All' && (
+                {selectedCategories.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
                 )}
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Category: {selectedCategory}
+                  Categories: {selectedCategories.length} selected
                 </div>
               </div>
 
               {/* Brand Icon */}
               <div className="relative group flex flex-col items-center">
                 <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedBrand !== 'All' 
+                  selectedBrands.length > 0 
                     ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}>
                   <Award size={18} />
                 </div>
-                {selectedBrand !== 'All' && (
+                {selectedBrands.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
                 )}
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Brand: {selectedBrand}
+                  Brands: {selectedBrands.length} selected
                 </div>
               </div>
 
               {/* Type Icon */}
               <div className="relative group flex flex-col items-center">
                 <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedType !== 'All' 
+                  selectedTypes.length > 0 
                     ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}>
                   <Wrench size={18} />
                 </div>
-                {selectedType !== 'All' && (
+                {selectedTypes.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
                 )}
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Type: {selectedType}
+                  Types: {selectedTypes.length} selected
                 </div>
               </div>
 
               {/* Sub-Type Icon */}
               <div className="relative group flex flex-col items-center">
                 <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedSubType !== 'All' 
+                  selectedSubTypes.length > 0 
                     ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}>
                   <Sliders size={18} />
                 </div>
-                {selectedSubType !== 'All' && (
+                {selectedSubTypes.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
                 )}
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Sub-Type: {selectedSubType}
+                  Sub-Types: {selectedSubTypes.length} selected
                 </div>
               </div>
 
               {/* Model Icon */}
               <div className="relative group flex flex-col items-center">
                 <div className={`p-2.5 rounded-xl border transition-all ${
-                  selectedModel !== 'All' 
+                  selectedModels.length > 0 
                     ? 'bg-[#2796a9]/10 border-[#2796a9] text-[#2796a9] shadow-[0_0_10px_rgba(39,150,169,0.2)]' 
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}>
                   <Cpu size={18} />
                 </div>
-                {selectedModel !== 'All' && (
+                {selectedModels.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#2796a9] ring-2 ring-slate-900" />
                 )}
                 <div className="absolute left-14 top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-slate-900 border border-slate-800 text-[10px] text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-md">
-                  Model: {selectedModel}
+                  Models: {selectedModels.length} selected
                 </div>
               </div>
             </div>
           </aside>
         </div>
+        )}
 
         {/* Right Content Area (Hero, Categories, Brands, Catalog Grid) */}
         <main className="flex-grow min-w-0 flex flex-col relative z-10">
 
           {/* Layer 1: Slides over Sticky Spotlight (z-20, relative, bg-slate-950, shadow) */}
+          {currentView === 'home' && (
+          <>
           <div className="relative z-20 shadow-[0_15px_30px_rgba(0,0,0,0.5)] bg-slate-950">
         {/* 1. HERO CAROUSEL */}
         <div className="relative pt-24 h-[65vh] w-full overflow-hidden">
@@ -820,7 +921,7 @@ export default function ShopPage() {
                     {slide.subtitle}
                   </p>
                   <button
-                    onClick={scrollToCatalog}
+                    onClick={() => setCurrentView('products')}
                     className="px-6 py-3 bg-[#04667b] hover:bg-[#2796a9] text-white font-semibold text-sm rounded shadow-lg transition-all self-start flex items-center gap-2"
                   >
                     Browse Catalog
@@ -863,7 +964,7 @@ export default function ShopPage() {
                   image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278522/port/zhzh2v9rozlz7q6askvl.jpg'
                 }
               ].map((cat) => {
-                const isSelected = selectedCategory === cat.name;
+                const isSelected = selectedCategories.includes(cat.name);
                 return (
                   <div
                     key={cat.name}
@@ -956,7 +1057,7 @@ export default function ShopPage() {
                     {/* Set 1 */}
                     <div className="flex gap-8 md:gap-16 items-center flex-shrink-0 px-8">
                       {row.map((brand, idx) => {
-                        const isSelected = selectedBrand === brand.name;
+                        const isSelected = selectedBrands.includes(brand.name);
                         return (
                           <div
                             key={`b-set1-${idx}`}
@@ -985,7 +1086,7 @@ export default function ShopPage() {
                     {/* Set 2 */}
                     <div className="flex gap-8 md:gap-16 items-center flex-shrink-0 px-8">
                       {row.map((brand, idx) => {
-                        const isSelected = selectedBrand === brand.name;
+                        const isSelected = selectedBrands.includes(brand.name);
                         return (
                           <div
                             key={`b-set2-${idx}`}
@@ -1018,8 +1119,11 @@ export default function ShopPage() {
           </div>
         );
       })()}
+          </>
+          )}
 
       {/* Layer 3: Catalog & Footer (z-30, relative, bg-slate-950, shadow) */}
+      {currentView === 'products' && (
       <div className="relative z-30 shadow-[0_-20px_40px_rgba(0,0,0,0.5)] bg-slate-950">
 
       {/* 4. PRODUCT CATALOG */}
@@ -1028,59 +1132,12 @@ export default function ShopPage() {
 
           {/* MAIN PRODUCT AREA */}
           <div className="w-full">
-            {/* SEARCH AND CONTROLS */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
-              {/* Search */}
-              <div className="relative flex-1 max-w-md">
-                <Search size={18} className="absolute left-4 top-3.5 text-slate-500" />
-                <input
-                  type="text"
-                  placeholder="Search products by SKU, name, brand, model..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-[#2796a9] text-white"
-                />
-              </div>
-
-              {/* Layout and Sort */}
-              <div className="flex items-center justify-end gap-4">
-                {/* Sort */}
-                <div className="relative flex items-center gap-2">
-                  <span className="text-xs text-slate-400 font-light">Sort by:</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-[#2796a9] cursor-pointer"
-                  >
-                    <option value="name-asc">Product Name (A-Z)</option>
-                    <option value="newest">Newest Uploads</option>
-                  </select>
-                </div>
-
-                {/* View toggles */}
-                <div className="flex items-center border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-[#04667b] text-white' : 'text-slate-400 hover:text-white'}`}
-                    aria-label="Grid View"
-                  >
-                    <Grid size={16} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-[#04667b] text-white' : 'text-slate-400 hover:text-white'}`}
-                    aria-label="List View"
-                  >
-                    <List size={16} />
-                  </button>
-                </div>
-              </div>
-            </div>
+            {/* SEARCH AND CONTROLS REMOVED AESTHETICALLY */}
 
             {/* RESULTS COUNT & FILTER TAGS */}
             <div className="flex items-center justify-between mb-6 text-sm text-slate-400 font-light">
               <div>
-                Showing <span className="text-white font-semibold">{filteredProducts.length}</span> industrial products
+                Showing <span className="text-white font-semibold">{Math.min(displayedProducts.length, filteredProducts.length)}</span> of <span className="text-white font-semibold">{filteredProducts.length}</span> industrial products
               </div>
             </div>
 
@@ -1094,8 +1151,8 @@ export default function ShopPage() {
                 </p>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredProducts.map((p) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6">
+                {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
                     className="bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md flex flex-col h-full group"
@@ -1104,7 +1161,7 @@ export default function ShopPage() {
                   >
                     {/* Image Area */}
                     <div
-                      className="h-48 w-full bg-slate-950 flex items-center justify-center p-6 cursor-pointer relative"
+                      className="h-56 w-full bg-slate-950 flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"
                       onClick={() => setSelectedProduct(p)}
                     >
                       <img
@@ -1112,15 +1169,32 @@ export default function ShopPage() {
                         alt={p.product_name}
                         className="max-h-full max-w-full object-contain group-hover:scale-102 transition-transform duration-300"
                       />
-                      <span className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-[10px] text-slate-400 font-medium px-2 py-0.5 rounded">
-                        {p.brand}
-                      </span>
+                      {p.tag && (
+                        <span className="absolute top-4 left-4 bg-[#d85c18] text-white text-[10px] font-bold px-2 py-0.5 rounded z-10">
+                          {p.tag}
+                        </span>
+                      )}
+
+                      {/* Hover Tech Spec Overlay */}
+                      <div className="absolute inset-x-0 bottom-0 bg-slate-100 text-slate-900 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 border-t-2 border-[#d85c18]">
+                        <div className="p-4">
+                          <h5 className="text-[10px] font-bold text-[#d85c18] tracking-[0.2em] uppercase text-center mb-3">Tech Spec</h5>
+                          <div className="flex flex-col gap-1.5 text-[11px]">
+                            {parseSpecifications(p.specifications).slice(0, 3).map((spec, i) => (
+                              <div key={i} className="flex justify-between border-b border-slate-300 pb-1.5 last:border-0 last:pb-0">
+                                <span className="text-slate-600">{spec.parameter}</span>
+                                <span className="font-mono font-medium text-slate-900">{spec.value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Details */}
                     <div className="p-6 flex flex-col flex-1">
                       <div className="text-[11px] text-slate-500 font-light tracking-wide mb-1 block">
-                        Model: {p.model} | SKU: {p.sku}
+                        Brand: <span className="text-slate-300 font-medium">{p.brand}</span>
                       </div>
                       <h4
                         className="font-bold text-base text-white hover:text-[#2796a9] cursor-pointer mb-2 line-clamp-1"
@@ -1155,7 +1229,7 @@ export default function ShopPage() {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {filteredProducts.map((p) => (
+                {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
                     className="bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md p-6 flex flex-col sm:flex-row items-center gap-6 group"
@@ -1177,7 +1251,7 @@ export default function ShopPage() {
                     {/* Details */}
                     <div className="flex-1 flex flex-col h-full text-center sm:text-left">
                       <div className="text-[11px] text-slate-500 font-light tracking-wide mb-1 block">
-                        Brand: <span className="text-slate-300 font-medium">{p.brand}</span> | Model: {p.model} | SKU: {p.sku}
+                        Brand: <span className="text-slate-300 font-medium">{p.brand}</span>
                       </div>
                       <h4
                         className="font-bold text-lg text-white hover:text-[#2796a9] cursor-pointer mb-2"
@@ -1211,15 +1285,44 @@ export default function ShopPage() {
                 ))}
               </div>
             )}
+
+            {/* Pagination / Show More */}
+            {filteredProducts.length > displayLimit && (
+              <div className="flex justify-end mt-8">
+                <button
+                  onClick={() => setDisplayLimit(prev => prev + 12)}
+                  className="px-6 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)]"
+                >
+                  Show More
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </section>
+      </div>
+      )}
 
       {/* FOOTER */}
       <Footer />
-      </div>
       </main>
       </div>
+
+      {/* Scroll to Top FAB */}
+      <AnimatePresence>
+        {showScrollTop && currentView === 'products' && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 p-4 bg-[#04667b] hover:bg-[#2796a9] text-white rounded-full shadow-[0_0_20px_rgba(4,102,123,0.5)] transition-colors"
+            title="Scroll to Top"
+          >
+            <ArrowUp size={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* ==================================== MODAL OVERLAYS ==================================== */}
 
@@ -1792,6 +1895,21 @@ export default function ShopPage() {
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+            className="fixed bottom-6 right-6 z-[60] bg-slate-900 border border-slate-700 shadow-[0_5px_15px_rgba(0,0,0,0.5)] px-4 py-3 rounded-xl flex items-center gap-3 text-sm text-slate-100"
+          >
+            <CheckCircle size={18} className="text-[#2796a9]" />
+            {toastMessage}
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
