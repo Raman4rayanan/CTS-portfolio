@@ -11,7 +11,7 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery, onOpenCart, cartCount, currentEcommView, onNavigateEcomm }) {
+export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery, onOpenCart, cartCount, currentEcommView, onNavigateEcomm, products = [] }) {
   const isShopPage = isShop || window.location.pathname === '/shop';
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -189,7 +189,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
             {/* Center: Search Bar (Shop Only, Centered) */}
             <div className="flex justify-center items-center w-full">
               {isShopPage && (
-                <div className="w-full max-w-md relative hidden md:block">
+                <div className="w-full max-w-md relative hidden md:block group">
                   <span className="absolute left-3.5 top-3 text-white/40"><Search size={16} /></span>
                   <input
                     type="text"
@@ -198,6 +198,40 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                     onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white"
                   />
+                  
+                  {/* Autocomplete Dropdown */}
+                  {searchQuery && products.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-slate-700 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden z-[100] flex flex-col hidden group-focus-within:flex hover:flex">
+                      {products
+                        .filter(p => 
+                          (p.product_name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (p.product_id || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (p.brand || '').toLowerCase().includes(searchQuery.toLowerCase())
+                        )
+                        .slice(0, 5)
+                        .map((p, idx) => (
+                          <div
+                            key={p.product_id || p._id || idx}
+                            onMouseDown={() => {
+                              if (setSearchQuery) {
+                                setSearchQuery(p.product_name);
+                                // Optional: if you want to navigate immediately to products view
+                                if (onNavigateEcomm && currentEcommView !== 'products') {
+                                  onNavigateEcomm('products');
+                                }
+                              }
+                            }}
+                            className="flex items-center gap-3 p-3 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0 transition-colors"
+                          >
+                            <img src={p.images?.[0] || 'https://via.placeholder.com/40'} alt={p.product_name} className="w-10 h-10 object-contain bg-white rounded p-1 flex-shrink-0" />
+                            <div className="flex flex-col overflow-hidden">
+                              <span className="text-sm font-semibold text-white truncate">{p.product_name}</span>
+                              <span className="text-[10px] text-[#2796a9] font-bold uppercase tracking-wider mt-0.5">{p.brand}</span>
+                            </div>
+                          </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

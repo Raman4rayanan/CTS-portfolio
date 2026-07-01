@@ -662,6 +662,7 @@ export default function ShopPage() {
         cartCount={totalCartCount}
         currentEcommView={currentView}
         onNavigateEcomm={(view) => setCurrentView(view)}
+        products={products}
       />
 
       {/* Main Page Layout Container: Sidebar on Left, Sections on Right */}
@@ -763,9 +764,10 @@ export default function ShopPage() {
                     onChange={e => setTypeSearch(e.target.value)}
                     className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none mb-3 placeholder:text-slate-600"
                   />
-                  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  <div className="flex flex-col gap-2">
                     {filterOptions.types
                       .filter(t => t.toLowerCase().includes(typeSearch.toLowerCase()))
+                      .slice(0, 4)
                       .map(t => (
                       <label key={t} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
                         <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
@@ -790,7 +792,7 @@ export default function ShopPage() {
               )}
 
               {/* Sub-Type Filter */}
-              {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
+              {selectedTypes.length > 0 && (
                 <div>
                   <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Sub-Type</label>
                   <input
