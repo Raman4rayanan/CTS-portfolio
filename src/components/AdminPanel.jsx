@@ -329,6 +329,15 @@ export default function AdminPanel() {
       const configRes = await fetch(`${API_BASE_URL}/api/portfolio/config?t=${Date.now()}`);
       const configData = await configRes.json();
 
+      if (statsRes.status === 401 || inquiriesRes.status === 401) {
+        console.warn('Session expired or invalid token. Redirecting.');
+        localStorage.removeItem('cts_user');
+        localStorage.removeItem('cts_token');
+        setUser(null);
+        navigate('/');
+        return;
+      }
+
       if (statsData.success && inquiriesData.success && activitiesData.success && servicesData.success && configData.success) {
         setStats(statsData.data);
         setInquiries(inquiriesData.data);

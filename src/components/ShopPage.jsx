@@ -61,11 +61,32 @@ export default function ShopPage() {
     }
   ]);
 
-  const currentBrandsList = (brandsList.length > 0 ? brandsList : brandLogos).map(b => ({
-    name: b.name,
-    src: b.logoUrl || b.src || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
-    scale: b.scale || 1
-  }));
+  const currentBrandsList = (brandsList.length > 0 ? brandsList : brandLogos).map(b => {
+    const nameLower = b.name.toLowerCase();
+    let fallbackLogo = '';
+    if (nameLower.includes('bosch')) {
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png';
+    } else if (nameLower.includes('atlas')) {
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png';
+    } else if (nameLower.includes('eibenstock')) {
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png';
+    } else {
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png';
+    }
+
+    const matchingPortfolioPartner = config?.partners?.find(
+      p => p.name.toLowerCase().replace(/[\s_-]+/g, '') === b.name.toLowerCase().replace(/[\s_-]+/g, '')
+    );
+
+    const rawSrc = matchingPortfolioPartner?.src || b.logoUrl || b.src;
+    const hasValidSrc = rawSrc && !rawSrc.includes('placeholder.png') && rawSrc.trim() !== '';
+
+    return {
+      name: b.name,
+      src: hasValidSrc ? rawSrc : fallbackLogo,
+      scale: matchingPortfolioPartner?.scale || b.scale || 1
+    };
+  });
 
   // Fetch portfolio settings config
   useEffect(() => {
