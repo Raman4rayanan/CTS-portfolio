@@ -853,8 +853,9 @@ export default function ShopPage() {
                 transition={{ duration: 1.2, ease: 'easeInOut' }}
               >
                 {/* Radial overlay */}
-                <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-slate-950/30" />
+                <div className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: '#016A8A', opacity: 0.7 }} />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(18, 41, 44, 1), rgba(0, 0, 0, 0.4), transparent)' }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
 
                 <div className="h-full flex flex-col justify-center px-8 md:px-20 lg:px-32 max-w-4xl relative z-10">
                   <span className="text-[#2796a9] text-xs font-bold tracking-[0.25em] mb-4 bg-[#2796a9]/10 px-3 py-1 rounded-full self-start">
@@ -927,8 +928,8 @@ export default function ShopPage() {
                       style={{ backgroundImage: `url(${cat.image})` }}
                     />
                     {/* Overlays */}
-                    <div className="absolute inset-0 bg-slate-950/80 group-hover:bg-slate-950/70 transition-colors" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+                    <div className="absolute inset-0 transition-opacity duration-300 opacity-80 group-hover:opacity-50" style={{ backgroundColor: '#016A8A', mixBlendMode: 'multiply' }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-[rgba(18,41,44,0.6)] to-transparent" />
 
                     {/* Content */}
                     <div className="absolute inset-0 p-6 flex flex-col justify-end">
@@ -950,8 +951,8 @@ export default function ShopPage() {
 
       {/* Layer 2: Brand Spotlight Sticky Parallax Background */}
       {ecommConfig.showBrandSpotlight && (() => {
-        const c1 = config?.partnersBgColor1 || '#112A4F';
-        const c2 = config?.partnersBgColor2 || '#040C19';
+        const c1 = config?.partnersBgColor1 || '#016A8A';
+        const c2 = config?.partnersBgColor2 || '#0C3B4A';
         const c3 = config?.partnersBgColor3 || '#02060C';
         
         // Combine currentBrandsList into a single repeated scrolling marquee track
