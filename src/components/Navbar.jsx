@@ -172,7 +172,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -80, opacity: 0 }}
           transition={{ duration: 0.7, ease: [0.33, 1, 0.68, 1], delay: 0.4 }}
-          className={`navbar fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+          className={`navbar fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${(scrolled && !isShopPage)
             ? 'bg-gradient-to-r from-[rgb(3,5,42)] via-[rgb(2,58,81)] to-[rgb(12,91,106)] backdrop-blur-md shadow-lg shadow-black/20'
             : 'bg-transparent'
             }`}

@@ -677,7 +677,7 @@ export default function ShopPage() {
       />
 
       {/* Main Page Layout Container: Sidebar on Left, Sections on Right */}
-      <div className="flex flex-col lg:flex-row min-h-screen pt-24">
+      <div className={`flex flex-col lg:flex-row min-h-screen ${currentView === 'products' ? 'pt-24' : ''}`}>
         
         {/* SIDEBAR FILTERS WRAPPER (Persistent throughout the eCommerce page, expanded on desktop) */}
         {currentView === 'products' && (
@@ -849,117 +849,116 @@ export default function ShopPage() {
           {/* Layer 1: Slides over Sticky Spotlight (z-20, relative, bg-slate-950, shadow) */}
           {currentView === 'home' && (
           <>
-          <div className="relative z-20 shadow-[0_15px_30px_rgba(0,0,0,0.5)] bg-slate-950">
-        {/* 1. HERO CAROUSEL */}
-        <div className="relative pt-24 h-[65vh] w-full overflow-hidden">
-          {carouselSlides.map((slide, idx) => {
-            const isActive = idx === currentSlide;
-            return (
-              <motion.div
-                key={idx}
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${slide.image})` }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isActive ? 1 : 0 }}
-                transition={{ duration: 1.2, ease: 'easeInOut' }}
-              >
-                {/* Radial overlay */}
-                <div className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: '#016A8A', opacity: 0.7 }} />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(18, 41, 44, 1), rgba(0, 0, 0, 0.4), transparent)' }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-
-                <div className="h-full flex flex-col justify-center px-8 md:px-20 lg:px-32 max-w-4xl relative z-10">
-                  <span className="text-[#2796a9] text-xs font-bold tracking-[0.25em] mb-4 bg-[#2796a9]/10 px-3 py-1 rounded-full self-start">
-                    {slide.tag}
-                  </span>
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-md">
-                    {slide.title}
-                  </h1>
-                  <p className="text-slate-300 text-base md:text-lg mb-8 font-light max-w-xl">
-                    {slide.subtitle}
-                  </p>
-                  <button
-                    onClick={() => setCurrentView('products')}
-                    className="px-6 py-3 bg-[#04667b] hover:bg-[#2796a9] text-white font-semibold text-sm rounded shadow-lg transition-all self-start flex items-center gap-2"
-                  >
-                    Browse Catalog
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* 2. BROWSE BY CATEGORY */}
-        <section className="py-16 px-6 md:px-16 lg:px-28 bg-slate-950">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-10 text-center md:text-left">
-              <span className="text-[#2796a9] text-xs font-bold tracking-[0.2em] uppercase">Departments</span>
-              <h2 className="text-3xl font-extrabold text-white mt-2">Browse by Category</h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  name: 'Power Tools',
-                  desc: 'Drilling, core-cutting, and dynamic high-performance motor tools.',
-                  image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
-                },
-                {
-                  name: 'Safety Equipment',
-                  desc: 'Certified industrial helmets, cut-resistant gloves, and safety goggles.',
-                  image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg'
-                },
-                {
-                  name: 'Industrial Cleaning',
-                  desc: 'High-pressure washers, vacuums, and heavy emission filters.',
-                  image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278569/port/uyvemispshvvtup3frea.jpg'
-                },
-                {
-                  name: 'Accessories',
-                  desc: 'Abrasive discs, sanding polyurethane blocks, and modular storage units.',
-                  image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278522/port/zhzh2v9rozlz7q6askvl.jpg'
-                }
-              ].map((cat) => {
-                const isSelected = selectedCategories.includes(cat.name);
+            {/* 1. HERO CAROUSEL (Sticky) */}
+            <div className="sticky top-0 z-0 h-[100svh] w-full overflow-hidden bg-slate-950">
+              {carouselSlides.map((slide, idx) => {
+                const isActive = idx === currentSlide;
                 return (
-                  <div
-                    key={cat.name}
-                    onClick={() => handleCategorySelect(cat.name)}
-                    className={`group relative h-64 rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 shadow-lg ${
-                      isSelected
-                        ? 'border-[#2796a9] shadow-[0_0_20px_rgba(39,150,169,0.3)] scale-[1.02]'
-                        : 'border-slate-800 hover:border-slate-600'
-                    }`}
+                  <motion.div
+                    key={idx}
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${slide.image})` }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 1.2, ease: 'easeInOut' }}
                   >
-                    {/* Background Image */}
-                    <div
-                      className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                      style={{ backgroundImage: `url(${cat.image})` }}
-                    />
-                    {/* Overlays */}
-                    <div className="absolute inset-0 transition-opacity duration-300 opacity-80 group-hover:opacity-50" style={{ backgroundColor: '#016A8A', mixBlendMode: 'multiply' }} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-[rgba(18,41,44,0.6)] to-transparent" />
+                    {/* Radial overlay */}
+                    <div className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: '#016A8A', opacity: 0.7 }} />
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(18, 41, 44, 1), rgba(0, 0, 0, 0.4), transparent)' }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
 
-                    {/* Content */}
-                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                      <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 group-hover:text-[#2796a9] transition-colors">
-                        {cat.name}
-                        <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-5px] group-hover:translate-x-0 duration-300" />
-                      </h3>
-                      <p className="text-slate-400 text-xs font-light leading-relaxed">
-                        {cat.desc}
+                    <div className="h-full flex flex-col justify-center px-8 md:px-20 lg:px-32 max-w-4xl relative z-10">
+                      <span className="text-[#2796a9] text-xs font-bold tracking-[0.25em] mb-4 bg-[#2796a9]/10 px-3 py-1 rounded-full self-start">
+                        {slide.tag}
+                      </span>
+                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-md">
+                        {slide.title}
+                      </h1>
+                      <p className="text-slate-300 text-base md:text-lg mb-8 font-light max-w-xl">
+                        {slide.subtitle}
                       </p>
+                      <button
+                        onClick={() => setCurrentView('products')}
+                        className="px-6 py-3 bg-[#04667b] hover:bg-[#2796a9] text-white font-semibold text-sm rounded shadow-lg transition-all self-start flex items-center gap-2"
+                      >
+                        Browse Catalog
+                        <ArrowRight size={16} />
+                      </button>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
-          </div>
-        </section>
-      </div>
 
+            {/* 2. BROWSE BY CATEGORY (Slides over Sticky Hero) */}
+            <div className="relative z-20 shadow-[0_-15px_30px_rgba(0,0,0,0.5)] bg-slate-950 min-h-[40vh]">
+              <section className="py-16 px-6 md:px-16 lg:px-28 bg-slate-950">
+                <div className="max-w-7xl mx-auto">
+                  <div className="mb-10 text-center md:text-left">
+                    <span className="text-[#2796a9] text-xs font-bold tracking-[0.2em] uppercase">Departments</span>
+                    <h2 className="text-3xl font-extrabold text-white mt-2">Browse by Category</h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[
+                      {
+                        name: 'Power Tools',
+                        desc: 'Drilling, core-cutting, and dynamic high-performance motor tools.',
+                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+                      },
+                      {
+                        name: 'Safety Equipment',
+                        desc: 'Certified industrial helmets, cut-resistant gloves, and safety goggles.',
+                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg'
+                      },
+                      {
+                        name: 'Industrial Cleaning',
+                        desc: 'High-pressure washers, vacuums, and heavy emission filters.',
+                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278569/port/uyvemispshvvtup3frea.jpg'
+                      },
+                      {
+                        name: 'Accessories',
+                        desc: 'Abrasive discs, sanding polyurethane blocks, and modular storage units.',
+                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278522/port/zhzh2v9rozlz7q6askvl.jpg'
+                      }
+                    ].map((cat) => {
+                      const isSelected = selectedCategories.includes(cat.name);
+                      return (
+                        <div
+                          key={cat.name}
+                          onClick={() => handleCategorySelect(cat.name)}
+                          className={`group relative h-64 rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 shadow-lg ${
+                            isSelected
+                              ? 'border-[#2796a9] shadow-[0_0_20px_rgba(39,150,169,0.3)] scale-[1.02]'
+                              : 'border-slate-800 hover:border-slate-600'
+                          }`}
+                        >
+                          {/* Background Image */}
+                          <div
+                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                            style={{ backgroundImage: `url(${cat.image})` }}
+                          />
+                          {/* Overlays */}
+                          <div className="absolute inset-0 transition-opacity duration-300 opacity-80 group-hover:opacity-50" style={{ backgroundColor: '#016A8A', mixBlendMode: 'multiply' }} />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-[rgba(18,41,44,0.6)] to-transparent" />
+
+                          {/* Content */}
+                          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 group-hover:text-[#2796a9] transition-colors">
+                              {cat.name}
+                              <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-5px] group-hover:translate-x-0 duration-300" />
+                            </h3>
+                            <p className="text-slate-400 text-xs font-light leading-relaxed">
+                              {cat.desc}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
+            </div>
       {/* Layer 2: Brand Spotlight Sticky Parallax Background */}
       {ecommConfig.showBrandSpotlight && (() => {
         const c1 = config?.partnersBgColor1 || '#016A8A';
