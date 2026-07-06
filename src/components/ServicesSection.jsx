@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, PenTool, Wrench, Archive, ArrowUpSquare, Leaf, HardHat, Cog, Wrench as ToolIcon, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { Settings, PenTool, Wrench, Archive, ArrowUpSquare, Leaf, HardHat, Cog, Wrench as ToolIcon } from 'lucide-react';
 import MagicBento from './MagicBento';
 
 const services = [
@@ -108,8 +109,8 @@ const iconMap = {
 };
 
 export default function ServicesSection() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [servicesList, setServicesList] = useState(services);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -127,23 +128,21 @@ export default function ServicesSection() {
       .catch(err => console.error('Error fetching services:', err));
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && selectedCategory) {
-        setSelectedCategory(null);
+  const handleServiceClick = (card) => {
+    console.log('DEBUG CLICK:', card);
+    if (card.title && card.title.toLowerCase().includes('customized')) {
+      localStorage.setItem('prefill_contact_msg', 'true');
+      const contactEl = document.getElementById('contact');
+      if (contactEl) {
+        contactEl.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.hash = 'contact';
       }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCategory]);
-
-  useEffect(() => {
-    if (selectedCategory) {
-      document.body.style.overflow = 'hidden';
+      window.dispatchEvent(new Event('prefillContact'));
     } else {
-      document.body.style.overflow = '';
+      navigate('/shop', { state: { category: card.title } });
     }
-  }, [selectedCategory]);
+  };
 
   return (
     <section id="services" className="bg-background-light py-16 md:py-20 px-6 md:px-16 lg:px-28">
@@ -169,79 +168,9 @@ export default function ServicesSection() {
         </div>
 
         <div className="w-full relative z-0">
-          <MagicBento items={servicesList} onItemClick={(card) => setSelectedCategory(card)} />
+          <MagicBento items={servicesList} onItemClick={handleServiceClick} />
         </div>
       </div>
-
-      <AnimatePresence>
-        {selectedCategory && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12"
-          >
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
-              onClick={() => setSelectedCategory(null)}
-            />
-
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="relative w-full max-w-5xl bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-full"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 md:p-8 border-b border-slate-100 bg-white/90 backdrop-blur-md sticky top-0 z-10 shrink-0">
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-primary-navy m-0">
-                    {selectedCategory.title}
-                  </h3>
-                  <p className="text-slate-500 mt-1 text-sm md:text-base font-light">
-                    Explore our range of premium solutions.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 hover:text-primary-navy hover:bg-slate-100 transition-colors shadow-sm cursor-pointer"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              {/* Scrollable grid area */}
-              <div className="p-6 md:p-8 overflow-y-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {(dummyTools[selectedCategory.title] || []).map((tool, idx) => (
-                    <div key={idx} className="group flex flex-col bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                      <div className="h-48 w-full bg-slate-50 relative overflow-hidden">
-                        <img src={tool.image} alt={tool.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute inset-0 bg-primary-navy/5 group-hover:bg-transparent transition-colors duration-300" />
-                      </div>
-                      <div className="p-5 flex-1 flex flex-col justify-between gap-3">
-                        <h4 className="font-bold text-primary-navy text-lg leading-tight">
-                          {tool.name}
-                        </h4>
-                        <span className="text-xs font-semibold text-primary-blue bg-blue-50 w-max px-3 py-1.5 rounded-md self-start border border-blue-100/50">View specs</span>
-                      </div>
-                    </div>
-                  ))}
-
-                  {(!dummyTools[selectedCategory.title] || dummyTools[selectedCategory.title].length === 0) && (
-                    <div className="col-span-full py-12 text-center text-slate-400">
-                      <p>Detailed equipment lists coming soon.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

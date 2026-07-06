@@ -692,6 +692,9 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [signupUsername, setSignupUsername] = useState('');
+  const [signupCompany, setSignupCompany] = useState('');
+  const [signupPhone, setSignupPhone] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -755,7 +758,9 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
     setTimeout(() => {
       const mockUser = {
         email: email,
-        username: email.split('@')[0],
+        username: signupUsername || email.split('@')[0],
+        companyName: signupCompany,
+        phone: signupPhone,
         role: 'User'
       };
       localStorage.setItem('cts_user', JSON.stringify(mockUser));
@@ -785,6 +790,20 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
       onClose();
     }
   };
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileData, setProfileData] = useState({
+    username: user?.username || '',
+    companyName: user?.companyName || '',
+    phone: user?.phone || ''
+  });
+
+  const handleProfileSave = (e) => {
+    e.preventDefault();
+    const updatedUser = { ...user, ...profileData };
+    localStorage.setItem('cts_user', JSON.stringify(updatedUser));
+    if (setUser) setUser(updatedUser);
+    setIsEditingProfile(false);
+  };
 
   return (
     <motion.div
@@ -795,40 +814,72 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
       className="bg-[rgba(4,12,25,0.96)] backdrop-blur-xl border border-white/10 rounded-2xl p-6 w-80 shadow-[0_10px_30px_rgba(0,0,0,0.5),0_0_30px_rgba(39,150,169,0.1)] text-white flex flex-col gap-4 text-left"
     >
       {user ? (
-        <div className="flex flex-col items-center gap-4 text-center">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#04667b] to-[#2796a9] flex items-center justify-center text-xl font-bold border border-white/20 shadow-md">
-            {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-          </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-lg text-white">{user.username || 'User'}</span>
-            <span className="text-sm text-white/60 font-light">{user.email}</span>
-            <span className="text-xs text-[#2796a9] font-medium mt-1 bg-[#2796a9]/10 px-2 py-0.5 rounded-full self-center">
-              {user.role} Account
-            </span>
-          </div>
+        <div className="flex flex-col gap-4 text-center">
+          {isEditingProfile ? (
+            <form onSubmit={handleProfileSave} className="flex flex-col gap-3 text-left">
+              <h4 className="text-sm font-bold text-[#2796a9] border-b border-white/10 pb-2 mb-1">Edit Profile</h4>
+              
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60">Username</label>
+                <input type="text" value={profileData.username} onChange={e => setProfileData({...profileData, username: e.target.value})} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:border-[#2796a9] outline-none" required />
+              </div>
 
-          <div className="h-[1px] w-full bg-white/10 my-1" />
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60">Company Name</label>
+                <input type="text" value={profileData.companyName} onChange={e => setProfileData({...profileData, companyName: e.target.value})} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:border-[#2796a9] outline-none" placeholder="e.g., Acme Corp" />
+              </div>
 
-          {user.role === 'Admin' && (
-            <Link
-              to="/admin"
-              onClick={onClose}
-              className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white rounded-xl transition-all duration-300 font-semibold text-sm cursor-pointer shadow-md"
-            >
-              Admin Panel
-            </Link>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60">Phone Number</label>
+                <input type="tel" value={profileData.phone} onChange={e => setProfileData({...profileData, phone: e.target.value})} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:border-[#2796a9] outline-none" placeholder="+1 234 567 8900" />
+              </div>
+
+              <div className="flex gap-2 mt-2">
+                <button type="button" onClick={() => setIsEditingProfile(false)} className="flex-1 py-2 border border-white/10 hover:bg-white/5 text-slate-300 text-xs font-semibold rounded-lg transition-colors cursor-pointer">Cancel</button>
+                <button type="submit" className="flex-1 py-2 bg-[#04667b] hover:bg-[#2796a9] text-white text-xs font-semibold rounded-lg transition-all shadow-md cursor-pointer">Save</button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#04667b] to-[#2796a9] flex items-center justify-center text-xl font-bold border border-white/20 shadow-md mx-auto">
+                {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <div className="flex flex-col">
+                <span className="font-semibold text-lg text-white">{user.username || 'User'}</span>
+                <span className="text-sm text-white/60 font-light">{user.email}</span>
+                {user.companyName && <span className="text-xs text-white/80 mt-1">{user.companyName}</span>}
+                {user.phone && <span className="text-xs text-white/50">{user.phone}</span>}
+                <span className="text-xs text-[#2796a9] font-medium mt-2 bg-[#2796a9]/10 px-2 py-0.5 rounded-full self-center">
+                  {user.role} Account
+                </span>
+              </div>
+
+              <button onClick={() => setIsEditingProfile(true)} className="text-xs text-[#2796a9] hover:text-white underline mt-1 cursor-pointer">Edit Profile</button>
+
+              <div className="h-[1px] w-full bg-white/10 my-1" />
+
+              {user.role === 'Admin' && (
+                <Link
+                  to="/admin"
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white rounded-xl transition-all duration-300 font-semibold text-sm cursor-pointer shadow-md"
+                >
+                  Admin Panel
+                </Link>
+              )}
+
+              <button
+                onClick={() => {
+                  onLogout();
+                  onClose();
+                }}
+                className="flex items-center justify-center gap-2 w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/20 hover:border-red-500 rounded-xl transition-all duration-300 font-medium text-sm cursor-pointer"
+              >
+                <LogOut size={16} />
+                Log Out
+              </button>
+            </>
           )}
-
-          <button
-            onClick={() => {
-              onLogout();
-              onClose();
-            }}
-            className="flex items-center justify-center gap-2 w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/20 hover:border-red-500 rounded-xl transition-all duration-300 font-medium text-sm cursor-pointer"
-          >
-            <LogOut size={16} />
-            Log Out
-          </button>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -942,6 +993,19 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
               </div>
 
               <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><User size={16} /></span>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={signupUsername}
+                  disabled={otpSent}
+                  onChange={(e) => setSignupUsername(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white disabled:opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="relative flex items-center">
                 <span className="absolute left-3 text-white/40"><Mail size={16} /></span>
                 <input
                   type="email"
@@ -949,6 +1013,32 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
                   value={email}
                   disabled={otpSent}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white disabled:opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><span className="text-xs">🏢</span></span>
+                <input
+                  type="text"
+                  placeholder="Company Name"
+                  value={signupCompany}
+                  disabled={otpSent}
+                  onChange={(e) => setSignupCompany(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white disabled:opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><span className="text-xs">📞</span></span>
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={signupPhone}
+                  disabled={otpSent}
+                  onChange={(e) => setSignupPhone(e.target.value)}
                   className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white disabled:opacity-50"
                   required
                 />

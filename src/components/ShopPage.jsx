@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import {
   Search,
   Grid,
@@ -39,6 +40,7 @@ const brandLogos = [
 // Carousel items placeholder (will be replaced by state on mount)
 
 export default function ShopPage() {
+  const location = useLocation();
   const [config, setConfig] = useState(null);
   const [brandsList, setBrandsList] = useState([]);
   const [carouselSlides, setCarouselSlides] = useState([
@@ -270,6 +272,20 @@ export default function ShopPage() {
     fetchBrandsAndProducts();
     fetchConfig();
   }, []);
+
+  // Route State Handling
+  useEffect(() => {
+    if (location.state && location.state.category) {
+      setSelectedCategories([location.state.category]);
+      setCurrentView('products');
+      setTimeout(() => {
+        window.scrollTo({ top: 500, behavior: 'smooth' });
+      }, 300);
+      
+      // Clear the state so it doesn't re-trigger on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -521,11 +537,6 @@ export default function ShopPage() {
   };
 
   const handleBrandSelect = (brand) => {
-    if (currentView === 'home') {
-      setCurrentView('products');
-      scrollToCatalog();
-      return;
-    }
     setSelectedBrands([brand]);
     // Reset lower child filters
     setSelectedTypes([]);
@@ -704,7 +715,7 @@ export default function ShopPage() {
               {/* Category Filter */}
               <div>
                 <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Category</label>
-                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="flex flex-col gap-2 pr-2">
                   {filterOptions.categories.map(c => (
                     <label key={c} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
                       <div className="relative flex items-center justify-center w-4 h-4">
@@ -730,7 +741,7 @@ export default function ShopPage() {
               {/* Brand Filter */}
               <div>
                 <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Brand</label>
-                <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="flex flex-col gap-2 pr-2">
                   {filterOptions.brands.map(b => (
                     <label key={b} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
                       <div className="relative flex items-center justify-center w-4 h-4">

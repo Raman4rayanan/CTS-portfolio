@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Send, User, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -7,6 +7,7 @@ export default function ContactSection() {
     name: '',
     phone: '',
     email: '',
+    companyName: '',
     message: ''
   });
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
@@ -18,6 +19,48 @@ export default function ContactSection() {
       [e.target.name]: e.target.value
     });
   };
+
+  useEffect(() => {
+    const applyPrefill = () => {
+      // Check if user is logged in
+      const storedUser = localStorage.getItem('cts_user');
+      let defaultMsg = '';
+      
+      // Check if we have a pre-filled message flag from Services
+      const prefillMsg = localStorage.getItem('prefill_contact_msg');
+      
+      let updatedData = {};
+
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          updatedData = {
+            name: user.username || '',
+            email: user.email || '',
+            phone: user.phone || '',
+            companyName: user.companyName || ''
+          };
+          if (prefillMsg) {
+            defaultMsg = `hello CTS, this is ${user.username || 'User'}, look for the below mentioned customized tools:\n`;
+          }
+        } catch (err) {}
+      } else if (prefillMsg) {
+        defaultMsg = `hello CTS, this is User, look for the below mentioned customized tools:\n`;
+      }
+
+      if (prefillMsg) {
+        updatedData.message = defaultMsg;
+        localStorage.removeItem('prefill_contact_msg');
+      }
+
+      setFormData(prev => ({ ...prev, ...updatedData }));
+    };
+
+    applyPrefill(); // Run on mount
+
+    window.addEventListener('prefillContact', applyPrefill);
+    return () => window.removeEventListener('prefillContact', applyPrefill);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,13 +195,26 @@ export default function ContactSection() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-500">Email (Optional)</label>
+                <label className="text-xs font-semibold text-slate-500">Company Name</label>
+                <input
+                  type="text"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  placeholder="Your Company"
+                  className="w-full bg-background-light border border-slate-200 rounded-lg px-4 py-3 text-slate-700 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue transition-all"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-500">Email *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Your Email"
+                  required
                   className="w-full bg-background-light border border-slate-200 rounded-lg px-4 py-3 text-slate-700 outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue transition-all"
                 />
               </div>

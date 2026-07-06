@@ -30,7 +30,7 @@ export default function Footer() {
             {['Home', 'About', 'Services', 'Contact'].map((link) => (
               <li key={link}>
                 <a
-                  href={`#${link.toLowerCase()}`}
+                  href={link === 'Home' ? '/' : `/#${link.toLowerCase()}`}
                   className="text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1 group w-fit"
                 >
                   {link}

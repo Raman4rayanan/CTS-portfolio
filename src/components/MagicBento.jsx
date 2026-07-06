@@ -572,16 +572,14 @@ const MagicBento = ({
 
             const Icon = card.icon;
 
-            return (
-              <div
-                key={index}
-                className={baseClassName}
-                style={cardStyle}
-                ref={el => {
-                  if (!el) return;
-
-                  const handleMouseMove = (e) => {
+              return (
+                <div
+                  key={card._id || card.title || index}
+                  className={baseClassName}
+                  style={cardStyle}
+                  onMouseMove={(e) => {
                     if (shouldDisableAnimations || !enableTilt) return;
+                    const el = e.currentTarget;
                     const rect = el.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -598,24 +596,23 @@ const MagicBento = ({
                       ease: 'power2.out',
                       transformPerspective: 1000
                     });
-                  };
-
-                  const handleMouseLeave = () => {
+                  }}
+                  onMouseLeave={(e) => {
                     if (shouldDisableAnimations || !enableTilt) return;
-                    gsap.to(el, {
+                    gsap.to(e.currentTarget, {
                       rotateX: 0,
                       rotateY: 0,
                       duration: 0.3,
                       ease: 'power2.out'
                     });
-                  };
-
-                  const handleClick = (e) => {
+                  }}
+                  onClick={(e) => {
                     if (onItemClick) {
                       onItemClick(card);
                     }
                     if (!clickEffect || shouldDisableAnimations) return;
 
+                    const el = e.currentTarget;
                     const rect = el.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -639,13 +636,8 @@ const MagicBento = ({
 
                     el.appendChild(ripple);
                     gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1, opacity: 0, duration: 0.6, ease: 'power2.out', onComplete: () => ripple.remove() });
-                  };
-
-                  el.addEventListener('mousemove', handleMouseMove);
-                  el.addEventListener('mouseleave', handleMouseLeave);
-                  el.addEventListener('click', handleClick);
-                }}
-              >
+                  }}
+                >
                 {/* Full-card background image and overlay */}
                 {card.image && (
                   <>
