@@ -18,7 +18,7 @@
 }
 
 /* Explicit User Fixes for Navbar */
-.navbar, .navbar a {
+.navbar:not(.shop-navbar), .navbar:not(.shop-navbar) a {
   font-family: 'Montserrat', sans-serif !important;
 }
 

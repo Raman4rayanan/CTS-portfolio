@@ -6,6 +6,7 @@ import {
   Grid,
   List,
   ChevronRight,
+  ChevronLeft,
   ShoppingCart,
   X,
   Plus,
@@ -154,6 +155,8 @@ export default function ShopPage() {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [showAllCategories, setShowAllCategories] = useState(false);
   
   const [ecommConfig, setEcommConfig] = useState({
     showBrandSpotlight: true,
@@ -662,7 +665,7 @@ export default function ShopPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 font-sans text-slate-100">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100" style={{ fontFamily: '"Playfair Display", serif' }}>
       {/* Global Navbar */}
       <Navbar 
         isVisible={true} 
@@ -894,68 +897,120 @@ export default function ShopPage() {
             <div className="relative z-20 shadow-[0_-15px_30px_rgba(0,0,0,0.5)] bg-slate-950 min-h-[40vh]">
               <section className="py-16 px-6 md:px-16 lg:px-28 bg-slate-950">
                 <div className="max-w-7xl mx-auto">
-                  <div className="mb-10 text-center md:text-left">
-                    <span className="text-[#2796a9] text-xs font-bold tracking-[0.2em] uppercase">Departments</span>
-                    <h2 className="text-3xl font-extrabold text-white mt-2">Browse by Category</h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[
-                      {
-                        name: 'Power Tools',
-                        desc: 'Drilling, core-cutting, and dynamic high-performance motor tools.',
-                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
-                      },
-                      {
-                        name: 'Safety Equipment',
-                        desc: 'Certified industrial helmets, cut-resistant gloves, and safety goggles.',
-                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg'
-                      },
-                      {
-                        name: 'Industrial Cleaning',
-                        desc: 'High-pressure washers, vacuums, and heavy emission filters.',
-                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278569/port/uyvemispshvvtup3frea.jpg'
-                      },
-                      {
-                        name: 'Accessories',
-                        desc: 'Abrasive discs, sanding polyurethane blocks, and modular storage units.',
-                        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278522/port/zhzh2v9rozlz7q6askvl.jpg'
-                      }
-                    ].map((cat) => {
-                      const isSelected = selectedCategories.includes(cat.name);
-                      return (
-                        <div
-                          key={cat.name}
-                          onClick={() => handleCategorySelect(cat.name)}
-                          className={`group relative h-64 rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 shadow-lg ${
-                            isSelected
-                              ? 'border-[#2796a9] shadow-[0_0_20px_rgba(39,150,169,0.3)] scale-[1.02]'
-                              : 'border-slate-800 hover:border-slate-600'
-                          }`}
+                  <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="text-center md:text-left">
+                      <span className="text-[#2796a9] text-xs font-bold tracking-[0.2em] uppercase">Departments</span>
+                      <h2 className="text-3xl font-extrabold text-white mt-2">Browse by Category</h2>
+                    </div>
+                    
+                    {/* Carousel Navigation Arrows */}
+                    {!showAllCategories && Array.from(filterOptions.categories).filter(c => c !== 'All').length > 3 && (
+                      <div className="flex gap-4 justify-center md:justify-end">
+                        <button
+                          onClick={() => setCategoryIndex(prev => Math.max(0, prev - 1))}
+                          disabled={categoryIndex === 0}
+                          className="w-12 h-12 rounded-full border border-slate-700 flex items-center justify-center text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#2796a9] hover:border-[#2796a9] transition-colors"
                         >
-                          {/* Background Image */}
-                          <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                            style={{ backgroundImage: `url(${cat.image})` }}
-                          />
-                          {/* Overlays */}
-                          <div className="absolute inset-0 transition-opacity duration-300 opacity-80 group-hover:opacity-50" style={{ backgroundColor: '#016A8A', mixBlendMode: 'multiply' }} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-[rgba(18,41,44,0.6)] to-transparent" />
-
-                          {/* Content */}
-                          <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 group-hover:text-[#2796a9] transition-colors">
-                              {cat.name}
-                              <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-5px] group-hover:translate-x-0 duration-300" />
-                            </h3>
-                            <p className="text-slate-400 text-xs font-light leading-relaxed">
-                              {cat.desc}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                          <ChevronLeft size={24} />
+                        </button>
+                        <button
+                          onClick={() => setCategoryIndex(prev => Math.min(Array.from(filterOptions.categories).filter(c => c !== 'All').length - 3, prev + 1))}
+                          disabled={categoryIndex >= Array.from(filterOptions.categories).filter(c => c !== 'All').length - 3}
+                          className="w-12 h-12 rounded-full border border-slate-700 flex items-center justify-center text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#2796a9] hover:border-[#2796a9] transition-colors"
+                        >
+                          <ChevronRight size={24} />
+                        </button>
+                      </div>
+                    )}
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                    <AnimatePresence mode="popLayout">
+                      {Array.from(filterOptions.categories)
+                        .filter(catName => catName !== 'All')
+                        .slice(showAllCategories ? 0 : categoryIndex, showAllCategories ? undefined : categoryIndex + 3)
+                        .map((catName, index) => {
+                          const isSelected = selectedCategories.includes(catName);
+                          const repProduct = products.find(p => p.category === catName);
+                          const image = repProduct?.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png';
+
+                          const handleCardMove = (e) => {
+                            const c = e.currentTarget;
+                            const rect = c.getBoundingClientRect();
+                            c.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                            c.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                          };
+
+                          return (
+                            <motion.article
+                              key={catName}
+                              initial={{ opacity: 0, x: 20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -20 }}
+                              transition={{ duration: 0.45, ease: [0.33, 1, 0.68, 1], delay: (index % 3) * 0.1 }}
+                              onMouseMove={handleCardMove}
+                              onClick={() => handleCategorySelect(catName)}
+                              className={`group relative w-full h-[420px] rounded-3xl overflow-hidden shadow-xl cursor-pointer ${
+                                isSelected
+                                  ? 'border-2 border-[#2796a9] shadow-[0_0_30px_rgba(39,150,169,0.3)] scale-[1.02]'
+                                  : 'border border-slate-800'
+                              }`}
+                              style={{ '--spotlight-color': 'rgba(39,150,169,0.25)' }}
+                            >
+                              {/* Spotlight effect on hover */}
+                              <div
+                                className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-20 opacity-0 group-hover:opacity-100 mix-blend-overlay"
+                                style={{
+                                  background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%)'
+                                }}
+                              />
+
+                              {/* Background Image */}
+                              <div className="absolute inset-0 z-0 bg-slate-900">
+                                <img
+                                  src={image}
+                                  alt={catName}
+                                  loading="lazy"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none opacity-80"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent pointer-events-none" />
+                              </div>
+
+                              {/* Text Overlay */}
+                              <div className="relative z-10 w-full h-full flex flex-col justify-end p-7 text-white">
+                                <h3 className="text-2xl font-bold mb-2 drop-shadow-md group-hover:text-[#2796a9] transition-colors flex items-center gap-2">
+                                  {catName}
+                                  <ChevronRight size={20} className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-5px] group-hover:translate-x-0 duration-300" />
+                                </h3>
+                                <p className="text-sm text-slate-300 leading-relaxed font-light line-clamp-3 drop-shadow-sm">
+                                  Explore our premium range of {catName.toLowerCase()} equipment and tools.
+                                </p>
+                              </div>
+                            </motion.article>
+                          );
+                        })}
+                    </AnimatePresence>
+                  </div>
+                  
+                  {/* View More / Show Less Button */}
+                  {Array.from(filterOptions.categories).filter(c => c !== 'All').length > 3 && (
+                    <div className="flex justify-center mt-12">
+                      <button
+                        onClick={() => {
+                          setShowAllCategories(prev => !prev);
+                          setCategoryIndex(0); // Reset index when toggling
+                        }}
+                        className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-[#2796a9] text-[#2796a9] font-semibold text-sm tracking-wide overflow-hidden transition-all duration-300 hover:text-white"
+                      >
+                        <span className="absolute inset-0 bg-[#2796a9] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+                        <span className="relative z-10">
+                          {showAllCategories 
+                            ? 'Show Less' 
+                            : `View More (${Array.from(filterOptions.categories).filter(c => c !== 'All').length - 3} more)`}
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </section>
             </div>
