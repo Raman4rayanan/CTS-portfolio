@@ -140,7 +140,16 @@ export default function ServicesSection() {
       }
       window.dispatchEvent(new Event('prefillContact'));
     } else {
-      navigate('/shop', { state: { category: card.title } });
+      let mappedCategory = card.title;
+      const t = card.title.toLowerCase();
+      if (t.includes('storage cabinets')) {
+        mappedCategory = 'Storage Units';
+      } else if (t.includes('ppe')) {
+        mappedCategory = ['Protective Clothing', 'Protective Equipment', 'Hearing Protection', 'Safety Eyewear', 'Safety Footwear', 'Hand Protection'];
+      } else if (t.includes('service solution')) {
+        mappedCategory = 'Accessories';
+      }
+      navigate('/shop', { state: { category: mappedCategory } });
     }
   };
 

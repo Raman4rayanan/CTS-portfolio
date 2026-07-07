@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Menu, X, User, Eye, EyeOff, LogOut, Mail, Lock, Search, History, ShoppingCart } from 'lucide-react';
+import { Menu, X, User, Eye, EyeOff, LogOut, Mail, Lock, Search, History, ShoppingCart, CheckCircle } from 'lucide-react';
 
 const navLinks = [
   { label: 'Home', href: '#' },
@@ -101,6 +101,12 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const [toastMessage, setToastMessage] = useState(null);
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   // Close profile dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -122,7 +128,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
   const handleLogin = async (email, password) => {
     const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
-      const response = await fetch(`${apiBaseUrl}/api/admin/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/customer/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -132,6 +138,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
         localStorage.setItem('cts_user', JSON.stringify(data.user));
         localStorage.setItem('cts_token', data.token);
         setUser(data.user);
+        showToast('Successfully signed in!');
         return { success: true };
       } else {
         return { success: false, error: data.error || 'Invalid credentials' };
@@ -147,7 +154,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
     try {
       const token = localStorage.getItem('cts_token');
       if (token) {
-        await fetch(`${apiBaseUrl}/api/admin/logout`, {
+        await fetch(`${apiBaseUrl}/api/customer/logout`, {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${token}` 
@@ -160,6 +167,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
     localStorage.removeItem('cts_user');
     localStorage.removeItem('cts_token');
     setUser(null);
+    showToast('Successfully signed out!');
   };
 
   return (
@@ -317,6 +325,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                           onLogin={handleLogin}
                           onLogout={handleLogout}
                           setUser={setUser}
+                          showToast={showToast}
                         />
                       </div>
                     )}
@@ -396,6 +405,8 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                               onClose={() => setMobileProfileOpen(false)}
                               onLogin={handleLogin}
                               onLogout={handleLogout}
+                              setUser={setUser}
+                              showToast={showToast}
                             />
                           </div>
                         )}
@@ -444,6 +455,8 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
                               onClose={() => setMobileProfileOpen(false)}
                               onLogin={handleLogin}
                               onLogout={handleLogout}
+                              setUser={setUser}
+                              showToast={showToast}
                             />
                           </div>
                         )}
@@ -682,11 +695,25 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
           </div>
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.3 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+            className="fixed bottom-10 right-10 bg-[#2796a9] text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 font-semibold"
+          >
+            <CheckCircle size={24} />
+            {toastMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
 
-function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
+function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) {
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -754,21 +781,37 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser }) {
       return;
     }
 
-    // Complete sign up and log in
-    setTimeout(() => {
-      const mockUser = {
-        email: email,
-        username: signupUsername || email.split('@')[0],
-        companyName: signupCompany,
-        phone: signupPhone,
-        role: 'User'
-      };
-      localStorage.setItem('cts_user', JSON.stringify(mockUser));
-      localStorage.setItem('cts_token', 'mock_signup_token');
-      if (setUser) setUser(mockUser);
+    // Complete sign up and log in against real backend
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiBaseUrl}/api/customer/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          username: signupUsername || email.split('@')[0],
+          companyName: signupCompany,
+          phone: signupPhone
+        })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        localStorage.setItem('cts_user', JSON.stringify(data.user));
+        localStorage.setItem('cts_token', data.token);
+        if (setUser) setUser(data.user);
+        if (showToast) showToast('Successfully signed up and logged in!');
+        onClose();
+      } else {
+        setError(data.error || 'Registration failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection error. Is the server running?');
+    } finally {
       setLoading(false);
-      onClose();
-    }, 800);
+    }
   };
 
   const handleSubmit = async (e) => {

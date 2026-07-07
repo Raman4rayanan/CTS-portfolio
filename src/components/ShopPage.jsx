@@ -279,7 +279,11 @@ export default function ShopPage() {
   // Route State Handling
   useEffect(() => {
     if (location.state && location.state.category) {
-      setSelectedCategories([location.state.category]);
+      if (Array.isArray(location.state.category)) {
+        setSelectedCategories(location.state.category);
+      } else {
+        setSelectedCategories([location.state.category]);
+      }
       setCurrentView('products');
       setTimeout(() => {
         window.scrollTo({ top: 500, behavior: 'smooth' });

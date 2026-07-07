@@ -10,6 +10,7 @@ const portfolioRoutes = require('./routes/portfolio');
 const ecommRoutes = require('./routes/ecomm');
 const ecommConfigRoutes = require('./routes/ecommConfig');
 const adminRoutes = require('./routes/admin');
+const customerAuthRoutes = require('./routes/customerAuth');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/ecomm/config', ecommConfigRoutes);
 app.use('/api/ecomm', ecommRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/customer', customerAuthRoutes);
 
 // Fallback Route
 app.get('/', (req, res) => {
