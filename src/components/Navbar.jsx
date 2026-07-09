@@ -128,12 +128,26 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
   const handleLogin = async (email, password) => {
     const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
-      const response = await fetch(`${apiBaseUrl}/api/customer/login`, {
+      let response = await fetch(`${apiBaseUrl}/api/customer/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await response.json();
+      let data = await response.json();
+
+      // If customer login fails, try admin login
+      if (!data.success) {
+        const adminResponse = await fetch(`${apiBaseUrl}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const adminData = await adminResponse.json();
+        if (adminData.success) {
+          data = adminData;
+        }
+      }
+
       if (data.success) {
         localStorage.setItem('cts_user', JSON.stringify(data.user));
         localStorage.setItem('cts_token', data.token);
@@ -141,7 +155,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
         showToast('Successfully signed in!');
         return { success: true };
       } else {
-        return { success: false, error: data.error || 'Invalid credentials' };
+        return { success: false, error: 'Invalid credentials' };
       }
     } catch (err) {
       console.error(err);
@@ -153,8 +167,12 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
     const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     try {
       const token = localStorage.getItem('cts_token');
+      const userStr = localStorage.getItem('cts_user');
+      const currentUser = userStr ? JSON.parse(userStr) : null;
+
       if (token) {
-        await fetch(`${apiBaseUrl}/api/customer/logout`, {
+        const endpoint = (currentUser && currentUser.role) ? '/api/admin/logout' : '/api/customer/logout';
+        await fetch(`${apiBaseUrl}${endpoint}`, {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${token}` 
@@ -180,7 +198,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -80, opacity: 0 }}
           transition={{ duration: 0.7, ease: [0.33, 1, 0.68, 1], delay: 0.4 }}
-          className={`navbar ${isShopPage ? 'shop-navbar' : ''} fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${(scrolled && !isShopPage)
+          className={`navbar ${isShopPage ? 'shop-navbar' : ''} fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
             ? 'bg-gradient-to-r from-[rgb(3,5,42)] via-[rgb(2,58,81)] to-[rgb(12,91,106)] backdrop-blur-md shadow-lg shadow-black/20'
             : 'bg-transparent'
             }`}

@@ -404,33 +404,28 @@ export default function ShopPage() {
     }
 
     // Category filter
-    const selectedCategory = selectedCategories[0] || 'All';
-    if (selectedCategory !== 'All') {
-      result = result.filter(p => p.category === selectedCategory);
+    if (selectedCategories.length > 0 && !selectedCategories.includes('All')) {
+      result = result.filter(p => p.category && selectedCategories.includes(p.category));
     }
 
     // Brand filter
-    const selectedBrand = selectedBrands[0] || 'All';
-    if (selectedBrand !== 'All') {
-      result = result.filter(p => p.brand === selectedBrand);
+    if (selectedBrands.length > 0 && !selectedBrands.includes('All')) {
+      result = result.filter(p => p.brand && selectedBrands.includes(p.brand));
     }
 
     // Type filter
-    const selectedType = selectedTypes[0] || 'All';
-    if (selectedType !== 'All') {
-      result = result.filter(p => p.type === selectedType);
+    if (selectedTypes.length > 0 && !selectedTypes.includes('All')) {
+      result = result.filter(p => p.type && selectedTypes.includes(p.type));
     }
 
     // Sub-type filter
-    const selectedSubType = selectedSubTypes[0] || 'All';
-    if (selectedSubType !== 'All') {
-      result = result.filter(p => p.sub_type === selectedSubType);
+    if (selectedSubTypes.length > 0 && !selectedSubTypes.includes('All')) {
+      result = result.filter(p => p.sub_type && selectedSubTypes.includes(p.sub_type));
     }
 
     // Model filter
-    const selectedModel = selectedModels[0] || 'All';
-    if (selectedModel !== 'All') {
-      result = result.filter(p => p.model === selectedModel);
+    if (selectedModels.length > 0 && !selectedModels.includes('All')) {
+      result = result.filter(p => p.model && selectedModels.includes(p.model));
     }
 
     // Sort
@@ -669,7 +664,7 @@ export default function ShopPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100" style={{ fontFamily: '"Playfair Display", serif' }}>
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 font-sans">
       {/* Global Navbar */}
       <Navbar 
         isVisible={true} 
