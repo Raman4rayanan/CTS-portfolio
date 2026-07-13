@@ -4,6 +4,7 @@ const Product = require('../models/ecomm/Product');
 const Brand = require('../models/ecomm/Brand');
 const Order = require('../models/ecomm/Order');
 const { protectAdmin } = require('../middleware/auth');
+const { sendQuoteEmail } = require('../services/emailService');
 
 // Get all products (Public)
 router.get('/products', async (req, res) => {
@@ -273,6 +274,11 @@ router.post('/orders', async (req, res) => {
     });
 
     await order.save();
+
+    // Try to send email notifications asynchronously (don't block the response)
+    const adminEmail = process.env.SMTP_USER || 'adminconcepttoolsandservice@gmail.com';
+    sendQuoteEmail(adminEmail, customerDetails.email, order).catch(err => console.error('Failed to send quote emails', err));
+
     res.status(201).json({ success: true, data: order });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

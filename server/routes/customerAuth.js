@@ -4,14 +4,55 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const Customer = require('../models/ecomm/Customer');
 const CustomerSession = require('../models/ecomm/CustomerSession');
+const Otp = require('../models/ecomm/Otp');
+const { sendOtpEmail } = require('../services/emailService');
+
+// Generate and send OTP
+router.post('/send-otp', async (req, res) => {
+  try {
+    const { email, username } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required.' });
+    }
+
+    const existingCustomer = await Customer.findOne({ email });
+    if (existingCustomer) {
+      return res.status(400).json({ success: false, error: 'An account with this email already exists.' });
+    }
+
+    // Generate 4-digit OTP
+    const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // Delete any existing OTPs for this email to prevent spam/confusion
+    await Otp.deleteMany({ email });
+
+    const newOtp = new Otp({ email, otp: otpCode });
+    await newOtp.save();
+
+    const emailSent = await sendOtpEmail(email, otpCode, username);
+    if (emailSent) {
+      res.json({ success: true, message: 'OTP sent successfully.' });
+    } else {
+      res.status(500).json({ success: false, error: 'Failed to send OTP email. Please check your SMTP configuration.' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Customer Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, username, companyName, phone } = req.body;
+    const { email, password, username, companyName, phone, otp } = req.body;
     
-    if (!email || !password || !username) {
-      return res.status(400).json({ success: false, error: 'Email, username, and password are required.' });
+    if (!email || !password || !username || !otp) {
+      return res.status(400).json({ success: false, error: 'Email, username, password, and OTP are required.' });
+    }
+
+    // Verify OTP
+    const validOtp = await Otp.findOne({ email, otp });
+    if (!validOtp) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP.' });
     }
 
     const existingCustomer = await Customer.findOne({ email });
@@ -21,6 +62,9 @@ router.post('/register', async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Delete used OTP
+    await Otp.deleteMany({ email });
 
     const customer = new Customer({
       email,

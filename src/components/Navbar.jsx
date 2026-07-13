@@ -772,14 +772,31 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
     }
 
     setLoading(true);
-    // Simulate sending OTP
-    setTimeout(() => {
-      const code = Math.floor(1000 + Math.random() * 9000).toString();
-      setOtpCode(code);
-      setOtpSent(true);
+    
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiBaseUrl}/api/customer/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email,
+          username: signupUsername || email.split('@')[0]
+        })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setOtpSent(true);
+        setOtpSuccessMsg('Verification code sent to your email!');
+      } else {
+        setError(data.error || 'Failed to send OTP.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection error while sending OTP.');
+    } finally {
       setLoading(false);
-      setOtpSuccessMsg(`Verification code sent! (For testing, use code: ${code})`);
-    }, 1000);
+    }
   };
 
   const handleVerifyOtp = async (e) => {
@@ -789,12 +806,6 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
 
     if (!enteredOtp) {
       setError('Please enter the verification code.');
-      setLoading(false);
-      return;
-    }
-
-    if (enteredOtp !== otpCode) {
-      setError('Invalid verification code. Please try again.');
       setLoading(false);
       return;
     }
@@ -810,7 +821,8 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
           password,
           username: signupUsername || email.split('@')[0],
           companyName: signupCompany,
-          phone: signupPhone
+          phone: signupPhone,
+          otp: enteredOtp
         })
       });
       const data = await response.json();

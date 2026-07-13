@@ -35,7 +35,8 @@ import {
   Search,
   SlidersHorizontal,
   Download,
-  Upload
+  Upload,
+  Users
 } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -138,16 +139,20 @@ export default function AdminPanel() {
   const [ecommProductForm, setEcommProductForm] = useState({
     product_id: '',
     sku: '',
-    brand: 'Ingersoll Rand',
-    category: 'Power Tools',
+    brand: '',
+    category: '',
     type: '',
     sub_type: '',
     model: '',
     product_name: '',
     description: '',
     specifications: '',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+    image: '',
+    images: []
   });
+  
+  // Customers List
+  const [storeCustomers, setStoreCustomers] = useState([]);
 
   // Cloudinary Upload tracking & handler
   const [uploadingField, setUploadingField] = useState(null);
@@ -460,6 +465,18 @@ export default function AdminPanel() {
           const savedQuotes = localStorage.getItem('cts_quotes');
           setOrdersList(savedQuotes ? JSON.parse(savedQuotes) : []);
         }
+
+        // Fetch customers
+        try {
+          const customersRes = await fetch(`${API_BASE_URL}/api/admin/customers`, { headers });
+          const customersData = await customersRes.json();
+          if (customersData.success) {
+            setStoreCustomers(customersData.data);
+          }
+        } catch (customersErr) {
+          console.error('Error fetching customers:', customersErr);
+        }
+
       } else {
         setError('Error retrieving data from one or more services.');
       }
@@ -730,6 +747,31 @@ export default function AdminPanel() {
     });
   };
 
+  const handleDeleteCustomer = (id) => {
+    setDeleteConfirmData({
+      title: 'Delete Customer Account',
+      message: 'Are you sure you want to delete this customer account? This will permanently erase their data and immediately revoke their active sessions.',
+      onConfirm: async () => {
+        const token = localStorage.getItem('cts_token');
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/admin/customers/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setStoreCustomers(prev => prev.filter(item => item._id !== id));
+            fetchStatsOnly();
+          } else {
+            alert(data.error);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    });
+  };
+
   // Services CRUD
   const handleCreateServiceSubmit = async (e) => {
     e.preventDefault();
@@ -831,6 +873,12 @@ export default function AdminPanel() {
             icon={<LayoutDashboard size={18} />} 
             active={activeTab === 'dashboard'} 
             onClick={() => setActiveTab('dashboard')} 
+          />
+          <SidebarLink 
+            label="Users" 
+            icon={<Users size={18} />} 
+            active={activeTab === 'users'} 
+            onClick={() => setActiveTab('users')} 
           />
           <SidebarLink 
             label="Inquiries" 
@@ -1164,6 +1212,70 @@ export default function AdminPanel() {
                       </div>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* USERS TAB */}
+              {activeTab === 'users' && (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+                  <div className="flex justify-between items-center mb-8">
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                        <Users size={24} className="text-[#04667b]" />
+                        Storefront Customers
+                      </h3>
+                      <p className="text-slate-400 text-sm">Manage registered eCommerce customer accounts.</p>
+                    </div>
+                    <div className="text-sm font-semibold text-[#04667b] bg-[#04667b]/10 px-4 py-2 rounded-full border border-[#04667b]/20">
+                      Total: {storeCustomers.length}
+                    </div>
+                  </div>
+
+                  {storeCustomers.length === 0 ? (
+                    <div className="text-center py-16 bg-slate-950/50 rounded-xl border border-dashed border-slate-800">
+                      <Users size={48} className="mx-auto text-slate-700 mb-4" />
+                      <h4 className="text-white font-bold mb-2">No Customers Found</h4>
+                      <p className="text-slate-500 text-sm">No users have signed up on the storefront yet.</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500 bg-slate-950/50">
+                            <th className="p-4 font-bold">Username</th>
+                            <th className="p-4 font-bold">Email</th>
+                            <th className="p-4 font-bold">Company</th>
+                            <th className="p-4 font-bold">Phone</th>
+                            <th className="p-4 font-bold text-center">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-800/50">
+                          {storeCustomers.map((user) => (
+                            <tr key={user._id} className="hover:bg-slate-800/20 transition-colors">
+                              <td className="p-4">
+                                <div className="font-bold text-slate-200">{user.username}</div>
+                                <div className="text-[10px] text-slate-500 mt-1">Joined: {new Date(user.createdAt).toLocaleDateString()}</div>
+                              </td>
+                              <td className="p-4 font-medium text-slate-300">{user.email}</td>
+                              <td className="p-4 text-slate-400">{user.companyName || '-'}</td>
+                              <td className="p-4 text-slate-400">{user.phone || '-'}</td>
+                              <td className="p-4">
+                                <div className="flex items-center justify-center">
+                                  <button
+                                    onClick={() => handleDeleteCustomer(user._id)}
+                                    className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                                    title="Delete Customer"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               )}
 

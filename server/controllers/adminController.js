@@ -11,6 +11,8 @@ const Product = require('../models/ecomm/Product');
 const Company = require('../models/ecomm/Company');
 const Brand = require('../models/ecomm/Brand');
 const Order = require('../models/ecomm/Order');
+const Customer = require('../models/ecomm/Customer');
+const CustomerSession = require('../models/ecomm/CustomerSession');
 
 const User = require('../models/admin/User');
 const Role = require('../models/admin/Role');
@@ -172,6 +174,36 @@ exports.getCrossDatabaseStats = async (req, res) => {
         }
       }
     });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Customer Management
+exports.getCustomers = async (req, res) => {
+  try {
+    const customers = await Customer.find().select('-password').sort({ createdAt: -1 });
+    res.json({ success: true, count: customers.length, data: customers });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.deleteCustomer = async (req, res) => {
+  try {
+    const customerId = req.params.id;
+    
+    // Delete customer
+    const deletedCustomer = await Customer.findByIdAndDelete(customerId);
+    
+    if (!deletedCustomer) {
+      return res.status(404).json({ success: false, error: 'Customer not found.' });
+    }
+
+    // Delete all sessions for this customer to force logout
+    await CustomerSession.deleteMany({ customer: customerId });
+
+    res.json({ success: true, message: 'Customer account deleted successfully.' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

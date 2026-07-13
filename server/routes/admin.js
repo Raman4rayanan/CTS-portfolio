@@ -7,7 +7,9 @@ const {
   getInquiries, 
   updateInquiryStatus, 
   deleteInquiry, 
-  getCrossDatabaseStats 
+  getCrossDatabaseStats,
+  getCustomers,
+  deleteCustomer
 } = require('../controllers/adminController');
 const { protectAdmin } = require('../middleware/auth');
 
@@ -17,6 +19,10 @@ router.post('/login', login);
 // Protected endpoints
 router.post('/logout', protectAdmin, logout);
 router.get('/me', protectAdmin, getMe);
+
+// Customer Management
+router.get('/customers', protectAdmin, getCustomers);
+router.delete('/customers/:id', protectAdmin, deleteCustomer);
 
 // Inquiry management
 router.route('/inquiries')
