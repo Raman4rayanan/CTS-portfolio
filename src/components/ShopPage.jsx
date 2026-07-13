@@ -1137,7 +1137,7 @@ export default function ShopPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ delay: idx * 0.1, duration: 0.5 }}
-                    className="group flex flex-col bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden hover:border-[#2796a9]/50 hover:shadow-[0_10px_30px_rgba(39,150,169,0.15)] transition-all duration-300"
+                    className="group flex flex-col bg-[#121A2D] border border-slate-800 rounded-2xl overflow-hidden hover:border-[#2796a9]/50 hover:shadow-[0_10px_30px_rgba(39,150,169,0.15)] transition-all duration-300"
                   >
                     <div className="relative h-56 bg-white flex items-center justify-center p-6 overflow-hidden">
                       <img 
@@ -1214,7 +1214,7 @@ export default function ShopPage() {
                 {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
-                    className="bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md flex flex-col h-full group"
+                    className="bg-[#121A2D] border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md flex flex-col h-full group"
                     whileHover={{ y: -5 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -1235,14 +1235,14 @@ export default function ShopPage() {
                       )}
 
                       {/* Hover Tech Spec Overlay */}
-                      <div className="absolute inset-x-0 bottom-0 bg-slate-100 text-slate-900 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 border-t-2 border-[#d85c18]">
+                      <div className="absolute inset-x-0 bottom-0 bg-[#1A2238] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 ease-out z-20 border-t-2 border-[#D86B2B]">
                         <div className="p-4">
-                          <h5 className="text-[10px] font-bold text-[#d85c18] tracking-[0.2em] uppercase text-center mb-3">Tech Spec</h5>
-                          <div className="flex flex-col gap-1.5 text-[11px]">
+                          <h5 className="text-xs font-bold text-white tracking-wider uppercase mb-3">TECH SPEC</h5>
+                          <div className="flex flex-col gap-2">
                             {parseSpecifications(p.specifications).slice(0, 3).map((spec, i) => (
-                              <div key={i} className="flex justify-between border-b border-slate-300 pb-1.5 last:border-0 last:pb-0">
-                                <span className="text-slate-600">{spec.parameter}</span>
-                                <span className="font-mono font-medium text-slate-900">{spec.value}</span>
+                              <div key={i} className="flex justify-between border-b border-white/10 pb-2 last:border-0 last:pb-0">
+                                <span className="text-slate-400 text-xs font-light">{spec.parameter}</span>
+                                <span className="text-white text-xs font-medium">{spec.value}</span>
                               </div>
                             ))}
                           </div>
@@ -1291,7 +1291,7 @@ export default function ShopPage() {
                 {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
-                    className="bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md p-6 flex flex-col sm:flex-row items-center gap-6 group"
+                    className="bg-[#121A2D] border border-slate-800 hover:border-slate-600 rounded-2xl overflow-hidden shadow-md p-6 flex flex-col sm:flex-row items-center gap-6 group"
                     whileHover={{ x: 5 }}
                     transition={{ duration: 0.3 }}
                   >
