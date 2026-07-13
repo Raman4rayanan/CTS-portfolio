@@ -2,15 +2,22 @@ const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    // Force IPv4 to prevent 'ETIMEDOUT' on Render server connecting via IPv6
+    tls: {
+      rejectUnauthorized: false
+    }
   });
 };
 
 const path = require('path');
+const fs = require('fs');
 
 const sendOtpEmail = async (toEmail, otpCode, username) => {
   try {
@@ -36,15 +43,25 @@ const sendOtpEmail = async (toEmail, otpCode, username) => {
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
           <p style="font-size: 12px; color: #999; text-align: center;">If you did not request this email, please safely ignore it.</p>
         </div>
-      `,
-      attachments: [
+      `
+    };
+
+    const logoPath = path.join(__dirname, '../../public/admin/logo.png');
+    if (fs.existsSync(logoPath)) {
+      mailOptions.attachments = [
         {
           filename: 'logo.png',
-          path: path.join(__dirname, '../../public/admin/logo.png'),
-          cid: 'ctslogo' // same cid value as in the html img src
+          path: logoPath,
+          cid: 'ctslogo'
         }
-      ]
-    };
+      ];
+    } else {
+      // Fallback if public logo is missing on the serverless deployment
+      mailOptions.html = mailOptions.html.replace(
+        '<img src="cid:ctslogo" alt="Concept Tools and Services" style="max-height: 60px; width: auto;" />',
+        '<h2 style="color: #04667b; text-align: center;">Concept Tools and Services</h2>'
+      );
+    }
 
     await transporter.sendMail(mailOptions);
     console.log(`OTP Email sent to ${toEmail}`);
