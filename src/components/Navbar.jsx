@@ -134,6 +134,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
         body: JSON.stringify({ email, password })
       });
       let data = await response.json();
+      let customerError = data.error;
 
       // If customer login fails, try admin login
       if (!data.success) {
@@ -155,7 +156,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
         showToast('Successfully signed in!');
         return { success: true };
       } else {
-        return { success: false, error: 'Invalid credentials' };
+        return { success: false, error: customerError || 'Invalid credentials' };
       }
     } catch (err) {
       console.error(err);
@@ -732,7 +733,8 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
 }
 
 function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) {
-  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
+  const [authMode, setAuthMode] = useState('login'); // 'login', 'signup', 'forgot-password', 'reset-password'
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -859,8 +861,86 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
     setLoading(false);
     if (res && !res.success) {
       setError(res.error);
+      if (res.error === 'Incorrect password.') {
+        setLoginAttempts(prev => prev + 1);
+      } else {
+        setLoginAttempts(0);
+      }
     } else {
+      setLoginAttempts(0);
       onClose();
+    }
+  };
+
+  const handleSendResetOtp = async (e) => {
+    e.preventDefault();
+    setError('');
+    setOtpSuccessMsg('');
+    if (!email) {
+      setError('Please enter your email address.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiBaseUrl}/api/customer/forgot-password-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setAuthMode('reset-password');
+        setOtpSent(true);
+        setOtpSuccessMsg('Password reset code sent to your email!');
+      } else {
+        setError(data.error || 'Failed to send reset OTP.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection error. Is the server running?');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!enteredOtp) {
+      setError('Please enter the verification code.');
+      return;
+    }
+    if (!password) {
+      setError('Please enter a new password.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiBaseUrl}/api/customer/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp: enteredOtp, newPassword: password })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setOtpSuccessMsg('Password reset successfully! You can now log in.');
+        setAuthMode('login');
+        setPassword('');
+        setLoginAttempts(0);
+      } else {
+        setError(data.error || 'Password reset failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection error.');
+    } finally {
+      setLoading(false);
     }
   };
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -957,6 +1037,7 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
       ) : (
         <div className="flex flex-col gap-3">
           {/* Sign In / Sign Up switcher tabs */}
+          {authMode !== 'forgot-password' && authMode !== 'reset-password' && (
           <div className="flex border-b border-white/10 pb-1 gap-4 w-full">
             <button
               type="button"
@@ -991,6 +1072,7 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
               Sign Up
             </button>
           </div>
+          )}
 
           {error && (
             <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg font-medium">
@@ -1008,10 +1090,10 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
               <div className="flex flex-col gap-1">
                 <h4 className="text-sm font-bold text-white tracking-wide">
-                  Access Procurement Desk
+                  Commercial Portal Login
                 </h4>
                 <p className="text-[11px] text-white/50 font-light leading-relaxed">
-                  Sign in to request net-30 quotes and track history.
+                  Secure access to your procurement workspace.
                 </p>
               </div>
 
@@ -1053,15 +1135,34 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
               >
                 {loading ? 'Signing In...' : 'Sign In'}
               </button>
+
+              {loginAttempts >= 2 && (
+                <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => { setAuthMode('forgot-password'); setError(''); setOtpSuccessMsg(''); }}
+                    className="text-xs text-[#2796a9] hover:text-white transition-colors text-left cursor-pointer font-medium"
+                  >
+                    Forgot Password? Reset it here
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setAuthMode('signup'); setError(''); setOtpSuccessMsg(''); }}
+                    className="text-xs text-white/50 hover:text-white transition-colors text-left cursor-pointer"
+                  >
+                    New to CTS? Sign up
+                  </button>
+                </div>
+              )}
             </form>
-          ) : (
+          ) : authMode === 'signup' ? (
             <div className="flex flex-col gap-3.5">
               <div className="flex flex-col gap-1">
                 <h4 className="text-sm font-bold text-white tracking-wide">
                   Create Commercial Account
                 </h4>
                 <p className="text-[11px] text-white/50 font-light leading-relaxed">
-                  Register to enable net-30 checkout and RFQ history tracking.
+                  Register your organization to streamline purchasing and quotation requests.
                 </p>
               </div>
 
@@ -1192,6 +1293,41 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
                 </form>
               )}
             </div>
+          ) : authMode === 'forgot-password' ? (
+            <form onSubmit={handleSendResetOtp} className="flex flex-col gap-3.5">
+              <div className="flex flex-col gap-1">
+                <h4 className="text-sm font-bold text-white tracking-wide">Forgot Password</h4>
+                <p className="text-[11px] text-white/50 font-light leading-relaxed">Enter your email to receive a reset code.</p>
+              </div>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><Mail size={16} /></span>
+                <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white" required />
+              </div>
+              <button type="submit" disabled={loading} className="w-full py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50">
+                {loading ? 'Sending...' : 'Send Reset Code'}
+              </button>
+              <button type="button" onClick={() => {setAuthMode('login'); setError(''); setOtpSuccessMsg('');}} className="text-xs text-[#2796a9] hover:text-white transition-colors mt-2 text-center w-full cursor-pointer underline">Back to Sign In</button>
+            </form>
+          ) : (
+            <form onSubmit={handleResetPassword} className="flex flex-col gap-3.5">
+              <div className="flex flex-col gap-1">
+                <h4 className="text-sm font-bold text-white tracking-wide">Reset Password</h4>
+                <p className="text-[11px] text-white/50 font-light leading-relaxed">Enter the 4-digit code and your new password.</p>
+              </div>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><Mail size={16} /></span>
+                <input type="text" placeholder="Enter 4-Digit OTP" value={enteredOtp} maxLength={4} onChange={(e) => setEnteredOtp(e.target.value)} className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white font-mono text-center tracking-widest" required />
+              </div>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-white/40"><Lock size={16} /></span>
+                <input type={showPassword ? 'text' : 'password'} placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-9 pr-10 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white" required />
+                <button type="button" onClick={() => setShowPassword(prev => !prev)} className="absolute right-3 text-white/40 hover:text-white transition-colors cursor-pointer">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+              </div>
+              <button type="submit" disabled={loading} className="w-full py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50">
+                {loading ? 'Resetting...' : 'Set New Password'}
+              </button>
+              <button type="button" onClick={() => {setAuthMode('login'); setOtpSent(false); setError(''); setOtpSuccessMsg('');}} className="text-xs text-[#2796a9] hover:text-white transition-colors mt-2 text-center w-full cursor-pointer underline">Cancel</button>
+            </form>
           )}
         </div>
       )}

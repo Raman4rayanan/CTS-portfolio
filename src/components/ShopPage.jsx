@@ -216,7 +216,13 @@ export default function ShopPage() {
         const res = await fetch(`${apiBaseUrl}/api/ecomm/products`);
         const result = await res.json();
         if (result.success && Array.isArray(result.data)) {
-          const filtered = result.data.filter(p => approvedBrands.includes(p.brand));
+          const sanitizedData = result.data.map(p => ({
+            ...p,
+            category: typeof p.category === 'string' ? p.category.trim().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : p.category,
+            type: typeof p.type === 'string' ? p.type.trim() : p.type,
+            brand: typeof p.brand === 'string' ? p.brand.trim() : p.brand
+          }));
+          const filtered = sanitizedData.filter(p => approvedBrands.includes(p.brand));
           if (filtered.length === 0) {
             loadLocalFallback();
           } else {

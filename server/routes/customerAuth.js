@@ -17,7 +17,7 @@ router.post('/send-otp', async (req, res) => {
 
     const existingCustomer = await Customer.findOne({ email });
     if (existingCustomer) {
-      return res.status(400).json({ success: false, error: 'An account with this email already exists.' });
+      return res.status(400).json({ success: false, error: 'Email already registered. Try signing in.' });
     }
 
     // Generate 4-digit OTP
@@ -114,12 +114,12 @@ router.post('/login', async (req, res) => {
 
     const customer = await Customer.findOne({ email });
     if (!customer) {
-      return res.status(401).json({ success: false, error: 'Invalid credentials.' });
+      return res.status(401).json({ success: false, error: 'Email not registered. Try signing up.' });
     }
 
     const isMatch = await bcrypt.compare(password, customer.password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, error: 'Invalid credentials.' });
+      return res.status(401).json({ success: false, error: 'Incorrect password.' });
     }
 
     // Clear old sessions
@@ -163,6 +163,64 @@ router.post('/logout', async (req, res) => {
     
     await CustomerSession.deleteOne({ token });
     res.json({ success: true, message: 'Logged out successfully.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Forgot Password - Send OTP
+router.post('/forgot-password-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ success: false, error: 'Email is required.' });
+
+    const existingCustomer = await Customer.findOne({ email });
+    if (!existingCustomer) {
+      return res.status(400).json({ success: false, error: 'No account found with this email.' });
+    }
+
+    const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+    await Otp.deleteMany({ email });
+    await new Otp({ email, otp: otpCode }).save();
+
+    const emailSent = await sendOtpEmail(email, otpCode, existingCustomer.username, 'reset');
+    if (emailSent) {
+      res.json({ success: true, message: 'Password reset OTP sent.' });
+    } else {
+      res.status(500).json({ success: false, error: 'Failed to send OTP email.' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Reset Password - Verify OTP and update password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ success: false, error: 'Email, OTP, and new password are required.' });
+    }
+
+    const validOtp = await Otp.findOne({ email, otp });
+    if (!validOtp) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP.' });
+    }
+
+    const customer = await Customer.findOne({ email });
+    if (!customer) {
+      return res.status(400).json({ success: false, error: 'No account found with this email.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    
+    customer.password = hashedPassword;
+    await customer.save();
+
+    await Otp.deleteMany({ email });
+
+    res.json({ success: true, message: 'Password reset successfully. You can now log in.' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
