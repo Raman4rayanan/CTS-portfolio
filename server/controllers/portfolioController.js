@@ -49,10 +49,10 @@ const defaultConfig = {
   ecommBannerText: 'CTS B2B Procurement Desk - Fast Quotations & Logistics',
   ecommSlides: [
     {
-      title: 'High-Performance Pneumatics',
-      subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
+      title: 'Industrial Storage Units',
+      subtitle: 'Heavy-duty storage solutions for your workspace',
       image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
-      tag: 'PNEUMATICS'
+      tag: 'STORAGE'
     },
     {
       title: 'Precision German Engineering',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import {
   Search,
   Grid,
@@ -46,10 +46,10 @@ export default function ShopPage() {
   const [brandsList, setBrandsList] = useState([]);
   const [carouselSlides, setCarouselSlides] = useState([
     {
-      title: 'High-Performance Pneumatics',
-      subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
+      title: 'Industrial Storage Units',
+      subtitle: 'Heavy-duty storage solutions for your workspace',
       image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
-      tag: 'PNEUMATICS'
+      tag: 'STORAGE'
     },
     {
       title: 'Precision German Engineering',
@@ -101,7 +101,16 @@ export default function ShopPage() {
         if (data.success) {
           setConfig(data.data);
           if (data.data.ecommSlides && data.data.ecommSlides.length > 0) {
-            setCarouselSlides(data.data.ecommSlides);
+            const slides = [...data.data.ecommSlides];
+            if (slides[0] && slides[0].title && slides[0].title.includes('Pneumatics')) {
+              slides[0] = {
+                title: 'Industrial Storage Units',
+                subtitle: 'Heavy-duty storage solutions for your workspace',
+                image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+                tag: 'STORAGE'
+              };
+            }
+            setCarouselSlides(slides);
           }
         }
       })
@@ -342,9 +351,20 @@ export default function ShopPage() {
       models: new Set(['All'])
     };
 
+    const counts = {
+      categories: { All: products.length },
+      brands: { All: 0 },
+      types: { All: 0 },
+      subTypes: { All: 0 },
+      models: { All: 0 }
+    };
+
     // 1. Categories are computed from all products
     products.forEach(p => {
-      if (p.category) options.categories.add(p.category);
+      if (p.category) {
+        options.categories.add(p.category);
+        counts.categories[p.category] = (counts.categories[p.category] || 0) + 1;
+      }
     });
 
     // 2. Brands depend on Category selection
@@ -352,8 +372,12 @@ export default function ShopPage() {
     const productsForBrand = products.filter(p => {
       return selectedCategory === 'All' || p.category === selectedCategory;
     });
+    counts.brands['All'] = productsForBrand.length;
     productsForBrand.forEach(p => {
-      if (p.brand) options.brands.add(p.brand);
+      if (p.brand) {
+        options.brands.add(p.brand);
+        counts.brands[p.brand] = (counts.brands[p.brand] || 0) + 1;
+      }
     });
 
     // 3. Types depend on Category and Brand selections
@@ -361,8 +385,12 @@ export default function ShopPage() {
     const productsForType = productsForBrand.filter(p => {
       return selectedBrand === 'All' || p.brand === selectedBrand;
     });
+    counts.types['All'] = productsForType.length;
     productsForType.forEach(p => {
-      if (p.type) options.types.add(p.type);
+      if (p.type) {
+        options.types.add(p.type);
+        counts.types[p.type] = (counts.types[p.type] || 0) + 1;
+      }
     });
 
     // 4. Sub-Types depend on Category, Brand, and Type selections
@@ -370,8 +398,12 @@ export default function ShopPage() {
     const productsForSubType = productsForType.filter(p => {
       return selectedType === 'All' || p.type === selectedType;
     });
+    counts.subTypes['All'] = productsForSubType.length;
     productsForSubType.forEach(p => {
-      if (p.sub_type) options.subTypes.add(p.sub_type);
+      if (p.sub_type) {
+        options.subTypes.add(p.sub_type);
+        counts.subTypes[p.sub_type] = (counts.subTypes[p.sub_type] || 0) + 1;
+      }
     });
 
     // 5. Models depend on Category, Brand, Type, and Sub-Type selections
@@ -379,16 +411,30 @@ export default function ShopPage() {
     const productsForModel = productsForSubType.filter(p => {
       return selectedSubType === 'All' || p.sub_type === selectedSubType;
     });
+    counts.models['All'] = productsForModel.length;
     productsForModel.forEach(p => {
-      if (p.model) options.models.add(p.model);
+      if (p.model) {
+        options.models.add(p.model);
+        counts.models[p.model] = (counts.models[p.model] || 0) + 1;
+      }
     });
 
+    const sortAlpha = (set) => {
+      const arr = Array.from(set);
+      const allIndex = arr.indexOf('All');
+      if (allIndex > -1) arr.splice(allIndex, 1);
+      arr.sort((a, b) => a.localeCompare(b));
+      if (allIndex > -1) arr.unshift('All');
+      return arr;
+    };
+
     return {
-      categories: Array.from(options.categories),
-      brands: Array.from(options.brands),
-      types: Array.from(options.types),
-      subTypes: Array.from(options.subTypes),
-      models: Array.from(options.models)
+      categories: sortAlpha(options.categories),
+      brands: sortAlpha(options.brands),
+      types: sortAlpha(options.types),
+      subTypes: sortAlpha(options.subTypes),
+      models: sortAlpha(options.models),
+      counts
     };
   }, [products, selectedCategories, selectedBrands, selectedTypes, selectedSubTypes]);
 
@@ -685,20 +731,27 @@ export default function ShopPage() {
       />
 
       {/* Main Page Layout Container: Sidebar on Left, Sections on Right */}
-      <div className={`flex flex-col lg:flex-row min-h-screen ${currentView === 'products' ? 'pt-24' : ''}`}>
+      <div className={`flex flex-col lg:flex-row min-h-screen`}>
         
         {/* SIDEBAR FILTERS WRAPPER (Persistent throughout the eCommerce page, expanded on desktop) */}
         {currentView === 'products' && (
         <div 
-          className="relative w-full lg:w-80 shrink-0 z-30 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col"
+          className="relative w-full lg:w-64 shrink-0 z-30 lg:sticky lg:top-0 lg:h-screen flex flex-col bg-slate-900/90 backdrop-blur-md border-b lg:border-r border-slate-800"
         >
           <aside 
-            className="w-full lg:absolute lg:top-0 lg:left-0 lg:h-full border-b lg:border-r border-slate-800 bg-slate-900/90 backdrop-blur-md z-30 flex flex-col lg:w-80 p-6 lg:overflow-y-auto"
+            className="w-full h-full z-30 flex flex-col lg:w-64 p-6 pt-24 lg:overflow-y-auto"
           >
+            {/* Logo locked in sidebar */}
+            <div className="flex justify-start items-center mb-2 -mt-16 lg:-mt-20 lg:-ml-12 xl:-ml-16">
+              <Link to="/">
+                <img src="/admin/logo.png" alt="CTS Logo" className="h-12 md:h-20 lg:h-24 w-auto max-w-none object-contain origin-left object-left" />
+              </Link>
+            </div>
+
             {/* Expanded Sidebar Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800 w-full">
-              <h3 className="font-bold text-lg text-white flex items-center gap-2">
-                <SlidersHorizontal size={18} />
+              <h3 className="font-bold text-xl text-white flex items-center gap-3">
+                <SlidersHorizontal size={22} />
                 Filters
               </h3>
               {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedTypes.length > 0 || selectedSubTypes.length > 0 || selectedModels.length > 0 || searchQuery !== '') && (
@@ -722,10 +775,10 @@ export default function ShopPage() {
             <div className="flex flex-col gap-6 w-full text-left">
               {/* Category Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Category</label>
+                <label className="text-xs font-extrabold text-[#2796a9] tracking-wider uppercase block mb-3">Category</label>
                 <div className="flex flex-col gap-2 pr-2">
                   {filterOptions.categories.map(c => (
-                    <label key={c} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                    <label key={c} className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-300 hover:text-white transition-colors group">
                       <div className="relative flex items-center justify-center w-4 h-4">
                         <input
                           type="checkbox"
@@ -740,7 +793,7 @@ export default function ShopPage() {
                         />
                         <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
                       </div>
-                      <span className="group-hover:text-white">{c}</span>
+                      <span className="group-hover:text-white">{c} ({filterOptions.counts.categories[c] || 0})</span>
                     </label>
                   ))}
                 </div>
@@ -748,10 +801,10 @@ export default function ShopPage() {
 
               {/* Brand Filter */}
               <div>
-                <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Brand</label>
+                <label className="text-xs font-extrabold text-[#2796a9] tracking-wider uppercase block mb-3">Brand</label>
                 <div className="flex flex-col gap-2 pr-2">
                   {filterOptions.brands.map(b => (
-                    <label key={b} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                    <label key={b} className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-300 hover:text-white transition-colors group">
                       <div className="relative flex items-center justify-center w-4 h-4">
                         <input
                           type="checkbox"
@@ -766,7 +819,7 @@ export default function ShopPage() {
                         />
                         <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
                       </div>
-                      <span className="group-hover:text-white">{b}</span>
+                      <span className="group-hover:text-white">{b} ({filterOptions.counts.brands[b] || 0})</span>
                     </label>
                   ))}
                 </div>
@@ -775,7 +828,7 @@ export default function ShopPage() {
               {/* Type Filter */}
               {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
                 <div>
-                  <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Type</label>
+                  <label className="text-xs font-extrabold text-[#2796a9] tracking-wider uppercase block mb-3">Type</label>
                   <input
                     type="text"
                     placeholder="Search type..."
@@ -783,12 +836,12 @@ export default function ShopPage() {
                     onChange={e => setTypeSearch(e.target.value)}
                     className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none mb-3 placeholder:text-slate-600"
                   />
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 pr-2">
                     {filterOptions.types
                       .filter(t => t.toLowerCase().includes(typeSearch.toLowerCase()))
                       .slice(0, 4)
                       .map(t => (
-                      <label key={t} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <label key={t} className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-300 hover:text-white transition-colors group">
                         <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
                           <input
                             type="checkbox"
@@ -803,7 +856,7 @@ export default function ShopPage() {
                           />
                           <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
                         </div>
-                        <span className="group-hover:text-white truncate">{t}</span>
+                        <span className="group-hover:text-white truncate">{t} ({filterOptions.counts.types[t] || 0})</span>
                       </label>
                     ))}
                   </div>
@@ -813,19 +866,19 @@ export default function ShopPage() {
               {/* Sub-Type Filter */}
               {selectedTypes.length > 0 && (
                 <div>
-                  <label className="text-xs font-bold text-[#2796a9] tracking-wider uppercase block mb-3">Sub-Type</label>
+                  <label className="text-xs font-extrabold text-[#2796a9] tracking-wider uppercase block mb-3">Sub Type</label>
                   <input
                     type="text"
-                    placeholder="Search sub-type..."
+                    placeholder="Search sub type..."
                     value={subTypeSearch}
                     onChange={e => setSubTypeSearch(e.target.value)}
                     className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none mb-3 placeholder:text-slate-600"
                   />
-                  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                  <div className="flex flex-col gap-2 pr-2">
                     {filterOptions.subTypes
                       .filter(st => st.toLowerCase().includes(subTypeSearch.toLowerCase()))
                       .map(st => (
-                      <label key={st} className="flex items-center gap-3 cursor-pointer text-sm text-slate-300 hover:text-white transition-colors group">
+                      <label key={st} className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-300 hover:text-white transition-colors group">
                         <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
                           <input
                             type="checkbox"
@@ -840,7 +893,7 @@ export default function ShopPage() {
                           />
                           <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
                         </div>
-                        <span className="group-hover:text-white truncate">{st}</span>
+                        <span className="group-hover:text-white truncate">{st} ({filterOptions.counts.subTypes[st] || 0})</span>
                       </label>
                     ))}
                   </div>
@@ -852,7 +905,7 @@ export default function ShopPage() {
         )}
 
         {/* Right Content Area (Hero, Categories, Brands, Catalog Grid) */}
-        <main className="flex-grow min-w-0 flex flex-col relative z-10">
+        <main className={`flex-grow min-w-0 flex flex-col relative z-10 ${currentView === 'products' ? 'pt-24' : ''}`}>
 
           {/* Layer 1: Slides over Sticky Spotlight (z-20, relative, bg-slate-950, shadow) */}
           {currentView === 'home' && (
@@ -886,7 +939,16 @@ export default function ShopPage() {
                         {slide.subtitle}
                       </p>
                       <button
-                        onClick={() => setCurrentView('products')}
+                        onClick={() => {
+                          if (slide.title.toLowerCase().includes('storage')) {
+                            setSelectedTypes(['Storage']);
+                          }
+                          setCurrentView('products');
+                          setTimeout(() => {
+                            const catalog = document.getElementById('catalog-section');
+                            if (catalog) catalog.scrollIntoView({ behavior: 'smooth' });
+                          }, 100);
+                        }}
                         className="px-6 py-3 bg-[#04667b] hover:bg-[#2796a9] text-white font-semibold text-sm rounded shadow-lg transition-all self-start flex items-center gap-2"
                       >
                         Browse Catalog
@@ -1145,11 +1207,11 @@ export default function ShopPage() {
                     transition={{ delay: idx * 0.1, duration: 0.5 }}
                     className="group flex flex-col bg-[#121A2D] border border-slate-800 rounded-2xl overflow-hidden hover:border-[#2796a9]/50 hover:shadow-[0_10px_30px_rgba(39,150,169,0.15)] transition-all duration-300"
                   >
-                    <div className="relative h-56 bg-white flex items-center justify-center p-6 overflow-hidden">
+                    <div className="relative h-56 bg-white flex items-center justify-center p-0 overflow-hidden">
                       <img 
                         src={product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
                         alt={product.product_name}
-                        className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                       />
                       {/* NEW Badge */}
                       <div className="absolute top-3 left-3 bg-[#2796a9] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded shadow-md">
@@ -1189,22 +1251,17 @@ export default function ShopPage() {
 
       {/* Layer 3: Catalog & Footer (z-30, relative, bg-slate-950, shadow) */}
       {currentView === 'products' && (
-      <div className="relative z-30 shadow-[0_-20px_40px_rgba(0,0,0,0.5)] bg-slate-950">
+      <div className="relative z-30 bg-slate-950">
 
       {/* 4. PRODUCT CATALOG */}
-      <section ref={catalogRef} id="catalog-section" className="py-20 px-6 md:px-16 lg:px-28 bg-slate-950">
+      <section ref={catalogRef} id="catalog-section" className="pt-8 pb-24 px-6 md:px-16 lg:px-28 bg-slate-950">
         <div className="max-w-7xl mx-auto flex flex-col w-full">
 
           {/* MAIN PRODUCT AREA */}
           <div className="w-full">
             {/* SEARCH AND CONTROLS REMOVED AESTHETICALLY */}
 
-            {/* RESULTS COUNT & FILTER TAGS */}
-            <div className="flex items-center justify-between mb-6 text-sm text-slate-400 font-light">
-              <div>
-                Showing <span className="text-white font-semibold">{Math.min(displayedProducts.length, filteredProducts.length)}</span> of <span className="text-white font-semibold">{filteredProducts.length}</span> industrial products
-              </div>
-            </div>
+            {/* FILTER TAGS (IF ANY) */}
 
             {/* PRODUCT GRID/LIST VIEW */}
             {filteredProducts.length === 0 ? (
@@ -1216,7 +1273,7 @@ export default function ShopPage() {
                 </p>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
@@ -1226,13 +1283,13 @@ export default function ShopPage() {
                   >
                     {/* Image Area */}
                     <div
-                      className="h-56 w-full bg-slate-950 flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"
+                      className="h-56 w-full bg-slate-950 flex items-center justify-center p-0 cursor-pointer relative overflow-hidden"
                       onClick={() => setSelectedProduct(p)}
                     >
                       <img
                         src={p.images?.[0] || 'https://via.placeholder.com/300x200?text=No+Image'}
                         alt={p.product_name}
-                        className="max-h-full max-w-full object-contain group-hover:scale-102 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {p.tag && (
                         <span className="absolute top-4 left-4 bg-[#d85c18] text-white text-[10px] font-bold px-2 py-0.5 rounded z-10">
@@ -1351,17 +1408,20 @@ export default function ShopPage() {
               </div>
             )}
 
-            {/* Pagination / Show More */}
-            {filteredProducts.length > displayLimit && (
-              <div className="flex justify-end mt-8">
+            {/* Pagination / Show More & Results Count */}
+            <div className="flex flex-col sm:flex-row items-center justify-center mt-12 gap-6 text-sm text-slate-400 font-light">
+              <div>
+                Showing <span className="text-white font-semibold">{Math.min(displayedProducts.length, filteredProducts.length)}</span> of <span className="text-white font-semibold">{filteredProducts.length}</span> industrial products
+              </div>
+              {filteredProducts.length > displayLimit && (
                 <button
                   onClick={() => setDisplayLimit(prev => prev + 12)}
                   className="px-6 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)]"
                 >
                   Show More
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </section>
