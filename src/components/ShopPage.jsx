@@ -159,7 +159,7 @@ export default function ShopPage() {
   const [typeSearch, setTypeSearch] = useState('');
   const [subTypeSearch, setSubTypeSearch] = useState('');
   const [modelSearch, setModelSearch] = useState('');
-  const [displayLimit, setDisplayLimit] = useState(12);
+  const [displayLimit, setDisplayLimit] = useState(16);
   const [sortBy, setSortBy] = useState('name-asc'); // name-asc, newest
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -1273,7 +1273,7 @@ export default function ShopPage() {
                 </p>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {displayedProducts.map((p) => (
                   <motion.div
                     key={p.product_id}
@@ -1415,7 +1415,7 @@ export default function ShopPage() {
               </div>
               {filteredProducts.length > displayLimit && (
                 <button
-                  onClick={() => setDisplayLimit(prev => prev + 12)}
+                  onClick={() => setDisplayLimit(prev => prev + 16)}
                   className="px-6 py-2.5 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-semibold tracking-[0.3px] normal-case antialiased rounded-lg transition-all duration-300 shadow-[0_0_10px_rgba(6,53,67,0.4)] hover:shadow-[0_0_20px_rgba(6,53,67,0.8)]"
                 >
                   Show More
