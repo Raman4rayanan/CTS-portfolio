@@ -24,6 +24,7 @@ import {
   Cpu,
   ArrowUp
 } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { sampleProducts } from '../data/sampleProducts';
@@ -200,24 +201,55 @@ export default function ShopPage() {
     const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
     const loadProducts = async (approvedBrands) => {
+      const normalizeProduct = (p) => {
+        let cat = typeof p.category === 'string' ? p.category.trim().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : p.category;
+        let typ = typeof p.type === 'string' ? p.type.trim() : p.type;
+        let sub = typeof p.sub_type === 'string' ? p.sub_type.trim() : p.sub_type;
+        
+        const replaceVariations = (val, fromList, to) => {
+          if (!val) return val;
+          const lower = val.toLowerCase();
+          if (fromList.some(f => lower === f.toLowerCase())) return to;
+          return val;
+        };
+        
+        cat = replaceVariations(cat, ['storage', 'storage cabinet', 'storage cabinets', 'storage unit', 'storage units'], 'Storage Unit');
+        typ = replaceVariations(typ, ['storage', 'storage cabinet', 'storage cabinets', 'storage unit', 'storage units'], 'Storage Unit');
+        sub = replaceVariations(sub, ['storage', 'storage cabinet', 'storage cabinets', 'storage unit', 'storage units'], 'Storage Unit');
+
+        cat = replaceVariations(cat, ['protective equipment', 'protective gear'], 'Protective Clothing');
+        typ = replaceVariations(typ, ['protective equipment', 'protective gear'], 'Protective Clothing');
+        sub = replaceVariations(sub, ['protective equipment', 'protective gear'], 'Protective Clothing');
+
+        return {
+          ...p,
+          category: cat,
+          type: typ,
+          sub_type: sub,
+          brand: typeof p.brand === 'string' ? p.brand.trim() : p.brand
+        };
+      };
+
       const loadLocalFallback = () => {
         const saved = localStorage.getItem('cts_products');
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
-            const filtered = parsed.filter(p => approvedBrands.includes(p.brand));
+            const filtered = parsed.filter(p => approvedBrands.includes(p.brand)).map(normalizeProduct);
             if (filtered.length === 0) {
-              localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
-              setProducts(sampleProducts);
+              const normalizedSample = sampleProducts.map(normalizeProduct);
+              localStorage.setItem('cts_products', JSON.stringify(normalizedSample));
+              setProducts(normalizedSample);
             } else {
               setProducts(filtered);
             }
           } catch (e) {
-            setProducts(sampleProducts);
+            setProducts(sampleProducts.map(normalizeProduct));
           }
         } else {
-          localStorage.setItem('cts_products', JSON.stringify(sampleProducts));
-          setProducts(sampleProducts);
+          const normalizedSample = sampleProducts.map(normalizeProduct);
+          localStorage.setItem('cts_products', JSON.stringify(normalizedSample));
+          setProducts(normalizedSample);
         }
       };
 
@@ -225,12 +257,7 @@ export default function ShopPage() {
         const res = await fetch(`${apiBaseUrl}/api/ecomm/products`);
         const result = await res.json();
         if (result.success && Array.isArray(result.data)) {
-          const sanitizedData = result.data.map(p => ({
-            ...p,
-            category: typeof p.category === 'string' ? p.category.trim().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : p.category,
-            type: typeof p.type === 'string' ? p.type.trim() : p.type,
-            brand: typeof p.brand === 'string' ? p.brand.trim() : p.brand
-          }));
+          const sanitizedData = result.data.map(normalizeProduct);
           const filtered = sanitizedData.filter(p => approvedBrands.includes(p.brand));
           if (filtered.length === 0) {
             loadLocalFallback();
@@ -712,7 +739,56 @@ export default function ShopPage() {
 
   // Simulate print/download details
   const downloadSummaryPdf = (refId) => {
-    window.print();
+    const element = document.getElementById('quote-summary-content');
+    if (!element) return;
+    
+    // Create a wrapper to force light mode and white background for the PDF
+    // to make it professional and printer-friendly.
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <div style="font-family: sans-serif; padding: 40px; color: #1e293b; background: white;">
+        <div style="text-align: center; border-bottom: 2px solid #04667b; padding-bottom: 20px; margin-bottom: 30px;">
+          <img src="/admin/logo.png" style="max-height: 80px; margin-bottom: 10px;" />
+          <h1 style="color: #04667b; font-size: 24px; margin: 0;">Quotation Request</h1>
+          <p style="color: #64748b; font-size: 14px; margin-top: 5px;">Reference ID: ${refId}</p>
+        </div>
+        ${element.innerHTML}
+        <div style="margin-top: 40px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+          Concept Tools and Services (CTS) - Procurement Desk
+        </div>
+      </div>
+    `;
+
+    // Strip dark mode classes for cleaner PDF
+    const darkClasses = ['text-slate-300', 'text-slate-500', 'text-slate-200', 'text-slate-400', 'text-white', 'text-slate-100', 'border-slate-800', 'border-slate-800/80', 'bg-slate-950/50', 'bg-slate-950/30', 'bg-slate-950', 'bg-slate-900', 'bg-slate-900/30'];
+    darkClasses.forEach(cls => {
+      wrapper.querySelectorAll('.' + cls.replace('/', '\\/')).forEach(el => el.classList.remove(cls));
+    });
+    
+    // Add light mode styles to tables and borders
+    wrapper.querySelectorAll('table').forEach(table => {
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+    });
+    wrapper.querySelectorAll('th, td').forEach(cell => {
+      cell.style.borderBottom = '1px solid #e2e8f0';
+      cell.style.padding = '12px';
+      cell.style.color = '#334155';
+    });
+    wrapper.querySelectorAll('th').forEach(th => {
+      th.style.backgroundColor = '#f1f5f9';
+      th.style.color = '#0f172a';
+    });
+
+    const opt = {
+      margin:       10,
+      filename:     `CTS_Quotation_${refId}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(wrapper).set(opt).save();
   };
 
   return (
@@ -940,8 +1016,22 @@ export default function ShopPage() {
                       </p>
                       <button
                         onClick={() => {
-                          if (slide.title.toLowerCase().includes('storage')) {
-                            setSelectedTypes(['Storage']);
+                          setSelectedCategories([]);
+                          setSelectedBrands([]);
+                          setSelectedTypes([]);
+                          setSelectedSubTypes([]);
+                          setSelectedModels([]);
+                          setSearchQuery('');
+
+                          const lowerTitle = slide.title ? slide.title.toLowerCase() : '';
+                          const lowerTag = slide.tag ? slide.tag.toLowerCase() : '';
+
+                          if (lowerTag.includes('storage') || lowerTitle.includes('storage')) {
+                            setSelectedCategories(['Storage Unit']);
+                          } else if (lowerTag.includes('power tools') || lowerTitle.includes('power tools')) {
+                            setSelectedCategories(['Power Tools']);
+                          } else if (lowerTag.includes('safety') || lowerTitle.includes('safety')) {
+                            setSelectedCategories(['Hand Protection', 'Hearing Protection', 'Protective Clothing', 'Safety Eyewear', 'Safety Footwear']);
                           }
                           setCurrentView('products');
                           setTimeout(() => {
@@ -1140,7 +1230,7 @@ export default function ShopPage() {
                           <div
                             key={`b-set1-${idx}`}
                             onClick={() => handleBrandSelect(brand.name)}
-                            className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
+                            className="group flex-shrink-0 w-40 md:w-64 h-24 md:h-32 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
                             title={`Click to filter by ${brand.name}`}
                           >
                             <img
@@ -1160,7 +1250,7 @@ export default function ShopPage() {
                           <div
                             key={`b-set2-${idx}`}
                             onClick={() => handleBrandSelect(brand.name)}
-                            className="group flex-shrink-0 w-32 md:w-48 h-16 md:h-24 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
+                            className="group flex-shrink-0 w-40 md:w-64 h-24 md:h-32 flex items-center justify-center p-3 cursor-pointer transition-all duration-300 border border-transparent hover:border-slate-800/40 hover:bg-slate-950/20 hover:rounded-2xl"
                             title={`Click to filter by ${brand.name}`}
                           >
                             <img
@@ -1942,7 +2032,7 @@ export default function ShopPage() {
               </div>
 
               {/* Scrollable Receipt Body */}
-              <div className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col gap-6 text-left">
+              <div id="quote-summary-content" className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col gap-6 text-left">
                 {/* Intro message */}
                 <div className="p-4 bg-slate-950/50 border border-slate-800 rounded-2xl">
                   <p className="text-slate-300 text-sm font-light leading-relaxed">
