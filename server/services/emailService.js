@@ -4,9 +4,9 @@ const fs = require('fs');
 
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+    port: process.env.SMTP_PORT || 587,
+    secure: false, // Brevo uses 587 with STARTTLS (secure: false enables STARTTLS)
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -23,8 +23,9 @@ const sendOtpEmail = async (toEmail, otpCode, username, context = 'signup') => {
     const transporter = createTransporter();
     const actionText = context === 'reset' ? 'password reset process' : 'sign-up process';
     
+    const senderEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER;
     const mailOptions = {
-      from: `"Concept Tools and Services" <${process.env.SMTP_USER}>`,
+      from: `"Concept Tools and Services" <${senderEmail}>`,
       to: toEmail,
       subject: 'Your CTS Authentication Code',
       html: `
@@ -120,16 +121,17 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
       </div>
     `;
 
+    const senderEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER;
     const logoPath = path.join(__dirname, '../../public/admin/logo.png');
     const mailOptionsAdmin = {
-      from: `"CTS Procurement" <${process.env.SMTP_USER}>`,
+      from: `"CTS Procurement" <${senderEmail}>`,
       to: adminEmail,
       subject: `New Quote Request - ${quoteDetails.referenceId}`,
       html: htmlContent
     };
 
     const mailOptionsCustomer = {
-      from: `"CTS Procurement" <${process.env.SMTP_USER}>`,
+      from: `"CTS Procurement" <${senderEmail}>`,
       to: customerEmail,
       subject: `Quotation Request Received - ${quoteDetails.referenceId}`,
       html: htmlContent
