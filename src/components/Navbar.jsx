@@ -171,6 +171,7 @@ export default function Navbar({ isVisible, isShop, searchQuery, setSearchQuery,
         localStorage.setItem('cts_token', data.token);
         setUser(data.user);
         showToast('Successfully signed in!');
+        window.location.reload();
         return { success: true };
       } else {
         return { success: false, error: customerError || 'Invalid credentials' };

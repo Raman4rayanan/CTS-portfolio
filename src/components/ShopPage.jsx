@@ -549,7 +549,6 @@ export default function ShopPage() {
       return [...prev, { ...product, quantity: 1 }];
     });
     showToast(`"${product.product_name}" is now added to the cart`);
-    setIsCartOpen(true);
   };
 
   const updateCartQty = (productId, amount) => {
@@ -665,6 +664,7 @@ export default function ShopPage() {
     localStorage.setItem('cts_token', 'mock_token_key');
     setUser(mockUser);
     setIsAuthOpen(false);
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -2130,7 +2130,7 @@ export default function ShopPage() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-            className="fixed bottom-6 right-6 z-[60] bg-slate-900 border border-slate-700 shadow-[0_5px_15px_rgba(0,0,0,0.5)] px-4 py-3 rounded-xl flex items-center gap-3 text-sm text-slate-100"
+            className="fixed bottom-6 left-6 z-[60] bg-slate-900 border border-slate-700 shadow-[0_5px_15px_rgba(0,0,0,0.5)] px-4 py-3 rounded-xl flex items-center gap-3 text-sm text-slate-100"
           >
             <CheckCircle size={18} className="text-[#2796a9]" />
             {toastMessage}
