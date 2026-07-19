@@ -126,6 +126,7 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
     const mailOptionsAdmin = {
       from: `"CTS Procurement" <${senderEmail}>`,
       to: adminEmail,
+      cc: 'concepttoolsandservice@gmail.com',
       subject: `New Quote Request - ${quoteDetails.referenceId}`,
       html: htmlContent
     };

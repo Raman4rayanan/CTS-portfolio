@@ -1297,7 +1297,10 @@ export default function ShopPage() {
                     transition={{ delay: idx * 0.1, duration: 0.5 }}
                     className="group flex flex-col bg-[#121A2D] border border-slate-800 rounded-2xl overflow-hidden hover:border-[#2796a9]/50 hover:shadow-[0_10px_30px_rgba(39,150,169,0.15)] transition-all duration-300"
                   >
-                    <div className="relative h-56 bg-white flex items-center justify-center p-0 overflow-hidden">
+                    <div 
+                      className="relative h-56 bg-white flex items-center justify-center p-0 overflow-hidden cursor-pointer"
+                      onClick={() => setSelectedProduct(product)}
+                    >
                       <img 
                         src={product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
                         alt={product.product_name}
@@ -1313,7 +1316,12 @@ export default function ShopPage() {
                       <div className="flex justify-between items-start gap-2">
                         <div className="flex flex-col">
                           <span className="text-[#2796a9] text-xs font-bold uppercase tracking-wider">{product.brand}</span>
-                          <h4 className="text-sm font-bold text-white leading-snug line-clamp-2 mt-1 group-hover:text-[#2796a9] transition-colors">{product.product_name}</h4>
+                          <h4 
+                            className="text-sm font-bold text-white leading-snug line-clamp-2 mt-1 group-hover:text-[#2796a9] transition-colors cursor-pointer"
+                            onClick={() => setSelectedProduct(product)}
+                          >
+                            {product.product_name}
+                          </h4>
                         </div>
                       </div>
                       
@@ -1321,7 +1329,7 @@ export default function ShopPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            addToCart(product);
+                            addToQuote(product);
                           }}
                           className="flex-1 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[#2796a9]/20"
                         >
