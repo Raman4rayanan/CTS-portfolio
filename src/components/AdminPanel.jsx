@@ -38,6 +38,7 @@ import {
   Upload,
   Users
 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -61,6 +62,103 @@ const defaultGradients = [
   'linear-gradient(135deg, #0e5c6e, #0B1F3A)',
   'linear-gradient(135deg, #0a4a7a, #0B1F3A)'
 ];
+
+// EcommExportModal Component
+function EcommExportModal({ products, brands, setActiveModal }) {
+  const [exportBrand, setExportBrand] = useState('All');
+  const [exportCategory, setExportCategory] = useState('All');
+
+  const handleExportCSV = () => {
+    let filtered = products;
+    if (exportBrand !== 'All') filtered = filtered.filter(p => p.brand === exportBrand);
+    if (exportCategory !== 'All') filtered = filtered.filter(p => p.category === exportCategory);
+
+    if (!filtered || filtered.length === 0) return alert('No products match these filters');
+
+    const headers = ['Product ID', 'SKU', 'Name', 'Brand', 'Category', 'Type', 'Model', 'Description'];
+    let csvContent = headers.join(',') + '\n';
+
+    filtered.forEach(p => {
+      const row = [
+        p.product_id || '',
+        p.sku || '',
+        `"${(p.product_name || '').replace(/"/g, '""')}"`,
+        `"${p.brand || ''}"`,
+        `"${p.category || ''}"`,
+        `"${p.type || ''}"`,
+        `"${p.model || ''}"`,
+        `"${(p.description || '').replace(/"/g, '""')}"`
+      ];
+      csvContent += row.join(',') + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    let filename = 'cts_catalog';
+    if (exportBrand !== 'All') filename += `_${exportBrand.replace(/\s+/g, '')}`;
+    if (exportCategory !== 'All') filename += `_${exportCategory.replace(/\s+/g, '')}`;
+    filename += '.csv';
+    
+    link.setAttribute('download', filename.toLowerCase());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setActiveModal(null);
+  };
+
+  const categories = [...new Set(products.map(p => p.category))].filter(Boolean);
+
+  return (
+    <div className="p-6">
+      <div className="flex flex-col gap-4">
+        <div>
+          <label className="text-xs text-white/50 mb-1 block">Filter by Brand</label>
+          <select
+            value={exportBrand}
+            onChange={(e) => setExportBrand(e.target.value)}
+            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+          >
+            <option value="All">All Brands</option>
+            {brands.map(b => (
+              <option key={b.name} value={b.name}>{b.name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-xs text-white/50 mb-1 block">Filter by Category</label>
+          <select
+            value={exportCategory}
+            onChange={(e) => setExportCategory(e.target.value)}
+            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+          >
+            <option value="All">All Categories</option>
+            {categories.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setActiveModal(null)}
+          className="px-4 py-2 rounded-xl text-white/60 hover:text-white border border-transparent hover:bg-white/5 transition-all text-xs font-semibold cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleExportCSV}
+          className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white rounded-xl text-xs font-bold hover:brightness-110 cursor-pointer"
+        >
+          Export CSV
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -98,7 +196,10 @@ export default function AdminPanel() {
     cloudinaryCloudName: '',
     cloudinaryUploadPreset: '',
     ecommBannerText: '',
-    ecommSlides: []
+    ecommSlides: [],
+    metaTitle: '',
+    metaDescription: '',
+    metaImage: ''
   });
   const [ecommCustomizeForm, setEcommCustomizeForm] = useState({
     showBrandSpotlight: true,
@@ -108,9 +209,17 @@ export default function AdminPanel() {
     newlyAddedTag: 'Latest Arrivals',
     newlyAddedTitle: 'Newly Added Products',
     newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
-    newlyAddedLimit: 8
+    newlyAddedLimit: 8,
+    newlyAddedProductIDs: []
   });
   const [ecommBrandsLocal, setEcommBrandsLocal] = useState([]);
+  
+  const [selectedUserHistory, setSelectedUserHistory] = useState(null);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
+  const [newsletterForm, setNewsletterForm] = useState({ subject: '', htmlContent: '', bannerBase64: '', bannerName: '' });
+  const [quoteReplyModalOpen, setQuoteReplyModalOpen] = useState(false);
+  const [selectedQuote, setSelectedQuote] = useState(null);
+  const [quoteReplyMessage, setQuoteReplyMessage] = useState('');
   
   const [saveSuccess, setSaveSuccess] = useState('');
   
@@ -134,7 +243,6 @@ export default function AdminPanel() {
   const [quoteSearchQuery, setQuoteSearchQuery] = useState('');
   const [quoteFilterStatus, setQuoteFilterStatus] = useState('All');
   const [newInternalNote, setNewInternalNote] = useState('');
-  const [selectedQuote, setSelectedQuote] = useState(null);
   const [csvText, setCsvText] = useState('');
   const [ecommProductForm, setEcommProductForm] = useState({
     product_id: '',
@@ -316,7 +424,7 @@ export default function AdminPanel() {
   // E-commerce Brands Mutations
   const handleAddEcommBrand = () => {
     setEcommBrandsLocal(prev => [
-      { name: 'New Brand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png', scale: 1.0 },
+      { name: 'New Brand', src: '', scale: 1.0 },
       ...prev
     ]);
   };
@@ -397,7 +505,11 @@ export default function AdminPanel() {
           cloudinaryCloudName: configData.data.cloudinaryCloudName || '',
           cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || '',
           ecommBannerText: configData.data.ecommBannerText || '',
-          ecommSlides: configData.data.ecommSlides || []
+          showEcommBanner: configData.data.showEcommBanner ?? true,
+          ecommSlides: configData.data.ecommSlides || [],
+          metaTitle: configData.data.metaTitle || '',
+          metaDescription: configData.data.metaDescription || '',
+          metaImage: configData.data.metaImage || ''
         });
 
         // E-commerce items loading from backend API
@@ -443,7 +555,8 @@ export default function AdminPanel() {
               newlyAddedTag: ecommConfigData.data.newlyAddedTag || 'Latest Arrivals',
               newlyAddedTitle: ecommConfigData.data.newlyAddedTitle || 'Newly Added Products',
               newlyAddedSubtitle: ecommConfigData.data.newlyAddedSubtitle || 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
-              newlyAddedLimit: ecommConfigData.data.newlyAddedLimit ?? 8
+              newlyAddedLimit: ecommConfigData.data.newlyAddedLimit ?? 8,
+              newlyAddedProductIDs: ecommConfigData.data.newlyAddedProductIDs || []
             }));
           }
         } catch (e) {
@@ -772,6 +885,76 @@ export default function AdminPanel() {
     });
   };
 
+  const handleViewHistory = async (email) => {
+    const token = localStorage.getItem('cts_token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/customers/${email}/history`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSelectedUserHistory({ email, ...data.data });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSendNewsletter = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('cts_token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/newsletter`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newsletterForm)
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message);
+        setIsNewsletterOpen(false);
+        setNewsletterForm({ subject: '', htmlContent: '', bannerBase64: '', bannerName: '' });
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to send newsletter');
+    }
+  };
+
+  const handleQuoteReply = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('cts_token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/orders/${selectedQuote._id}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          items: selectedQuote.items,
+          message: quoteReplyMessage
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrdersList(prev => prev.map(o => o._id === selectedQuote._id ? data.data : o));
+        setQuoteReplyModalOpen(false);
+        alert('Quote sent successfully to the customer!');
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to send quote');
+    }
+  };
+
   // Services CRUD
   const handleCreateServiceSubmit = async (e) => {
     e.preventDefault();
@@ -1035,6 +1218,50 @@ export default function AdminPanel() {
                     />
                   </div>
 
+                  {/* Activity Trends and Top Products Charts */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Activity Trends Chart */}
+                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
+                      <h3 className="font-bold text-lg text-white">Activity Trends (Last 30 Days)</h3>
+                      <div className="h-64 w-full">
+                        {stats.trends?.activityTrends ? (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={stats.trends.activityTrends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                              <XAxis dataKey="date" stroke="#ffffff50" fontSize={10} />
+                              <YAxis stroke="#ffffff50" fontSize={10} />
+                              <Tooltip contentStyle={{ backgroundColor: '#02050c', borderColor: '#ffffff20', borderRadius: '8px' }} />
+                              <Line type="monotone" dataKey="orders" name="Quotation Requests" stroke="#0ae7f0" strokeWidth={2} dot={false} />
+                              <Line type="monotone" dataKey="inquiries" name="General Inquiries" stroke="#f59e0b" strokeWidth={2} dot={false} />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex items-center justify-center h-full text-slate-500 text-sm">No trend data available</div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Top Products Chart */}
+                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
+                      <h3 className="font-bold text-lg text-white">Most Requested Products</h3>
+                      <div className="h-64 w-full">
+                        {stats.trends?.topProducts?.length > 0 ? (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={stats.trends.topProducts} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} layout="vertical">
+                              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" horizontal={true} vertical={false} />
+                              <XAxis type="number" stroke="#ffffff50" fontSize={10} />
+                              <YAxis type="category" dataKey="name" stroke="#ffffff50" fontSize={10} width={120} tick={{fill: '#ffffff80'}} />
+                              <Tooltip contentStyle={{ backgroundColor: '#02050c', borderColor: '#ffffff20', borderRadius: '8px', color: '#fff' }} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                              <Bar dataKey="quantity" name="Quantity Requested" fill="#2796a9" radius={[0, 4, 4, 0]} barSize={20} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex items-center justify-center h-full text-slate-500 text-sm">No product data available</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Quick Activity Lists / Overview */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Recent Inquiries Panel */}
@@ -1172,7 +1399,7 @@ export default function AdminPanel() {
                           <div className="flex flex-col gap-0.5">
                             <span className="text-[10px] text-white/40">TOTAL PIPELINE CONTRACT VALUE</span>
                             <span className="text-2xl font-bold font-mono text-white mt-1">
-                              ${ordersList.reduce((acc, order) => {
+                              ₹{ordersList.reduce((acc, order) => {
                                 const subtotal = (order.items || []).reduce((sum, it) => sum + (it.quantity * (it.unitPrice || 0)), 0);
                                 const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
                                 return acc + subtotal + taxAmount + (order.shippingCost || 0);
@@ -1226,8 +1453,13 @@ export default function AdminPanel() {
                       </h3>
                       <p className="text-slate-400 text-sm">Manage registered eCommerce customer accounts.</p>
                     </div>
-                    <div className="text-sm font-semibold text-[#04667b] bg-[#04667b]/10 px-4 py-2 rounded-full border border-[#04667b]/20">
-                      Total: {storeCustomers.length}
+                    <div className="flex gap-4">
+                      <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-bold rounded-full shadow-lg transition-colors">
+                        Send Newsletter
+                      </button>
+                      <div className="text-sm font-semibold text-[#04667b] bg-[#04667b]/10 px-4 py-2 rounded-full border border-[#04667b]/20 flex items-center">
+                        Total: {storeCustomers.length}
+                      </div>
                     </div>
                   </div>
 
@@ -1251,7 +1483,7 @@ export default function AdminPanel() {
                         </thead>
                         <tbody className="divide-y divide-slate-800/50">
                           {storeCustomers.map((user) => (
-                            <tr key={user._id} className="hover:bg-slate-800/20 transition-colors">
+                            <tr key={user._id} className="hover:bg-slate-800/20 transition-colors cursor-pointer" onClick={() => handleViewHistory(user.email)}>
                               <td className="p-4">
                                 <div className="font-bold text-slate-200">{user.username}</div>
                                 <div className="text-[10px] text-slate-500 mt-1">Joined: {new Date(user.createdAt).toLocaleDateString()}</div>
@@ -1262,7 +1494,7 @@ export default function AdminPanel() {
                               <td className="p-4">
                                 <div className="flex items-center justify-center">
                                   <button
-                                    onClick={() => handleDeleteCustomer(user._id)}
+                                    onClick={(e) => { e.stopPropagation(); handleDeleteCustomer(user._id); }}
                                     className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                                     title="Delete Customer"
                                   >
@@ -1717,6 +1949,47 @@ export default function AdminPanel() {
                             No journey milestones added yet. Click Add Row.
                           </div>
                         )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SEO / Meta Tags Settings Card */}
+                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-white/5 pb-3">
+                      <h4 className="font-bold text-base text-[#2796a9]">SEO / Meta Tags Settings</h4>
+                      <p className="text-xs text-white/40 font-light mt-0.5">Edit the website's Title, Meta Description, and Social Media preview images to improve Google ranking.</p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Meta Title</label>
+                        <input
+                          type="text"
+                          value={customizeForm.metaTitle || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, metaTitle: e.target.value }))}
+                          placeholder="Concept Tools and Services | Industrial Supply & MRO"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Meta Description</label>
+                        <textarea
+                          value={customizeForm.metaDescription || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, metaDescription: e.target.value }))}
+                          placeholder="Providing reliable industrial tools..."
+                          rows={2}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light resize-y"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Social Preview Image URL (Open Graph)</label>
+                        <input
+                          type="text"
+                          value={customizeForm.metaImage || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, metaImage: e.target.value }))}
+                          placeholder="https://yourwebsite.com/preview.jpg"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2180,7 +2453,18 @@ export default function AdminPanel() {
                     </div>
 
                     <div className="flex flex-col gap-1.5 max-w-xl">
-                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Top Banner News / Announcement Text</label>
+                      <div className="text-xs text-white/60 font-semibold uppercase tracking-wider flex justify-between mb-1">
+                        <span>Top Banner News / Announcement Text</span>
+                        <label className="flex items-center gap-2 cursor-pointer text-[#2796a9] font-bold normal-case tracking-normal">
+                          <input
+                            type="checkbox"
+                            checked={customizeForm.showEcommBanner !== false}
+                            onChange={(e) => setCustomizeForm(prev => ({ ...prev, showEcommBanner: e.target.checked }))}
+                            className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9]"
+                          />
+                          Make Banner Alive
+                        </label>
+                      </div>
                       <input
                         type="text"
                         value={customizeForm.ecommBannerText || ''}
@@ -2381,6 +2665,21 @@ export default function AdminPanel() {
                                   className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none w-24 font-mono"
                                 />
                               </div>
+                              <div className="flex flex-col gap-1.5">
+                                <label className="text-[10px] text-white/50 uppercase">Manually Highlighted Products (Optional)</label>
+                                <p className="text-[10px] text-white/40">Enter Product IDs or Models (comma separated) to override the auto-limit.</p>
+                                <input
+                                  type="text"
+                                  placeholder="e.g. KEN-593-1760K, PROD-9001"
+                                  value={(ecommCustomizeForm.newlyAddedProductIDs || []).join(', ')}
+                                  onChange={e => {
+                                    const val = e.target.value;
+                                    const ids = val.split(',').map(s => s.trim()).filter(Boolean);
+                                    setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedProductIDs: ids });
+                                  }}
+                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full font-mono"
+                                />
+                              </div>
                             </div>
                           )}
                         </div>
@@ -2404,7 +2703,7 @@ export default function AdminPanel() {
                         </button>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {ecommBrandsLocal.map((brand, idx) => (
                           <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-center group">
                             {/* Delete Button */}
@@ -2551,6 +2850,7 @@ export default function AdminPanel() {
                   {activeModal === 'create_ecomm_product' && 'Add E-commerce Product'}
                   {activeModal === 'edit_ecomm_product' && 'Edit E-commerce Product'}
                   {activeModal === 'import_ecomm_csv' && 'Import Catalog via CSV'}
+                  {activeModal === 'export_catalog_ecomm' && 'Export Catalog to CSV'}
                   {activeModal === 'mass_delete_ecomm' && 'Mass Delete Catalog Products'}
                   {activeModal === 'manage_brands_ecomm' && 'Partner Brand Manager'}
                   {activeModal === 'storefront_settings_ecomm' && 'E-Commerce Storefront Settings'}
@@ -2775,6 +3075,16 @@ export default function AdminPanel() {
                 />
               )}
 
+              {/* EXPORT CATALOG MODAL */}
+              {activeModal === 'export_catalog_ecomm' && (
+                <EcommExportModal
+                  products={ecommProducts}
+                  brands={brandsList}
+                  setActiveModal={setActiveModal}
+                />
+              )}
+
+
               {/* BRAND MANAGER MODAL */}
               {activeModal === 'manage_brands_ecomm' && (
                 <EcommBrandManagerModal
@@ -2845,6 +3155,145 @@ export default function AdminPanel() {
                   Confirm Delete
                 </button>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* CUSTOMER HISTORY MODAL */}
+      <AnimatePresence>
+        {selectedUserHistory && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedUserHistory(null)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl relative z-10 flex flex-col"
+            >
+              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-lg text-white">Customer History</h3>
+                  <p className="text-xs text-[#2796a9]">{selectedUserHistory.email}</p>
+                </div>
+                <button onClick={() => setSelectedUserHistory(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
+                  <XCircle size={20} />
+                </button>
+              </div>
+              <div className="p-6 overflow-y-auto flex flex-col gap-6">
+                <div>
+                  <h4 className="font-bold text-white mb-3 text-sm flex items-center gap-2"><ShoppingCart size={16} /> Quotation Requests</h4>
+                  {selectedUserHistory.orders?.length > 0 ? (
+                    <div className="flex flex-col gap-2">
+                      {selectedUserHistory.orders.map(o => (
+                        <div key={o._id} className="p-3 bg-white/5 border border-white/10 rounded-xl flex justify-between items-center text-xs">
+                          <div>
+                            <span className="font-bold text-white mr-2">{o.referenceId}</span>
+                            <span className="text-white/50">{new Date(o.createdAt).toLocaleDateString()}</span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-md ${o.status === 'Completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-orange-500/20 text-orange-400'}`}>
+                            {o.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="text-xs text-white/40 italic">No quotation requests found.</p>}
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-3 text-sm flex items-center gap-2"><Inbox size={16} /> General Inquiries</h4>
+                  {selectedUserHistory.inquiries?.length > 0 ? (
+                    <div className="flex flex-col gap-2">
+                      {selectedUserHistory.inquiries.map(i => (
+                        <div key={i._id} className="p-3 bg-white/5 border border-white/10 rounded-xl flex flex-col gap-1 text-xs">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-[#2796a9]">{i.subject}</span>
+                            <span className="text-white/50">{new Date(i.createdAt).toLocaleDateString()}</span>
+                          </div>
+                          <span className="text-white/70 line-clamp-2">{i.message}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="text-xs text-white/40 italic">No inquiries found.</p>}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* NEWSLETTER MODAL */}
+      <AnimatePresence>
+        {isNewsletterOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsNewsletterOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-xl shadow-2xl relative z-10 flex flex-col"
+            >
+              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-lg text-white">Send Newsletter</h3>
+                  <p className="text-xs text-slate-400">Blast an email to all registered storefront customers.</p>
+                </div>
+                <button onClick={() => setIsNewsletterOpen(false)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
+                  <XCircle size={20} />
+                </button>
+              </div>
+              <form onSubmit={handleSendNewsletter} className="p-6 flex flex-col gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs text-white/60 font-semibold uppercase">Banner Image (Optional)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          // Strip the Data URL prefix to get pure base64
+                          const base64String = reader.result.split(',')[1];
+                          setNewsletterForm(prev => ({
+                            ...prev,
+                            bannerBase64: base64String,
+                            bannerName: file.name
+                          }));
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:border-[#2796a9] outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#2796a9]/20 file:text-[#2796a9] hover:file:bg-[#2796a9]/30"
+                  />
+                  {newsletterForm.bannerName && <span className="text-xs text-[#2796a9]">Selected: {newsletterForm.bannerName}</span>}
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs text-white/60 font-semibold uppercase">Email Subject</label>
+                  <input
+                    type="text"
+                    required
+                    value={newsletterForm.subject}
+                    onChange={e => setNewsletterForm({...newsletterForm, subject: e.target.value})}
+                    placeholder="e.g. New Product Line Announcement!"
+                    className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs text-white/60 font-semibold uppercase">HTML Content</label>
+                  <textarea
+                    required
+                    value={newsletterForm.htmlContent}
+                    onChange={e => setNewsletterForm({...newsletterForm, htmlContent: e.target.value})}
+                    placeholder="<h1>Hello!</h1><p>Check out our new products...</p>"
+                    rows={6}
+                    className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-[#2796a9] outline-none font-mono resize-y"
+                  />
+                </div>
+                <div className="flex justify-end pt-4 mt-2 border-t border-white/5">
+                  <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
+                    Send Blast
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
@@ -3022,6 +3471,36 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
     currentPage * itemsPerPage
   );
 
+  const handleExportCSV = () => {
+    if (!products || products.length === 0) return alert('No products to export');
+    
+    const headers = ['Product ID', 'SKU', 'Name', 'Brand', 'Category', 'Type', 'Model', 'Description'];
+    let csvContent = headers.join(',') + '\\n';
+    
+    products.forEach(p => {
+      const row = [
+        p.product_id || '',
+        p.sku || '',
+        `"${(p.product_name || '').replace(/"/g, '""')}"`,
+        `"${p.brand || ''}"`,
+        `"${p.category || ''}"`,
+        `"${p.type || ''}"`,
+        `"${p.model || ''}"`,
+        `"${(p.description || '').replace(/"/g, '""')}"`
+      ];
+      csvContent += row.join(',') + '\\n';
+    });
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'cts_catalog_export.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleEditClick = (product) => {
     setSelectedItem(product);
     setEcommProductForm({
@@ -3133,9 +3612,17 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
             <span>CSV Import</span>
           </button>
 
+          <button
+            onClick={() => setActiveModal('export_catalog_ecomm')}
+            className="px-4 py-2.5 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Download size={14} />
+            <span>Export CSV</span>
+          </button>
+
           {/* Manage Brands */}
           <button
-            onClick={() => setActiveModal('manage_brands_ecomm')}
+            onClick={() => setActiveTab('ecommCustomize')}
             className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <SlidersHorizontal size={14} />
@@ -3144,7 +3631,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
 
           {/* Storefront Settings */}
           <button
-            onClick={() => setActiveModal('storefront_settings_ecomm')}
+            onClick={() => setActiveTab('ecommCustomize')}
             className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Cog size={14} />
@@ -4345,7 +4832,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                       </span>
                     </td>
                     <td className="p-4 font-bold font-mono text-white text-sm">
-                      {hasPricedItems ? `$${grandTotal.toFixed(2)}` : <span className="text-yellow-500 font-sans font-normal text-xs">Unpriced RFQ</span>}
+                      {hasPricedItems ? `₹${grandTotal.toFixed(2)}` : <span className="text-yellow-500 font-sans font-normal text-xs">Unpriced RFQ</span>}
                     </td>
                     <td className="p-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
@@ -4427,6 +4914,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
   const [validUntil, setValidUntil] = useState(order.validUntil ? order.validUntil.split('T')[0] : '');
   const [adminComments, setAdminComments] = useState(order.adminComments || '');
   const [items, setItems] = useState(order.items || []);
+  const [includePricing, setIncludePricing] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -4434,6 +4922,39 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
     const updated = [...items];
     updated[idx] = { ...updated[idx], unitPrice: parseFloat(value) || 0 };
     setItems(updated);
+  };
+
+  const handleReplyWithQuote = async () => {
+    setError('');
+    setSubmitting(true);
+    const token = localStorage.getItem('cts_token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/orders/${order._id}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          items,
+          message: adminComments,
+          includePricing
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(prev => prev.map(o => o._id === order._id ? data.data : o));
+        setActiveModal(null);
+        alert('Quote replied successfully!');
+      } else {
+        setError(data.error || 'Failed to send reply.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Connection failure.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSave = async (e) => {
@@ -4538,7 +5059,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
                 <tr className="bg-white/5 border-b border-white/5 text-white/55 text-[10px] uppercase tracking-wider">
                   <th className="p-3">Product details</th>
                   <th className="p-3 text-center">Qty</th>
-                  <th className="p-3">Unit Price ($)</th>
+                  <th className="p-3">Unit Price (₹)</th>
                   <th className="p-3 text-right">Subtotal</th>
                 </tr>
               </thead>
@@ -4565,7 +5086,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
                       />
                     </td>
                     <td className="p-3 text-right font-mono text-white/80 font-bold">
-                      ${((item.quantity || 1) * (item.unitPrice || 0)).toFixed(2)}
+                      ₹{((item.quantity || 1) * (item.unitPrice || 0)).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -4580,7 +5101,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
           <div className="flex flex-col gap-4 text-xs">
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 uppercase">Shipping & Handling ($)</label>
+                <label className="text-[10px] text-white/50 uppercase">Shipping & Handling (₹)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -4647,19 +5168,19 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
             </div>
             <div className="flex justify-between">
               <span className="text-white/60">Subtotal:</span>
-              <span className="font-mono text-white font-semibold">${subtotal.toFixed(2)}</span>
+              <span className="font-mono text-white font-semibold">₹{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-white/60">Shipping cost:</span>
-              <span className="font-mono text-white font-semibold">${Number(shippingCost).toFixed(2)}</span>
+              <span className="font-mono text-white font-semibold">₹{Number(shippingCost).toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-white/60">Tax / GST ({taxRate}%):</span>
-              <span className="font-mono text-white font-semibold">${taxAmount.toFixed(2)}</span>
+              <span className="font-mono text-white font-semibold">₹{taxAmount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between border-t border-white/5 pt-3 font-bold text-sm text-[#2796a9]">
               <span>RFQ Grand Total:</span>
-              <span className="font-mono text-white">${total.toFixed(2)}</span>
+              <span className="font-mono text-white">₹{total.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -4673,13 +5194,34 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
-          >
-            {submitting ? 'Saving Changes...' : 'Save & Approve Quote'}
-          </button>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={includePricing}
+                onChange={(e) => setIncludePricing(e.target.checked)}
+                className="w-4 h-4 rounded border-white/20 bg-slate-800 text-[#2796a9] focus:ring-[#2796a9]"
+              />
+              Include Item Pricing Breakdown in Email
+            </label>
+            <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handleReplyWithQuote}
+              disabled={submitting}
+              className="px-6 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+            >
+              Reply with Quote
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              {submitting ? 'Saving...' : 'Save & Approve Quote'}
+            </button>
+          </div>
+        </div>
         </div>
       </form>
     </div>

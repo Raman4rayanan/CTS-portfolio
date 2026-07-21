@@ -217,7 +217,7 @@ exports.getPortfolioConfig = async (req, res) => {
 
 exports.updatePortfolioConfig = async (req, res) => {
   try {
-    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers, cloudinaryCloudName, cloudinaryUploadPreset } = req.body;
+    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers, cloudinaryCloudName, cloudinaryUploadPreset, metaTitle, metaDescription, metaImage, ecommBannerText, showEcommBanner, ecommSlides } = req.body;
     
     let config = await PortfolioConfig.findOne();
     if (!config) {
@@ -238,6 +238,12 @@ exports.updatePortfolioConfig = async (req, res) => {
     if (customers !== undefined) config.customers = customers;
     if (cloudinaryCloudName !== undefined) config.cloudinaryCloudName = cloudinaryCloudName;
     if (cloudinaryUploadPreset !== undefined) config.cloudinaryUploadPreset = cloudinaryUploadPreset;
+    if (metaTitle !== undefined) config.metaTitle = metaTitle;
+    if (metaDescription !== undefined) config.metaDescription = metaDescription;
+    if (metaImage !== undefined) config.metaImage = metaImage;
+    if (ecommBannerText !== undefined) config.ecommBannerText = ecommBannerText;
+    if (showEcommBanner !== undefined) config.showEcommBanner = showEcommBanner;
+    if (ecommSlides !== undefined) config.ecommSlides = ecommSlides;
 
     await config.save();
     res.json({ success: true, data: config });

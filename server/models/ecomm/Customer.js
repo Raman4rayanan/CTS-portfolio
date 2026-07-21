@@ -32,6 +32,10 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     default: 'User'
   },
+  newsletterOptIn: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now

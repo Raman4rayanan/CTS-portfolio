@@ -168,8 +168,147 @@ const sendInquiryEmail = async (adminEmail, inquiryData) => {
   }
 };
 
+const sendNewsletterEmail = async (subject, htmlContent, bccEmails, bannerBase64, bannerName) => {
+  const brevoApiKey = process.env.BREVO_API_KEY;
+  if (!brevoApiKey) return false;
+  
+  const senderEmail = process.env.SMTP_FROM_EMAIL || 'sales@concepttools.net';
+  
+  try {
+    const bccList = bccEmails.map(email => ({ email }));
+    // Prepare Corporate Email Wrapper
+    const formattedHtmlContent = `
+      <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <!-- Header -->
+        <div style="background-color: #02050c; padding: 20px; text-align: center; border-bottom: 4px solid #2796a9;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">Concept Tools & Services</h1>
+        </div>
+        
+        <!-- Banner Image -->
+        ${bannerBase64 ? `<div style="width: 100%;"><img src="cid:${bannerName}" alt="Newsletter Banner" style="width: 100%; display: block; border-bottom: 1px solid #eee;" /></div>` : ''}
+        
+        <!-- Body -->
+        <div style="padding: 30px 20px; color: #333333; line-height: 1.6; font-size: 16px;">
+          ${htmlContent}
+        </div>
+        
+        <!-- Footer -->
+        <div style="background-color: #f5f7fa; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
+          <p style="margin: 0; font-size: 12px; color: #777777;">&copy; ${new Date().getFullYear()} Concept Tools and Services. All rights reserved.</p>
+          <p style="margin: 5px 0 0 0; font-size: 12px; color: #777777;">You are receiving this email because you are registered at CTS.</p>
+        </div>
+      </div>
+    `;
+
+    const payload = {
+      sender: { name: 'Concept Tools and Services', email: senderEmail },
+      to: [{ email: senderEmail }],
+      bcc: bccList,
+      subject: subject,
+      htmlContent: formattedHtmlContent
+    };
+
+    if (bannerBase64 && bannerName) {
+      payload.attachment = [{
+        content: bannerBase64,
+        name: bannerName
+      }];
+    }
+
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': brevoApiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    return response.ok;
+  } catch (err) {
+    console.error('Newsletter error:', err);
+    return false;
+  }
+};
+
+const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = true) => {
+  const brevoApiKey = process.env.BREVO_API_KEY;
+  if (!brevoApiKey) return false;
+  
+  const senderEmail = process.env.SMTP_FROM_EMAIL || 'sales@concepttools.net';
+  
+  let itemsHtml = order.items.map(item => `
+    <tr>
+      <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.product_name}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+      ${includePricing ? `<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">₹${item.unitPrice || 0}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">₹${(item.quantity * (item.unitPrice || 0)).toFixed(2)}</td>` : ''}
+    </tr>
+  `).join('');
+  
+  const total = order.items.reduce((sum, item) => sum + (item.quantity * (item.unitPrice || 0)), 0);
+  const taxAmount = (total * (order.taxRate || 0)) / 100;
+  const grandTotal = total + (order.shippingCost || 0) + taxAmount;
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #04667b;">Formal Quotation: #${order.referenceId}</h2>
+      <p>Dear ${order.customerDetails.name},</p>
+      <p>Thank you for requesting a quote from CTS. Please find our pricing below:</p>
+      <div style="background-color: #f5f7fa; padding: 15px; margin: 20px 0; border-left: 4px solid #04667b;">
+        <p>${message ? message.replace(/\\n/g, '<br/>') : ''}</p>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+        <thead>
+          <tr style="background-color: #04667b; color: white;">
+            <th style="padding: 10px; text-align: left;">Item</th>
+            <th style="padding: 10px; text-align: center;">Qty</th>
+            <th style="padding: 10px; text-align: center;">Unit Price</th>
+            <th style="padding: 10px; text-align: center;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemsHtml}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="text-align: right; padding: 10px; font-weight: bold;">Grand Total:</td>
+            <td style="text-align: center; padding: 10px; font-weight: bold;">$${total.toFixed(2)}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <p>Please reply to this email to proceed with your order.</p>
+      <p>Best regards,<br/>The CTS Sales Team</p>
+    </div>
+  `;
+  
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': brevoApiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: { name: 'CTS Sales', email: senderEmail },
+        to: [{ email: toEmail }],
+        subject: `Your Quotation from CTS (#${order.referenceId})`,
+        htmlContent: htmlContent
+      })
+    });
+    return response.ok;
+  } catch (err) {
+    console.error('Quote email error:', err);
+    return false;
+  }
+};
+
 module.exports = {
   sendOtpEmail,
   sendQuoteEmail,
-  sendInquiryEmail
+  sendInquiryEmail,
+  sendNewsletterEmail,
+  sendFormalQuoteEmail
 };

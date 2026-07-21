@@ -777,6 +777,7 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
   const [signupUsername, setSignupUsername] = useState('');
   const [signupCompany, setSignupCompany] = useState('');
   const [signupPhone, setSignupPhone] = useState('');
+  const [signupNewsletterOptIn, setSignupNewsletterOptIn] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -871,7 +872,8 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
           username: signupUsername || email.split('@')[0],
           companyName: signupCompany,
           phone: signupPhone,
-          otp: enteredOtp
+          otp: enteredOtp,
+          newsletterOptIn: signupNewsletterOptIn
         })
       });
       const data = await response.json();
@@ -1284,6 +1286,20 @@ function ProfilePopup({ user, onClose, onLogout, onLogin, setUser, showToast }) 
                   className="w-full pl-9 pr-10 py-2 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all duration-300 placeholder:text-white/30 text-white disabled:opacity-50"
                   required
                 />
+              </div>
+
+              <div className="flex items-start gap-2 mt-1">
+                <input
+                  type="checkbox"
+                  id="newsletterOptIn"
+                  checked={signupNewsletterOptIn}
+                  onChange={(e) => setSignupNewsletterOptIn(e.target.checked)}
+                  disabled={otpSent}
+                  className="mt-1 w-4 h-4 rounded bg-white/5 border-white/10 text-[#2796a9] focus:ring-[#2796a9] focus:ring-offset-0 disabled:opacity-50 cursor-pointer"
+                />
+                <label htmlFor="newsletterOptIn" className="text-xs text-white/70 leading-relaxed cursor-pointer select-none">
+                  Yes, I want to receive updates, promotions, and new product announcements via email.
+                </label>
               </div>
 
               {!otpSent ? (

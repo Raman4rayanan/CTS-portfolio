@@ -11,6 +11,16 @@
   }
 }
 
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 15s linear infinite;
+}
+
 /* Hide scrollbar during the single page experience */
 ::-webkit-scrollbar {
   width: 0px;

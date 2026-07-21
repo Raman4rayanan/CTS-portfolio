@@ -43,7 +43,7 @@ router.post('/send-otp', async (req, res) => {
 // Customer Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, username, companyName, phone, otp } = req.body;
+    const { email, password, username, companyName, phone, otp, newsletterOptIn } = req.body;
     
     if (!email || !password || !username || !otp) {
       return res.status(400).json({ success: false, error: 'Email, username, password, and OTP are required.' });
@@ -70,8 +70,9 @@ router.post('/register', async (req, res) => {
       email,
       password: hashedPassword,
       username,
-      companyName,
-      phone
+      companyName: companyName || '',
+      phone: phone || '',
+      newsletterOptIn: newsletterOptIn || false
     });
 
     await customer.save();

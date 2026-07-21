@@ -34,6 +34,10 @@ const ConfigSchema = new mongoose.Schema({
     type: Number,
     default: 8
   },
+  newlyAddedProductIDs: {
+    type: [String],
+    default: []
+  },
   updatedAt: {
     type: Date,
     default: Date.now

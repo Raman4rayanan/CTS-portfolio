@@ -61,9 +61,29 @@ const PortfolioConfigSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  metaTitle: {
+    type: String,
+    default: 'Concept Tools and Services | Industrial Supply & MRO'
+  },
+  metaDescription: {
+    type: String,
+    default: 'Providing reliable industrial tools, technical solutions, and responsive service for your operational challenges.'
+  },
+  metaImage: {
+    type: String,
+    default: ''
+  },
   ecommBannerText: {
     type: String,
     default: 'CTS B2B Procurement Desk - Fast Quotations & Logistics'
+  },
+  showEcommBanner: {
+    type: Boolean,
+    default: true
+  },
+  newlyAddedProductIDs: {
+    type: [String],
+    default: []
   },
   ecommSlides: {
     type: [{

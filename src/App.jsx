@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import IntroScreen from './components/IntroScreen';
 import HeroSection from './components/HeroSection';
 import Navbar from './components/Navbar';
@@ -13,6 +13,16 @@ import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import ShopPage from './components/ShopPage';
 
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
 
 function LandingPage() {
   const [showIntro, setShowIntro] = useState(true);
@@ -30,6 +40,33 @@ function LandingPage() {
       })
       .catch(err => console.error('Error fetching portfolio config:', err));
   }, []);
+
+  // Apply SEO Meta Tags when config loads
+  useEffect(() => {
+    if (config) {
+      if (config.metaTitle) document.title = config.metaTitle;
+      
+      if (config.metaDescription) {
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = "description";
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = config.metaDescription;
+      }
+
+      if (config.metaImage) {
+        let metaImg = document.querySelector('meta[property="og:image"]');
+        if (!metaImg) {
+          metaImg = document.createElement('meta');
+          metaImg.setAttribute("property", "og:image");
+          document.head.appendChild(metaImg);
+        }
+        metaImg.content = config.metaImage;
+      }
+    }
+  }, [config]);
 
   // Disable scrolling while the intro screen is active
   useEffect(() => {
@@ -90,11 +127,14 @@ function LandingPage() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/admin" element={<AdminPanel />} />
-      <Route path="/shop" element={<ShopPage />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/shop" element={<ShopPage />} />
+      </Routes>
+    </>
   );
 }
 

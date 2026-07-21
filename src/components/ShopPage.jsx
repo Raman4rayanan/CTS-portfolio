@@ -176,7 +176,9 @@ export default function ShopPage() {
     newlyAddedTag: 'Latest Arrivals',
     newlyAddedTitle: 'Newly Added Products',
     newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
-    newlyAddedLimit: 8
+    newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
+    newlyAddedLimit: 8,
+    newlyAddedProductIDs: []
   });
 
   const showToast = (msg) => {
@@ -306,7 +308,8 @@ export default function ShopPage() {
             newlyAddedTag: data.data.newlyAddedTag || 'Latest Arrivals',
             newlyAddedTitle: data.data.newlyAddedTitle || 'Newly Added Products',
             newlyAddedSubtitle: data.data.newlyAddedSubtitle || 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
-            newlyAddedLimit: data.data.newlyAddedLimit ?? 8
+            newlyAddedLimit: data.data.newlyAddedLimit ?? 8,
+            newlyAddedProductIDs: data.data.newlyAddedProductIDs || []
           });
         }
       } catch (e) {
@@ -806,6 +809,8 @@ export default function ShopPage() {
         products={products}
       />
 
+
+
       {/* Main Page Layout Container: Sidebar on Left, Sections on Right */}
       <div className={`flex flex-col lg:flex-row min-h-screen`}>
         
@@ -1050,6 +1055,17 @@ export default function ShopPage() {
               })}
             </div>
 
+            {/* Top Banner (Optional) */}
+            {config && config.showEcommBanner !== false && config.ecommBannerText && (
+              <div className="w-full bg-[#02050c] border-b border-[#2796a9]/30 py-2 relative z-[60] overflow-hidden">
+                <div className="w-full text-center whitespace-nowrap animate-marquee">
+                  <span className="text-[10px] sm:text-xs font-bold text-[#2796a9] tracking-widest uppercase">
+                    {config.ecommBannerText}
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* 2. BROWSE BY CATEGORY (Slides over Sticky Hero) */}
             <div className="relative z-20 shadow-[0_-15px_30px_rgba(0,0,0,0.5)] bg-slate-950 min-h-[40vh]">
               <section className="py-16 px-6 md:px-16 lg:px-28 bg-slate-950">
@@ -1285,9 +1301,12 @@ export default function ShopPage() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products
+                .filter(p => ecommConfig.newlyAddedProductIDs && ecommConfig.newlyAddedProductIDs.length > 0
+                  ? ecommConfig.newlyAddedProductIDs.includes(p.product_id) || ecommConfig.newlyAddedProductIDs.includes(p.model)
+                  : true)
                 .slice()
                 .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-                .slice(0, ecommConfig.newlyAddedLimit)
+                .slice(0, ecommConfig.newlyAddedProductIDs && ecommConfig.newlyAddedProductIDs.length > 0 ? ecommConfig.newlyAddedProductIDs.length : ecommConfig.newlyAddedLimit)
                 .map((product, idx) => (
                   <motion.div
                     key={`new-${product._id || product.product_id}`}
@@ -1730,7 +1749,6 @@ export default function ShopPage() {
                 </button>
               </div>
 
-              {/* CART CONTENT */}
               {cart.length === 0 ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center">
                   <ShoppingCart size={48} className="text-slate-700 mb-4" />

@@ -152,6 +152,32 @@ router.get('/brands', async (req, res) => {
       await Brand.insertMany(defaultBrands);
       brands = await Brand.find().sort({ name: 1 });
     }
+    
+    // Auto-update placeholders
+    const brandUpdates = [
+      { name: 'Atlas', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png' },
+      { name: 'Bosch', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png' },
+      { name: 'Eibenstock Positron', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png' },
+      { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/ctrjijbpcixvkfvv636m.png' },
+      { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png' }
+    ];
+
+    let modified = false;
+    for (let brand of brands) {
+      if (brand.src && brand.src.includes('placeholder')) {
+        const update = brandUpdates.find(b => b.name === brand.name);
+        if (update) {
+          brand.src = update.src;
+          await brand.save();
+          modified = true;
+        }
+      }
+    }
+    
+    if (modified) {
+      brands = await Brand.find().sort({ name: 1 });
+    }
+
     res.json({ success: true, count: brands.length, data: brands });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

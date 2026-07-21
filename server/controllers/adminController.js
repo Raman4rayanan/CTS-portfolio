@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const Inquiry = require('../models/portfolio/Inquiry');
 const Activity = require('../models/portfolio/Activity');
 const ProductService = require('../models/portfolio/ProductService');
+const { sendNewsletterEmail, sendFormalQuoteEmail } = require('../services/emailService');
 
 const Category = require('../models/ecomm/Category');
 const Product = require('../models/ecomm/Product');
@@ -151,6 +152,54 @@ exports.getCrossDatabaseStats = async (req, res) => {
     const userCount = await User.countDocuments();
     const metrics = await DashboardMetric.find();
 
+    // Calculate top products
+    const allOrders = await Order.find();
+    const productCounts = {};
+    allOrders.forEach(order => {
+      order.items.forEach(item => {
+        if (!productCounts[item.product_name]) {
+          productCounts[item.product_name] = 0;
+        }
+        productCounts[item.product_name] += item.quantity;
+      });
+    });
+    
+    const topProducts = Object.entries(productCounts)
+      .map(([name, quantity]) => ({ name, quantity }))
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 5);
+
+    // Calculate activity trends (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const recentOrders = await Order.find({ createdAt: { $gte: thirtyDaysAgo } });
+    const recentInquiries = await Inquiry.find({ createdAt: { $gte: thirtyDaysAgo } });
+    
+    const trendsByDate = {};
+    const formatDate = (date) => {
+      if (!date) return '';
+      return new Date(date).toISOString().split('T')[0];
+    };
+    
+    // Initialize 30 days
+    for(let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      trendsByDate[formatDate(d)] = { date: formatDate(d).substring(5), orders: 0, inquiries: 0 };
+    }
+    
+    recentOrders.forEach(o => {
+      const d = formatDate(o.createdAt || o.date);
+      if (trendsByDate[d]) trendsByDate[d].orders++;
+    });
+    recentInquiries.forEach(i => {
+      const d = formatDate(i.createdAt);
+      if (trendsByDate[d]) trendsByDate[d].inquiries++;
+    });
+    
+    const activityTrends = Object.values(trendsByDate);
+
     res.json({
       success: true,
       data: {
@@ -171,6 +220,10 @@ exports.getCrossDatabaseStats = async (req, res) => {
         admin: {
           users: userCount,
           metrics: metrics
+        },
+        trends: {
+          topProducts,
+          activityTrends
         }
       }
     });
@@ -193,17 +246,79 @@ exports.deleteCustomer = async (req, res) => {
   try {
     const customerId = req.params.id;
     
-    // Delete customer
     const deletedCustomer = await Customer.findByIdAndDelete(customerId);
     
     if (!deletedCustomer) {
       return res.status(404).json({ success: false, error: 'Customer not found.' });
     }
+    
+    await CustomerSession.deleteMany({ user: customerId });
+    
+    res.json({ success: true, message: 'Customer deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 
-    // Delete all sessions for this customer to force logout
-    await CustomerSession.deleteMany({ customer: customerId });
+exports.getCustomerHistory = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const orders = await Order.find({ 'customerDetails.email': email }).sort({ createdAt: -1 });
+    const inquiries = await Inquiry.find({ email }).sort({ createdAt: -1 });
+    res.json({ success: true, data: { orders, inquiries } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 
-    res.json({ success: true, message: 'Customer account deleted successfully.' });
+exports.sendNewsletter = async (req, res) => {
+  try {
+    const { subject, htmlContent, bannerBase64, bannerName } = req.body;
+    if (!subject || !htmlContent) {
+      return res.status(400).json({ success: false, error: 'Subject and content are required' });
+    }
+    const customers = await Customer.find({ newsletterOptIn: true }).select('email');
+    const emails = customers.map(c => c.email);
+    
+    if (emails.length === 0) {
+      return res.status(400).json({ success: false, error: 'No registered customers found.' });
+    }
+    
+    const success = await sendNewsletterEmail(subject, htmlContent, emails, bannerBase64, bannerName);
+    if (success) {
+      res.json({ success: true, message: `Newsletter sent to ${emails.length} customers.` });
+    } else {
+      res.status(500).json({ success: false, error: 'Failed to send newsletter.' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    res.json({ success: true, data: order });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.replyToOrder = async (req, res) => {
+  try {
+    const { items, message, includePricing } = req.body;
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ success: false, error: 'Order not found' });
+    
+    order.items = items;
+    order.adminComments = message;
+    order.status = 'Approved';
+    await order.save();
+    
+    await sendFormalQuoteEmail(order.customerDetails.email, order, message, includePricing);
+    
+    res.json({ success: true, data: order });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

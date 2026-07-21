@@ -9,7 +9,11 @@ const {
   deleteInquiry, 
   getCrossDatabaseStats,
   getCustomers,
-  deleteCustomer
+  deleteCustomer,
+  getCustomerHistory,
+  sendNewsletter,
+  updateOrderStatus,
+  replyToOrder
 } = require('../controllers/adminController');
 const { protectAdmin } = require('../middleware/auth');
 
@@ -23,6 +27,8 @@ router.get('/me', protectAdmin, getMe);
 // Customer Management
 router.get('/customers', protectAdmin, getCustomers);
 router.delete('/customers/:id', protectAdmin, deleteCustomer);
+router.get('/customers/:email/history', protectAdmin, getCustomerHistory);
+router.post('/newsletter', protectAdmin, sendNewsletter);
 
 // Inquiry management
 router.route('/inquiries')
@@ -34,5 +40,9 @@ router.route('/inquiries/:id')
 
 // Statistics
 router.get('/stats', protectAdmin, getCrossDatabaseStats);
+
+// Orders / Quotes
+router.patch('/orders/:id/status', protectAdmin, updateOrderStatus);
+router.post('/orders/:id/reply', protectAdmin, replyToOrder);
 
 module.exports = router;
