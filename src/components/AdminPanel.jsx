@@ -3324,12 +3324,12 @@ export default function AdminPanel() {
                     onChange={e => setNewsletterForm({...newsletterForm, htmlContent: e.target.value})}
                     placeholder="<h1>Hello!</h1><p>Check out our new products...</p>"
                     rows={6}
-                    className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-[#2796a9] outline-none font-mono resize-y"
+                    className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-[#2796a9] outline-none font-mono resize-none overflow-y-auto"
                   />
                 </div>
                 <div className="flex justify-end pt-4 mt-2 border-t border-white/5">
                   <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
-                    Send Blast
+                    Send
                   </button>
                 </div>
               </form>
