@@ -253,7 +253,7 @@ const sendNewsletterEmail = async (subject, htmlContent, bccEmails, bannerBase64
   }
 };
 
-const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = true) => {
+const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = true, ccEmail = null) => {
   const brevoApiKey = process.env.BREVO_API_KEY;
   if (!brevoApiKey) return false;
   
@@ -295,7 +295,7 @@ const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = tr
         <tfoot>
           <tr>
             <td colspan="3" style="text-align: right; padding: 10px; font-weight: bold;">Grand Total:</td>
-            <td style="text-align: center; padding: 10px; font-weight: bold;">$${total.toFixed(2)}</td>
+            <td style="text-align: center; padding: 10px; font-weight: bold;">₹${total.toFixed(2)}</td>
           </tr>
         </tfoot>
       </table>
@@ -305,6 +305,17 @@ const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = tr
   `;
   
   try {
+    const payload = {
+      sender: { name: 'CTS Sales', email: senderEmail },
+      to: [{ email: toEmail }],
+      subject: `Your Quotation from CTS (#${order.referenceId})`,
+      htmlContent: htmlContent
+    };
+
+    if (ccEmail) {
+      payload.cc = [{ email: ccEmail }];
+    }
+
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -312,12 +323,7 @@ const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = tr
         'api-key': brevoApiKey,
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        sender: { name: 'CTS Sales', email: senderEmail },
-        to: [{ email: toEmail }],
-        subject: `Your Quotation from CTS (#${order.referenceId})`,
-        htmlContent: htmlContent
-      })
+      body: JSON.stringify(payload)
     });
     return response.ok;
   } catch (err) {

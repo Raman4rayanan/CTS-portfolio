@@ -16,6 +16,7 @@ const Customer = require('../models/ecomm/Customer');
 const CustomerSession = require('../models/ecomm/CustomerSession');
 
 const User = require('../models/admin/User');
+const PortfolioConfig = require('../models/portfolio/PortfolioConfig');
 const Role = require('../models/admin/Role');
 const Session = require('../models/admin/Session');
 const DashboardMetric = require('../models/admin/DashboardMetric');
@@ -316,7 +317,17 @@ exports.replyToOrder = async (req, res) => {
     order.status = 'Approved';
     await order.save();
     
-    await sendFormalQuoteEmail(order.customerDetails.email, order, message, includePricing);
+    let ccEmail = null;
+    try {
+      const config = await PortfolioConfig.findOne();
+      if (config && config.companyEmail) {
+        ccEmail = config.companyEmail;
+      }
+    } catch (e) {
+      console.error('Failed to fetch config for CC email:', e);
+    }
+    
+    await sendFormalQuoteEmail(order.customerDetails.email, order, message, includePricing, ccEmail);
     
     res.json({ success: true, data: order });
   } catch (error) {

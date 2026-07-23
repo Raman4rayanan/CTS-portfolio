@@ -1171,48 +1171,56 @@ export default function AdminPanel() {
                       value={stats.portfolio.inquiries} 
                       icon={<Inbox className="text-blue-400" />} 
                       color="from-blue-500/10 to-blue-500/5 border-blue-500/10"
+                      onClick={() => setActiveTab('inquiries')}
                     />
                     <DashboardCard 
                       title="Unread Inquiries" 
                       value={stats.portfolio.unreadInquiries} 
                       icon={<Inbox className="text-orange-400" />} 
                       color="from-orange-500/10 to-orange-500/5 border-orange-500/10"
+                      onClick={() => setActiveTab('inquiries')}
                     />
                     <DashboardCard 
                       title="Read Inquiries" 
                       value={stats.portfolio.readInquiries} 
                       icon={<CheckCircle className="text-emerald-400" />} 
                       color="from-emerald-500/10 to-emerald-500/5 border-emerald-500/10"
+                      onClick={() => setActiveTab('inquiries')}
                     />
                     <DashboardCard 
                       title="Total Activities" 
                       value={stats.portfolio.activities} 
                       icon={<Sparkles className="text-indigo-400" />} 
                       color="from-indigo-500/10 to-indigo-500/5 border-indigo-500/10"
+                      onClick={() => setActiveTab('activities')}
                     />
                     <DashboardCard 
                       title="Products & Services" 
                       value={stats.portfolio.services} 
                       icon={<Hammer className="text-teal-400" />} 
                       color="from-teal-500/10 to-teal-500/5 border-teal-500/10"
+                      onClick={() => setActiveTab('services')}
                     />
                     <DashboardCard 
                       title="E-comm Products" 
                       value={stats.ecommerce?.products || 0} 
                       icon={<ShoppingCart className="text-pink-400" />} 
                       color="from-pink-500/10 to-pink-500/5 border-pink-500/10"
+                      onClick={() => setActiveTab('ecomm')}
                     />
                     <DashboardCard 
                       title="Partner Brands" 
                       value={stats.ecommerce?.brands || 0} 
                       icon={<SlidersHorizontal className="text-[#2796a9]" />} 
                       color="from-[#2796a9]/10 to-[#2796a9]/5 border-[#2796a9]/10"
+                      onClick={() => setActiveTab('ecommCustomize')}
                     />
                     <DashboardCard 
                       title="Quote Requests" 
                       value={stats.ecommerce?.orders || 0} 
                       icon={<FileText className="text-emerald-400" />} 
                       color="from-emerald-500/10 to-emerald-500/5 border-emerald-500/10"
+                      onClick={() => setActiveTab('orders')}
                     />
                   </div>
 
@@ -2827,6 +2835,7 @@ export default function AdminPanel() {
                   brands={brandsList}
                   setBrands={setBrandsList}
                   setActiveModal={setActiveModal}
+                  setActiveTab={setActiveTab}
                   setSelectedItem={setSelectedItem}
                   setEcommProductForm={setEcommProductForm}
                   API_BASE_URL={API_BASE_URL}
@@ -3128,10 +3137,13 @@ export default function AdminPanel() {
 
               {/* STOREFRONT SETTINGS MODAL */}
               {activeModal === 'storefront_settings_ecomm' && (
-                <EcommStorefrontSettingsModal
-                  setActiveModal={setActiveModal}
-                  API_BASE_URL={API_BASE_URL}
-                />
+                <div className="p-6 text-center">
+                  <h3 className="text-xl font-bold mb-4">Redirecting...</h3>
+                  <p className="text-sm text-white/50 mb-6">Storefront Settings are managed in the Customization section.</p>
+                  <button onClick={() => { setActiveModal(null); setActiveTab('ecommCustomize'); }} className="px-6 py-2.5 bg-[#2796a9] text-white rounded-xl font-bold">
+                    Go to Storefront Settings
+                  </button>
+                </div>
               )}
 
               {/* ORDER EDIT / QUOTATION PROPOSAL MODAL */}
@@ -3354,9 +3366,12 @@ function SidebarLink({ label, icon, badge, active, onClick }) {
 }
 
 // Stats Cards Helper
-function DashboardCard({ title, value, icon, color }) {
+function DashboardCard({ title, value, icon, color, onClick }) {
   return (
-    <div className={`p-6 rounded-2xl bg-gradient-to-b border flex flex-col gap-4 shadow-md ${color}`}>
+    <div 
+      onClick={onClick}
+      className={`p-6 rounded-2xl bg-gradient-to-b border flex flex-col gap-4 shadow-md ${color} ${onClick ? 'cursor-pointer hover:brightness-110 transition-all' : ''}`}
+    >
       <div className="flex justify-between items-center">
         <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">{title}</span>
         <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
@@ -3461,7 +3476,7 @@ function AdminLogin({ onSubmit, error, loading }) {
 // ==========================================
 
 // EcommCatalogManager Component
-function EcommCatalogManager({ products, setProducts, brands, setBrands, setActiveModal, setSelectedItem, setEcommProductForm, API_BASE_URL, fetchStatsOnly, setDeleteConfirmData }) {
+function EcommCatalogManager({ products, setProducts, brands, setBrands, setActiveModal, setActiveTab, setSelectedItem, setEcommProductForm, API_BASE_URL, fetchStatsOnly, setDeleteConfirmData }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [brandFilter, setBrandFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
@@ -3649,7 +3664,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
 
           {/* Manage Brands */}
           <button
-            onClick={() => setActiveTab('ecommCustomize')}
+            onClick={() => setActiveModal('manage_brands_ecomm')}
             className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <SlidersHorizontal size={14} />
@@ -5251,6 +5266,169 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
         </div>
         </div>
       </form>
+    </div>
+  );
+}
+
+function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_URL }) {
+  const [localBrands, setLocalBrands] = useState([...brands]);
+  const [uploadingField, setUploadingField] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleAddBrand = () => {
+    setLocalBrands([{ name: 'New Brand', src: '', scale: 1.0 }, ...localBrands]);
+  };
+
+  const handleUpdateBrand = (index, field, value) => {
+    const updated = [...localBrands];
+    updated[index] = { ...updated[index], [field]: value };
+    setLocalBrands(updated);
+  };
+
+  const handleRemoveBrand = (index) => {
+    setLocalBrands(localBrands.filter((_, i) => i !== index));
+  };
+
+  const handleSaveBrands = async () => {
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem('cts_token');
+      const res = await fetch(`${API_BASE_URL}/api/ecomm/brands/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ brands: localBrands })
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setBrands(data.data);
+        setActiveModal(null);
+      } else {
+        alert(data.error || 'Failed to save brands');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Connection error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCloudinaryUpload = async (file, folder, onUploadSuccess, fieldId) => {
+    setUploadingField(fieldId);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'cts_unsigned');
+      formData.append('folder', folder);
+      
+      const response = await fetch(`https://api.cloudinary.com/v1_1/dzfuhxr2z/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const data = await response.json();
+      
+      if (data.secure_url) {
+        onUploadSuccess(data.secure_url);
+      } else {
+        alert('Upload failed: ' + (data.error?.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Upload Error:', error);
+      alert('Upload failed: Connection error');
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
+  return (
+    <div className="p-6 max-h-[80vh] overflow-y-auto flex flex-col gap-6 custom-scrollbar text-white">
+      <div className="flex justify-between items-center border-b border-white/5 pb-3">
+        <p className="text-xs text-white/50">Add, edit, or remove partner brand logos.</p>
+        <button
+          onClick={handleAddBrand}
+          className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#2796a9]/20 flex items-center gap-2"
+        >
+          <span>Add Brand Logo</span>
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        {localBrands.map((brand, idx) => (
+          <div key={idx} className="flex gap-4 p-4 bg-slate-950/50 rounded-xl border border-white/5 relative items-center group">
+            <button
+              onClick={() => handleRemoveBrand(idx)}
+              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-lg transition-all opacity-40 group-hover:opacity-100 border border-red-500/10 hover:border-red-500"
+            >
+              <span>Delete</span>
+            </button>
+            <div className="w-16 h-16 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+              <img
+                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
+                alt={brand.name}
+                className="max-w-full max-h-full object-contain opacity-80"
+                style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+            </div>
+            <div className="flex-1 flex flex-col gap-2 pt-1 pr-6">
+              <input
+                type="text"
+                value={brand.name}
+                onChange={e => handleUpdateBrand(idx, 'name', e.target.value)}
+                placeholder="Brand Name"
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+              />
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={brand.src || brand.logoUrl || ''}
+                  onChange={e => handleUpdateBrand(idx, 'src', e.target.value)}
+                  placeholder="Image URL path"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all"
+                />
+                <label className="shrink-0 px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-colors relative">
+                  {uploadingField === `brand_${idx}` ? 'Uploading...' : 'Upload Image'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleCloudinaryUpload(e.target.files[0], 'ecomm', (url) => handleUpdateBrand(idx, 'src', url), `brand_${idx}`);
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        ))}
+        {localBrands.length === 0 && (
+          <div className="text-center py-8 text-white/30 text-xs border border-dashed border-white/10 rounded-xl">
+            No brands configured. Click Add Brand Logo to create one.
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/5">
+        <button
+          onClick={() => setActiveModal(null)}
+          className="px-4 py-2 rounded-xl text-white/60 hover:text-white border border-transparent hover:bg-white/5 transition-all text-xs font-semibold"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSaveBrands}
+          disabled={isSaving}
+          className="px-6 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white rounded-xl text-xs font-bold hover:brightness-110 shadow-lg disabled:opacity-50 flex items-center gap-2"
+        >
+          {isSaving ? 'Saving...' : 'Save All Brands'}
+        </button>
+      </div>
     </div>
   );
 }
