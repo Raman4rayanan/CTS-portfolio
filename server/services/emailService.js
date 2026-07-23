@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 // We will use the Brevo REST API (port 443) instead of SMTP to bypass Railway's strict port blocking
-const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, senderName = 'Concept Tools and Services') => {
+const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, senderName = 'Concept Tools and Services', ccEmail = null) => {
   const brevoApiKey = process.env.BREVO_API_KEY;
   if (!brevoApiKey) {
     console.error('Missing BREVO_API_KEY in environment variables.');
@@ -10,6 +10,17 @@ const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, sender
   }
 
   try {
+    const payload = {
+      sender: { name: senderName, email: senderEmail },
+      to: [{ email: toEmail }],
+      subject: subject,
+      htmlContent: htmlContent
+    };
+
+    if (ccEmail) {
+      payload.cc = [{ email: ccEmail }];
+    }
+
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -17,12 +28,7 @@ const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, sender
         'api-key': brevoApiKey,
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        sender: { name: senderName, email: senderEmail },
-        to: [{ email: toEmail }],
-        subject: subject,
-        htmlContent: htmlContent
-      })
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -71,7 +77,7 @@ const sendOtpEmail = async (toEmail, otpCode, username, context = 'signup') => {
   }
 };
 
-const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
+const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails, ccEmail = null) => {
   try {
     let itemsHtml = quoteDetails.items.map(item => `
       <tr>
@@ -89,16 +95,16 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
         
         <div style="background-color: #04667b; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
           <h2 style="margin: 0; text-align: center;">New Quotation Request</h2>
-          <p style="margin: 5px 0 0 0; text-align: center; font-size: 14px;">Reference: #${quoteDetails.quoteId}</p>
+          <p style="margin: 5px 0 0 0; text-align: center; font-size: 14px;">Reference: #${quoteDetails.referenceId || quoteDetails.quoteId}</p>
         </div>
 
         <div style="margin-bottom: 30px;">
           <h3 style="color: #333; border-bottom: 2px solid #0ae7f0; padding-bottom: 5px; display: inline-block;">Customer Details</h3>
-          <p><strong>Name:</strong> ${quoteDetails.customer.name}</p>
-          <p><strong>Email:</strong> ${quoteDetails.customer.email}</p>
-          <p><strong>Phone:</strong> ${quoteDetails.customer.phone || 'Not provided'}</p>
-          <p><strong>Company:</strong> ${quoteDetails.customer.company || 'Not provided'}</p>
-          ${quoteDetails.customer.message ? `<p><strong>Message:</strong><br/> <span style="background-color: #f9fafb; padding: 10px; display: block; border-left: 3px solid #04667b; margin-top: 5px;">${quoteDetails.customer.message}</span></p>` : ''}
+          <p><strong>Name:</strong> ${quoteDetails.customerDetails?.name || quoteDetails.customer?.name}</p>
+          <p><strong>Email:</strong> ${quoteDetails.customerDetails?.email || quoteDetails.customer?.email}</p>
+          <p><strong>Phone:</strong> ${quoteDetails.customerDetails?.phone || quoteDetails.customer?.phone || 'Not provided'}</p>
+          <p><strong>Company:</strong> ${quoteDetails.customerDetails?.company || quoteDetails.customer?.company || 'Not provided'}</p>
+          ${(quoteDetails.customerDetails?.message || quoteDetails.customer?.message) ? `<p><strong>Message:</strong><br/> <span style="background-color: #f9fafb; padding: 10px; display: block; border-left: 3px solid #04667b; margin-top: 5px;">${quoteDetails.customerDetails?.message || quoteDetails.customer?.message}</span></p>` : ''}
         </div>
 
         <div style="margin-bottom: 30px;">
@@ -125,12 +131,12 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
     `;
 
     const senderEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'sales@concepttools.net';
-    const subject = `New Quotation Request - ${quoteDetails.customer.name} (#${quoteDetails.quoteId})`;
+    const subject = `New Quotation Request - ${quoteDetails.customerDetails?.name || quoteDetails.customer?.name} (#${quoteDetails.referenceId || quoteDetails.quoteId})`;
 
-    // Send to admin
-    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail);
+    // Send to admin (with optional CC)
+    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Services', ccEmail);
     // Send confirmation to customer
-    const confirmationSubject = `We've received your quotation request (#${quoteDetails.quoteId})`;
+    const confirmationSubject = `We've received your quotation request (#${quoteDetails.referenceId || quoteDetails.quoteId})`;
     await sendBrevoEmail(confirmationSubject, htmlContent, customerEmail, senderEmail);
 
     console.log(`Quote request ${quoteDetails.quoteId} sent via API`);
@@ -141,27 +147,42 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails) => {
   }
 };
 
-const sendInquiryEmail = async (adminEmail, inquiryData) => {
+const sendInquiryEmail = async (adminEmail, customerEmail, inquiryDetails, ccEmail = null) => {
   try {
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-        <h2 style="color: #04667b; text-align: center;">New General Inquiry</h2>
-        <p><strong>Name:</strong> ${inquiryData.name}</p>
-        <p><strong>Email:</strong> ${inquiryData.email}</p>
-        <p><strong>Message:</strong><br/>
-        <div style="background-color: #f5f7fa; padding: 15px; border-left: 4px solid #04667b; margin-top: 10px;">
-          ${inquiryData.message.replace(/\n/g, '<br/>')}
+      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="color: #04667b; text-align: center;">Concept Tools and Services</h2>
         </div>
-        </p>
+        
+        <div style="background-color: #04667b; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+          <h2 style="margin: 0; text-align: center;">New Contact Inquiry</h2>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+          <h3 style="color: #333; border-bottom: 2px solid #0ae7f0; padding-bottom: 5px; display: inline-block;">Details</h3>
+          <p><strong>Name:</strong> ${inquiryDetails.name}</p>
+          <p><strong>Email:</strong> ${inquiryDetails.email || 'Not provided'}</p>
+          <p><strong>Phone:</strong> ${inquiryDetails.phone}</p>
+          <p><strong>Message:</strong><br/> <span style="background-color: #f9fafb; padding: 10px; display: block; border-left: 3px solid #04667b; margin-top: 5px;">${inquiryDetails.message}</span></p>
+        </div>
       </div>
     `;
 
     const senderEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'sales@concepttools.net';
-    const subject = `New Inquiry from ${inquiryData.name}`;
+    const subject = `New Inquiry from ${inquiryDetails.name}`;
 
-    const success = await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail);
-    if (success) console.log(`Inquiry email sent via API`);
-    return success;
+    // Send to admin (with optional CC)
+    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Services', ccEmail);
+    
+    // Optionally, send confirmation to customer if they provided an email
+    if (customerEmail) {
+      const confirmationSubject = `We've received your inquiry`;
+      await sendBrevoEmail(confirmationSubject, htmlContent, customerEmail, senderEmail);
+    }
+
+    console.log('Inquiry email sent via API');
+    return true;
   } catch (error) {
     console.error('Error sending Inquiry Email:', error);
     return false;

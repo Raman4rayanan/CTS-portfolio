@@ -2,6 +2,7 @@ const Activity = require('../models/portfolio/Activity');
 const ProductService = require('../models/portfolio/ProductService');
 const Inquiry = require('../models/portfolio/Inquiry');
 const PortfolioConfig = require('../models/portfolio/PortfolioConfig');
+const { sendInquiryEmail } = require('../services/emailService');
 
 const defaultConfig = {
   heroTitle: 'Precision & Reliability',
@@ -195,6 +196,20 @@ exports.createInquiry = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Name, phone, and message are required.' });
     }
     const newInquiry = await Inquiry.create({ name, phone, email, message });
+
+    // Try to send email notifications asynchronously
+    const adminEmail = process.env.SMTP_USER || 'adminconcepttoolsandservice@gmail.com';
+    let ccEmail = null;
+    try {
+      const config = await PortfolioConfig.findOne();
+      if (config && config.companyEmail) {
+        ccEmail = config.companyEmail;
+      }
+    } catch (e) {
+      console.error('Failed to fetch config for CC email:', e);
+    }
+    sendInquiryEmail(adminEmail, email, { name, phone, email, message }, ccEmail).catch(err => console.error('Failed to send inquiry email:', err));
+
     res.status(201).json({ success: true, data: newInquiry, message: 'Inquiry saved successfully.' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -217,7 +232,7 @@ exports.getPortfolioConfig = async (req, res) => {
 
 exports.updatePortfolioConfig = async (req, res) => {
   try {
-    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers, cloudinaryCloudName, cloudinaryUploadPreset, metaTitle, metaDescription, metaImage, ecommBannerText, showEcommBanner, ecommSlides } = req.body;
+    const { heroTitle, heroSubtitle, aboutText, aboutHeaderLight, aboutHeaderBold, partnersBgColor1, partnersBgColor2, partnersBgColor3, journey, reasons, partners, customers, cloudinaryCloudName, cloudinaryUploadPreset, metaTitle, metaDescription, metaImage, ecommBannerText, showEcommBanner, ecommSlides, companyEmail } = req.body;
     
     let config = await PortfolioConfig.findOne();
     if (!config) {
@@ -244,6 +259,7 @@ exports.updatePortfolioConfig = async (req, res) => {
     if (ecommBannerText !== undefined) config.ecommBannerText = ecommBannerText;
     if (showEcommBanner !== undefined) config.showEcommBanner = showEcommBanner;
     if (ecommSlides !== undefined) config.ecommSlides = ecommSlides;
+    if (companyEmail !== undefined) config.companyEmail = companyEmail;
 
     await config.save();
     res.json({ success: true, data: config });

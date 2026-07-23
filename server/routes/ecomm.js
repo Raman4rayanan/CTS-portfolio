@@ -5,6 +5,7 @@ const Brand = require('../models/ecomm/Brand');
 const Order = require('../models/ecomm/Order');
 const { protectAdmin } = require('../middleware/auth');
 const { sendQuoteEmail } = require('../services/emailService');
+const PortfolioConfig = require('../models/portfolio/PortfolioConfig');
 
 // Get all products (Public)
 router.get('/products', async (req, res) => {
@@ -303,7 +304,17 @@ router.post('/orders', async (req, res) => {
 
     // Try to send email notifications asynchronously (don't block the response)
     const adminEmail = process.env.SMTP_USER || 'adminconcepttoolsandservice@gmail.com';
-    sendQuoteEmail(adminEmail, customerDetails.email, order).catch(err => console.error('Failed to send quote emails', err));
+    let ccEmail = null;
+    try {
+      const config = await PortfolioConfig.findOne();
+      if (config && config.companyEmail) {
+        ccEmail = config.companyEmail;
+      }
+    } catch (e) {
+      console.error('Failed to fetch config for CC email:', e);
+    }
+
+    sendQuoteEmail(adminEmail, customerDetails.email, order, ccEmail).catch(err => console.error('Failed to send quote emails', err));
 
     res.status(201).json({ success: true, data: order });
   } catch (error) {

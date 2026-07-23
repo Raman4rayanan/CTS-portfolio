@@ -175,6 +175,7 @@ export default function AdminPanel() {
   // Data states
   const [stats, setStats] = useState(null);
   const [inquiries, setInquiries] = useState([]);
+  const [userSearch, setUserSearch] = useState('');
   const [activities, setActivities] = useState([]);
   const [services, setServices] = useState([]);
   const [brandsList, setBrandsList] = useState([]);
@@ -196,6 +197,7 @@ export default function AdminPanel() {
     cloudinaryCloudName: '',
     cloudinaryUploadPreset: '',
     ecommBannerText: '',
+    companyEmail: '',
     ecommSlides: [],
     metaTitle: '',
     metaDescription: '',
@@ -505,6 +507,7 @@ export default function AdminPanel() {
           cloudinaryCloudName: configData.data.cloudinaryCloudName || '',
           cloudinaryUploadPreset: configData.data.cloudinaryUploadPreset || '',
           ecommBannerText: configData.data.ecommBannerText || '',
+          companyEmail: configData.data.companyEmail || '',
           showEcommBanner: configData.data.showEcommBanner ?? true,
           ecommSlides: configData.data.ecommSlides || [],
           metaTitle: configData.data.metaTitle || '',
@@ -1039,7 +1042,7 @@ export default function AdminPanel() {
   return (
     <div className="flex min-h-screen bg-[#02050c] text-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900/60 backdrop-blur-md border-r border-white/5 flex flex-col shrink-0">
+      <aside className="w-64 bg-slate-900/60 backdrop-blur-md border-r border-white/5 flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div className="h-24 px-6 flex items-center justify-between border-b border-white/5">
           <Link to="/" className="flex items-center gap-2 text-[#2796a9] font-bold text-lg hover:brightness-110 transition-all">
             <ArrowLeft size={16} />
@@ -1144,11 +1147,6 @@ export default function AdminPanel() {
           <h2 className="text-2xl font-bold tracking-wide capitalize">
             {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog Management' : `${activeTab} Management`}
           </h2>
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-cyan-500/10 text-[#2796a9] border border-cyan-500/20 uppercase">
-              Phase 1 Admin Panel Active
-            </span>
-          </div>
         </header>
 
         {/* Content Body */}
@@ -1453,7 +1451,17 @@ export default function AdminPanel() {
                       </h3>
                       <p className="text-slate-400 text-sm">Manage registered eCommerce customer accounts.</p>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search users..."
+                          value={userSearch}
+                          onChange={(e) => setUserSearch(e.target.value)}
+                          className="px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-full text-sm text-white focus:border-[#2796a9] outline-none w-64 pr-10"
+                        />
+                        <Search size={16} className="absolute right-3 top-3 text-slate-400" />
+                      </div>
                       <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-bold rounded-full shadow-lg transition-colors">
                         Send Newsletter
                       </button>
@@ -1482,7 +1490,13 @@ export default function AdminPanel() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-800/50">
-                          {storeCustomers.map((user) => (
+                          {storeCustomers
+                            .filter(c => 
+                              (c.username || '').toLowerCase().includes(userSearch.toLowerCase()) || 
+                              (c.email || '').toLowerCase().includes(userSearch.toLowerCase()) || 
+                              (c.companyName || '').toLowerCase().includes(userSearch.toLowerCase())
+                            )
+                            .map((user) => (
                             <tr key={user._id} className="hover:bg-slate-800/20 transition-colors cursor-pointer" onClick={() => handleViewHistory(user.email)}>
                               <td className="p-4">
                                 <div className="font-bold text-slate-200">{user.username}</div>
@@ -2470,6 +2484,19 @@ export default function AdminPanel() {
                         value={customizeForm.ecommBannerText || ''}
                         onChange={e => setCustomizeForm(prev => ({ ...prev, ecommBannerText: e.target.value }))}
                         placeholder="e.g. CTS B2B Procurement Desk - Fast Quotations & Logistics"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 max-w-xl">
+                      <div className="text-xs text-white/60 font-semibold uppercase tracking-wider mb-1">
+                        Company Email (For Order & Inquiry CCs)
+                      </div>
+                      <input
+                        type="email"
+                        value={customizeForm.companyEmail || ''}
+                        onChange={e => setCustomizeForm(prev => ({ ...prev, companyEmail: e.target.value }))}
+                        placeholder="e.g. sales@yourcompany.com"
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all"
                       />
                     </div>
@@ -3676,7 +3703,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
                       />
                     </div>
                   </td>
-                  <td className="p-4 font-mono text-xs">
+                  <td className="p-4 text-xs font-sans font-medium">
                     <div className="text-white font-semibold">{prod.product_id}</div>
                     <div className="text-white/40 mt-0.5">{prod.sku}</div>
                   </td>
@@ -4813,7 +4840,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
 
                 return (
                   <tr key={order._id} className="hover:bg-white/5 transition-colors group">
-                    <td className="p-4 font-bold text-white font-mono text-sm">
+                    <td className="p-4 font-bold text-white font-sans text-sm">
                       {order.referenceId}
                       <span className="text-[10px] text-white/30 block font-normal font-sans mt-0.5">
                         {new Date(order.date || order.createdAt).toLocaleDateString()}
@@ -4831,7 +4858,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                         Qty total: {order.items?.reduce((acc, it) => acc + it.quantity, 0) || 0}
                       </span>
                     </td>
-                    <td className="p-4 font-bold font-mono text-white text-sm">
+                    <td className="p-4 font-bold font-sans text-white text-sm">
                       {hasPricedItems ? `₹${grandTotal.toFixed(2)}` : <span className="text-yellow-500 font-sans font-normal text-xs">Unpriced RFQ</span>}
                     </td>
                     <td className="p-4">

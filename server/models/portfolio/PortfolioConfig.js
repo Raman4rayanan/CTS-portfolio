@@ -112,6 +112,10 @@ const PortfolioConfigSchema = new mongoose.Schema({
         tag: 'SAFETY'
       }
     ]
+  },
+  companyEmail: {
+    type: String,
+    default: ''
   }
 }, { timestamps: true });
 
