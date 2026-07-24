@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const Inquiry = require('../models/portfolio/Inquiry');
 const Activity = require('../models/portfolio/Activity');
 const ProductService = require('../models/portfolio/ProductService');
-const { sendNewsletterEmail, sendFormalQuoteEmail } = require('../services/emailService');
+const { sendNewsletterEmail, sendFormalQuoteEmail, sendInquiryReplyEmail } = require('../services/emailService');
 
 const Category = require('../models/ecomm/Category');
 const Product = require('../models/ecomm/Product');
@@ -112,6 +112,47 @@ exports.updateInquiryStatus = async (req, res) => {
     res.json({ success: true, data: inquiry });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Reply to Inquiry
+exports.replyToInquiry = async (req, res) => {
+  try {
+    const { replyMessage } = req.body;
+    const inquiry = await Inquiry.findById(req.params.id);
+
+    if (!inquiry) {
+      return res.status(404).json({ success: false, error: 'Inquiry not found' });
+    }
+
+    if (!replyMessage) {
+      return res.status(400).json({ success: false, error: 'Reply message is required' });
+    }
+
+    // Fetch config for CC email
+    const config = await PortfolioConfig.findOne();
+    const companyEmail = config && config.companyEmail ? config.companyEmail : null;
+
+    // Send email
+    const emailSent = await sendInquiryReplyEmail(
+      inquiry.email,
+      inquiry,
+      replyMessage,
+      companyEmail
+    );
+
+    if (!emailSent) {
+      return res.status(500).json({ success: false, error: 'Failed to send reply email' });
+    }
+
+    // Mark as read if not already
+    inquiry.read = true;
+    await inquiry.save();
+
+    res.status(200).json({ success: true, data: inquiry, message: 'Reply sent successfully' });
+  } catch (error) {
+    console.error('Error replying to inquiry:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
   }
 };
 

@@ -332,10 +332,70 @@ const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = tr
   }
 };
 
+const sendInquiryReplyEmail = async (toEmail, inquiryDetails, replyMessage, ccEmail = null) => {
+  const brevoApiKey = process.env.BREVO_API_KEY;
+  if (!brevoApiKey) return false;
+  
+  const senderEmail = process.env.SMTP_FROM_EMAIL || 'sales@concepttools.net';
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-w-[600px] margin: 0 auto; color: #333;">
+      <div style="background-color: #04667b; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h2 style="color: #fff; margin: 0;">Response to Your Inquiry</h2>
+      </div>
+      
+      <div style="padding: 20px; border: 1px solid #eee; border-radius: 0 0 8px 8px;">
+        <p>Dear ${inquiryDetails.name},</p>
+        
+        <p>Thank you for reaching out to us. Regarding your inquiry:</p>
+        
+        <div style="background-color: #f9fafb; border-left: 4px solid #ddd; padding: 10px; margin: 15px 0; color: #666; font-style: italic;">
+          "${inquiryDetails.message}"
+        </div>
+        
+        <div style="margin-top: 20px;">
+          ${replyMessage.replace(/\n/g, '<br>')}
+        </div>
+        
+        <p style="margin-top: 30px;">Best regards,<br>Concept Tools & Services Team</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    const payload = {
+      sender: { name: 'Concept Tools', email: senderEmail },
+      to: [{ email: toEmail }],
+      subject: 'Re: Your Inquiry at Concept Tools',
+      htmlContent: htmlContent
+    };
+
+    if (ccEmail) {
+      payload.cc = [{ email: ccEmail }];
+    }
+
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': brevoApiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    return response.ok;
+  } catch (err) {
+    console.error('Inquiry Reply Email error:', err);
+    return false;
+  }
+};
+
 module.exports = {
   sendOtpEmail,
   sendQuoteEmail,
   sendInquiryEmail,
   sendNewsletterEmail,
-  sendFormalQuoteEmail
+  sendFormalQuoteEmail,
+  sendInquiryReplyEmail
 };

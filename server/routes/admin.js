@@ -7,6 +7,7 @@ const {
   getInquiries, 
   updateInquiryStatus, 
   deleteInquiry, 
+  replyToInquiry,
   getCrossDatabaseStats,
   getCustomers,
   deleteCustomer,
@@ -37,6 +38,8 @@ router.route('/inquiries')
 router.route('/inquiries/:id')
   .put(protectAdmin, updateInquiryStatus)
   .delete(protectAdmin, deleteInquiry);
+
+router.post('/inquiries/:id/reply', protectAdmin, replyToInquiry);
 
 // Statistics
 router.get('/stats', protectAdmin, getCrossDatabaseStats);

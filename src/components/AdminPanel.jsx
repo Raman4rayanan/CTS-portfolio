@@ -234,6 +234,8 @@ export default function AdminPanel() {
   const [deleteConfirmData, setDeleteConfirmData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [viewingInquiry, setViewingInquiry] = useState(null);
+  const [replyMessage, setReplyMessage] = useState('');
+  const [submittingReply, setSubmittingReply] = useState(false);
 
   // Form states
   const [activityForm, setActivityForm] = useState({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
@@ -745,6 +747,39 @@ export default function AdminPanel() {
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleReplyToInquiry = async () => {
+    if (!replyMessage.trim()) return alert('Please enter a reply message.');
+    
+    setSubmittingReply(true);
+    try {
+      const token = localStorage.getItem('cts_token');
+      const res = await fetch(`${API_BASE_URL}/api/admin/inquiries/${viewingInquiry._id}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ replyMessage })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        alert('Reply sent successfully and inquiry marked as read.');
+        setReplyMessage('');
+        // Update local state to mark as read
+        setInquiries(inquiries.map(i => i._id === viewingInquiry._id ? { ...i, read: true } : i));
+        setViewingInquiry({ ...viewingInquiry, read: true });
+      } else {
+        alert(data.error || 'Failed to send reply.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Connection error');
+    } finally {
+      setSubmittingReply(false);
     }
   };
 
@@ -1624,8 +1659,26 @@ export default function AdminPanel() {
                             {viewingInquiry.message}
                           </div>
                         </div>
+
+                        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-2">
+                          <label className="text-xs text-white/40 font-semibold uppercase">Send Reply</label>
+                          <textarea
+                            value={replyMessage}
+                            onChange={e => setReplyMessage(e.target.value)}
+                            placeholder="Type your reply here... (Will be emailed to the user and CC'd to company)"
+                            rows={4}
+                            className="w-full bg-slate-800 border border-white/10 rounded-xl p-3 text-sm text-white focus:border-[#2796a9] outline-none resize-none"
+                          />
+                          <button
+                            onClick={handleReplyToInquiry}
+                            disabled={submittingReply || !replyMessage.trim()}
+                            className="self-end px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition-all disabled:opacity-50"
+                          >
+                            {submittingReply ? 'Sending...' : 'Send Reply'}
+                          </button>
+                        </div>
                         
-                        <div className="flex gap-3 mt-4">
+                        <div className="flex gap-3 mt-2">
                           <button
                             onClick={() => handleToggleInquiryRead(viewingInquiry._id, viewingInquiry.read)}
                             className="flex-1 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"

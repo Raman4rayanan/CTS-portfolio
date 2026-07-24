@@ -25,7 +25,7 @@ function ScrollToTop() {
 }
 
 function LandingPage() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('hasSeenIntro'));
   const [config, setConfig] = useState(null);
 
   // Fetch portfolio settings config
@@ -84,7 +84,10 @@ function LandingPage() {
         {showIntro && (
           <IntroScreen 
             key="intro" 
-            onComplete={() => setShowIntro(false)} 
+            onComplete={() => {
+              sessionStorage.setItem('hasSeenIntro', 'true');
+              setShowIntro(false);
+            }} 
           />
         )}
       </AnimatePresence>
