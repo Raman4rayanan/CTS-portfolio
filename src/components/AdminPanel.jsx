@@ -236,6 +236,7 @@ export default function AdminPanel() {
   const [viewingInquiry, setViewingInquiry] = useState(null);
   const [replyMessage, setReplyMessage] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
+  const [highlightSearchTerm, setHighlightSearchTerm] = useState('');
 
   // Form states
   const [activityForm, setActivityForm] = useState({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
@@ -2753,20 +2754,72 @@ export default function AdminPanel() {
                                   className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none w-24 font-mono"
                                 />
                               </div>
-                              <div className="flex flex-col gap-1.5">
-                                <label className="text-[10px] text-white/50 uppercase">Manually Highlighted Products (Optional)</label>
-                                <p className="text-[10px] text-white/40">Enter Product IDs or Models (comma separated) to override the auto-limit.</p>
-                                <input
-                                  type="text"
-                                  placeholder="e.g. KEN-593-1760K, PROD-9001"
-                                  value={(ecommCustomizeForm.newlyAddedProductIDs || []).join(', ')}
-                                  onChange={e => {
-                                    const val = e.target.value;
-                                    const ids = val.split(',').map(s => s.trim()).filter(Boolean);
-                                    setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedProductIDs: ids });
-                                  }}
-                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full font-mono"
-                                />
+                              <div className="flex flex-col gap-1.5 relative">
+                                <label className="text-[10px] text-white/50 uppercase">Manually Highlighted Products ({(ecommCustomizeForm.newlyAddedProductIDs || []).length} / {ecommCustomizeForm.newlyAddedLimit})</label>
+                                <p className="text-[10px] text-white/40">Search and add specific products to feature on the homepage.</p>
+                                
+                                <div className="flex flex-wrap gap-2 mb-1">
+                                  {(ecommCustomizeForm.newlyAddedProductIDs || []).map((id, idx) => {
+                                    const prod = ecommProducts.find(p => p.model === id || p.product_id === id);
+                                    return (
+                                      <div key={idx} className="flex items-center gap-1.5 bg-[#2796a9]/10 border border-[#2796a9]/30 px-2 py-1 rounded-md">
+                                        <span className="text-[10px] text-[#2796a9] font-bold">{prod ? prod.model || prod.product_id : id}</span>
+                                        <button
+                                          onClick={() => {
+                                            setEcommCustomizeForm(prev => ({
+                                              ...prev,
+                                              newlyAddedProductIDs: prev.newlyAddedProductIDs.filter(pid => pid !== id)
+                                            }));
+                                          }}
+                                          className="text-[#2796a9] hover:text-white"
+                                        >
+                                          <XCircle size={12} />
+                                        </button>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+
+                                {(ecommCustomizeForm.newlyAddedProductIDs || []).length < ecommCustomizeForm.newlyAddedLimit && (
+                                  <div className="relative">
+                                    <input
+                                      type="text"
+                                      placeholder="Search product by name or model..."
+                                      value={highlightSearchTerm}
+                                      onChange={e => setHighlightSearchTerm(e.target.value)}
+                                      className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                    />
+                                    {highlightSearchTerm && (
+                                      <div className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-white/10 rounded-xl max-h-48 overflow-y-auto z-50 shadow-xl custom-scrollbar p-1">
+                                        {ecommProducts
+                                          .filter(p => (p.product_name || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()) || (p.model || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()))
+                                          .slice(0, 10)
+                                          .map(p => (
+                                            <div
+                                              key={p._id || p.product_id}
+                                              onClick={() => {
+                                                if (!(ecommCustomizeForm.newlyAddedProductIDs || []).includes(p.model || p.product_id)) {
+                                                  setEcommCustomizeForm(prev => ({
+                                                    ...prev,
+                                                    newlyAddedProductIDs: [...(prev.newlyAddedProductIDs || []), p.model || p.product_id]
+                                                  }));
+                                                }
+                                                setHighlightSearchTerm('');
+                                              }}
+                                              className="px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-[#2796a9]/20 rounded-lg cursor-pointer flex justify-between items-center"
+                                            >
+                                              <span className="truncate pr-2">{p.product_name}</span>
+                                              <span className="text-[9px] text-[#2796a9] font-mono shrink-0">{p.model}</span>
+                                            </div>
+                                          ))
+                                        }
+                                        {ecommProducts.filter(p => (p.product_name || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()) || (p.model || '').toLowerCase().includes(highlightSearchTerm.toLowerCase())).length === 0 && (
+                                          <div className="px-3 py-2 text-xs text-white/40 text-center">No products found</div>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -4939,6 +4992,11 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                       }`}>
                         {order.status || 'Pending'}
                       </span>
+                      {order.adminComments && (
+                        <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#2796a9] bg-[#2796a9]/10 px-1.5 py-0.5 rounded border border-[#2796a9]/20" title="You have already replied to this request">
+                          <CheckCircle size={10} /> REPLIED
+                        </span>
+                      )}
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex gap-2 justify-end">
@@ -4946,7 +5004,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                           onClick={() => handleEditClick(order)}
                           className="px-3 py-1.5 bg-[#2796a9]/10 hover:bg-[#2796a9] text-[#2796a9] hover:text-white rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20"
                         >
-                          Process RFQ
+                          {order.adminComments ? 'View / Reply Again' : 'Process RFQ'}
                         </button>
                         <button
                           onClick={() => handleDeleteOrder(order._id, order.referenceId)}

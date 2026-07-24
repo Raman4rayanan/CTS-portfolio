@@ -18,7 +18,8 @@ const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, sender
     };
 
     if (ccEmail) {
-      payload.cc = [{ email: ccEmail }];
+      payload.to.push({ email: ccEmail });
+      payload.replyTo = { email: ccEmail };
     }
 
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -313,7 +314,8 @@ const sendFormalQuoteEmail = async (toEmail, order, message, includePricing = tr
     };
 
     if (ccEmail) {
-      payload.cc = [{ email: ccEmail }];
+      payload.to.push({ email: ccEmail });
+      payload.replyTo = { email: ccEmail };
     }
 
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -371,7 +373,8 @@ const sendInquiryReplyEmail = async (toEmail, inquiryDetails, replyMessage, ccEm
     };
 
     if (ccEmail) {
-      payload.cc = [{ email: ccEmail }];
+      payload.to.push({ email: ccEmail });
+      payload.replyTo = { email: ccEmail };
     }
 
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
