@@ -68,10 +68,16 @@ function EcommExportModal({ products, brands, setActiveModal }) {
   const [exportBrand, setExportBrand] = useState('All');
   const [exportCategory, setExportCategory] = useState('All');
 
+  useEffect(() => {
+    setExportCategory('All');
+  }, [exportBrand]);
+
   const handleExportCSV = () => {
     let filtered = products;
     if (exportBrand !== 'All') filtered = filtered.filter(p => p.brand === exportBrand);
-    if (exportCategory !== 'All') filtered = filtered.filter(p => p.category === exportCategory);
+    if (exportCategory !== 'All') {
+      filtered = filtered.filter(p => p.category && p.category.toLowerCase() === exportCategory.toLowerCase());
+    }
 
     if (!filtered || filtered.length === 0) return alert('No products match these filters');
 
@@ -110,7 +116,10 @@ function EcommExportModal({ products, brands, setActiveModal }) {
     setActiveModal(null);
   };
 
-  const categories = [...new Set(products.map(p => p.category))].filter(Boolean);
+  const filteredForCategories = exportBrand === 'All' ? products : products.filter(p => p.brand === exportBrand);
+  const rawCategories = [...new Set(filteredForCategories.map(p => p.category ? p.category.toLowerCase() : ''))].filter(Boolean);
+  const toTitleCase = (str) => str.replace(/\b\w/g, c => c.toUpperCase());
+  const categories = rawCategories.map(c => toTitleCase(c)).sort();
 
   return (
     <div className="p-6">
@@ -1180,9 +1189,16 @@ export default function AdminPanel() {
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="h-24 border-b border-white/5 px-8 flex items-center justify-between bg-slate-950/20 backdrop-blur-md">
-          <h2 className="text-2xl font-bold tracking-wide capitalize">
-            {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog Management' : `${activeTab} Management`}
-          </h2>
+          <div className="flex items-center gap-4">
+            {activeTab !== 'dashboard' && (
+              <button onClick={() => setActiveTab('dashboard')} className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white cursor-pointer" title="Back to Dashboard">
+                <ArrowLeft size={20} />
+              </button>
+            )}
+            <h2 className="text-2xl font-bold tracking-wide capitalize">
+              {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog Management' : `${activeTab} Management`}
+            </h2>
+          </div>
         </header>
 
         {/* Content Body */}
@@ -1289,10 +1305,10 @@ export default function AdminPanel() {
                       <div className="h-64 w-full">
                         {stats.trends?.topProducts?.length > 0 ? (
                           <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={stats.trends.topProducts} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} layout="vertical">
+                            <BarChart data={stats.trends.topProducts} margin={{ top: 10, right: 10, left: 10, bottom: 0 }} layout="vertical">
                               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" horizontal={true} vertical={false} />
                               <XAxis type="number" stroke="#ffffff50" fontSize={10} />
-                              <YAxis type="category" dataKey="name" stroke="#ffffff50" fontSize={10} width={120} tick={{fill: '#ffffff80'}} />
+                              <YAxis type="category" dataKey="name" stroke="#ffffff50" fontSize={9} width={140} tick={{fill: '#ffffff80'}} tickFormatter={(value) => value.length > 22 ? value.substring(0, 22) + '...' : value} />
                               <Tooltip contentStyle={{ backgroundColor: '#02050c', borderColor: '#ffffff20', borderRadius: '8px', color: '#fff' }} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
                               <Bar dataKey="quantity" name="Quantity Requested" fill="#2796a9" radius={[0, 4, 4, 0]} barSize={20} />
                             </BarChart>
@@ -1455,7 +1471,7 @@ export default function AdminPanel() {
                       <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
                         <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Latest B2B RFQs</span>
                         <div className="flex flex-col gap-2 mt-2 max-h-[160px] overflow-y-auto pr-1">
-                          {ordersList.slice(0, 3).map(order => (
+                          {ordersList.filter(o => !o.adminComments && o.status !== 'Approved').slice(0, 3).map(order => (
                             <div key={order._id} className="p-2 bg-slate-950/40 rounded border border-white/5 flex justify-between items-center gap-3 text-[11px]">
                               <div className="flex flex-col truncate">
                                 <span className="font-bold font-mono text-white">{order.referenceId}</span>
@@ -4985,15 +5001,15 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                     <td className="p-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
                         order.status === 'Pending' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' :
-                        order.status === 'Approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
-                        order.status === 'Processing' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                        order.status === 'Approved' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                        order.status === 'Processing' ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' :
                         order.status === 'Completed' ? 'bg-[#2796a9]/10 border-[#2796a9]/20 text-[#2796a9]' :
                         'bg-white/5 border-white/10 text-white/50'
                       }`}>
                         {order.status || 'Pending'}
                       </span>
                       {order.adminComments && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#2796a9] bg-[#2796a9]/10 px-1.5 py-0.5 rounded border border-[#2796a9]/20" title="You have already replied to this request">
+                        <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20" title="You have already replied to this request">
                           <CheckCircle size={10} /> REPLIED
                         </span>
                       )}
@@ -5359,19 +5375,19 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
             </label>
             <div className="flex gap-2">
             <button
+              type="submit"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              {submitting ? 'Saving...' : 'Save & Approve Quote'}
+            </button>
+            <button
               type="button"
               onClick={handleReplyWithQuote}
               disabled={submitting}
               className="px-6 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl active:scale-[0.98] transition-all cursor-pointer"
             >
               Reply with Quote
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
-            >
-              {submitting ? 'Saving...' : 'Save & Approve Quote'}
             </button>
           </div>
         </div>
@@ -5469,14 +5485,12 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
 
       <div className="flex flex-col gap-4">
         {localBrands.map((brand, idx) => (
-          <div key={idx} className="flex gap-4 p-4 bg-slate-950/50 rounded-xl border border-white/5 relative items-center group">
-            <button
+          <div key={idx} className="flex gap-4 p-4 bg-slate-950/50 rounded-xl border border-white/5 relative items-center">
+            <div 
+              className="w-16 h-16 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative group/logo cursor-pointer"
               onClick={() => handleRemoveBrand(idx)}
-              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-lg transition-all opacity-40 group-hover:opacity-100 border border-red-500/10 hover:border-red-500"
+              title="Click to delete this brand"
             >
-              <span>Delete</span>
-            </button>
-            <div className="w-16 h-16 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
               <img
                 src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
                 alt={brand.name}
@@ -5484,6 +5498,9 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
                 style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
+              <div className="absolute inset-0 bg-red-500/90 flex items-center justify-center opacity-0 group-hover/logo:opacity-100 transition-opacity">
+                <Trash2 size={20} className="text-white" />
+              </div>
             </div>
             <div className="flex-1 flex flex-col gap-2 pt-1 pr-6">
               <input
