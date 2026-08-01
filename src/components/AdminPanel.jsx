@@ -2319,7 +2319,7 @@ export default function AdminPanel() {
                               <img
                                 src={partner.src}
                                 alt={partner.name}
-                                className="max-w-full max-h-full object-contain brightness-0 invert opacity-70"
+                                className="max-w-full max-h-full object-contain opacity-70"
                                 style={{ transform: `scale(${parseFloat(partner.scale) || 1})` }}
                                 onError={(e) => { e.target.style.display = 'none'; }}
                               />
