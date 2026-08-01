@@ -1,25 +1,25 @@
 import React from 'react';
 
 const partners = [
-  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png', scale: 1.25 },
-  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/ctrjijbpcixvkfvv636m.png', scale: 1.35 },
-  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png', scale: 1.00 },
-  { name: 'Kärcher', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/jnxm5tebwwycgkzsv0gh.png' },
-  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png', scale: 2.5 },
-  { name: 'Klingspor', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278559/port/ufdcu4zxkbtjyxoxposs.png' },
-  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278518/port/khritkvs9abfqepsxpa9.png', scale: 1.8 },
-  { name: 'KOVAX Abrasive Solutions', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278560/port/wnoyku31gx14sgymc4ca.png' },
-  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
+  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278517/port/svdnbsmz2mkirhr9oqes.png', scale: 1.25 },
+  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278558/port/ctrjijbpcixvkfvv636m.png', scale: 1.35 },
+  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png', scale: 1.00 },
+  { name: 'Kärcher', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278558/port/jnxm5tebwwycgkzsv0gh.png' },
+  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278519/port/wkn0oyaxl2jgzwklcupo.png', scale: 2.5 },
+  { name: 'Klingspor', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278559/port/ufdcu4zxkbtjyxoxposs.png' },
+  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278518/port/khritkvs9abfqepsxpa9.png', scale: 1.8 },
+  { name: 'KOVAX Abrasive Solutions', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278560/port/wnoyku31gx14sgymc4ca.png' },
+  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
 ];
 
 const customers = [
-  { name: 'Nordex India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278561/port/cpmgqiss7wrghl1gzjlk.png' },
-  { name: 'Senvion India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278564/port/czcng6i3shx2wlq3av5f.png' },
-  { name: 'Suzlon Energy', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278567/port/xd6fmunadvouvc2i7vtm.png', scale: 1.50 },
-  { name: 'Gurit Wind', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278522/port/mfy72cjvqzfvmf5hikrg.png', scale: 1.35 },
-  { name: 'Indocool Composites', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278557/port/ghselfrwdtbpmfrqcsgh.png' },
-  { name: 'Stellantis Avtec Powertrain', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278566/port/hy0vxuxsrrbzbia18rex.png', scale: 1.35 },
-  { name: 'Exeraxis India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278521/port/rmhwor6uepsf5nla4e3o.png', scale: 2.00 }
+  { name: 'Nordex India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278561/port/cpmgqiss7wrghl1gzjlk.png' },
+  { name: 'Senvion India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278564/port/czcng6i3shx2wlq3av5f.png' },
+  { name: 'Suzlon Energy', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278567/port/xd6fmunadvouvc2i7vtm.png', scale: 1.50 },
+  { name: 'Gurit Wind', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278522/port/mfy72cjvqzfvmf5hikrg.png', scale: 1.35 },
+  { name: 'Indocool Composites', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278557/port/ghselfrwdtbpmfrqcsgh.png' },
+  { name: 'Stellantis Avtec Powertrain', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278566/port/hy0vxuxsrrbzbia18rex.png', scale: 1.35 },
+  { name: 'Exeraxis India', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278521/port/rmhwor6uepsf5nla4e3o.png', scale: 2.00 }
 ];
 
 export default function PartnersSection({ config }) {

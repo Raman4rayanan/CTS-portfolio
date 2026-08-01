@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278523/port/qssdgzsxxah2fteaiysb.png',
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278556/port/is9uae1dghh7jql2mjqz.png'
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png',
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
+  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png'
 ];
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import IntroScreen from './components/IntroScreen';
@@ -10,8 +10,15 @@ import ActivitiesSection from './components/ActivitiesSection';
 import PartnersSection from './components/PartnersSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
-import AdminPanel from './components/AdminPanel';
-import ShopPage from './components/ShopPage';
+import SeoHead from './components/SeoHead';
+import ErrorBoundary from './components/ErrorBoundary';
+import NotFoundPage from './pages/errors/NotFoundPage';
+import OfflinePage from './pages/errors/OfflinePage';
+import MaintenancePage from './pages/errors/MaintenancePage';
+
+// Lazy load heavy route components
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
+const ShopPage = lazy(() => import('./components/ShopPage'));
 
 
 function ScrollToTop() {
@@ -41,32 +48,51 @@ function LandingPage() {
       .catch(err => console.error('Error fetching portfolio config:', err));
   }, []);
 
-  // Apply SEO Meta Tags when config loads
-  useEffect(() => {
-    if (config) {
-      if (config.metaTitle) document.title = config.metaTitle;
-      
-      if (config.metaDescription) {
-        let metaDesc = document.querySelector('meta[name="description"]');
-        if (!metaDesc) {
-          metaDesc = document.createElement('meta');
-          metaDesc.name = "description";
-          document.head.appendChild(metaDesc);
-        }
-        metaDesc.content = config.metaDescription;
-      }
+  // Apply SEO Meta Tags when config loads (handled by SeoHead now)
+  const metaTitle = config?.metaTitle || 'CONCEPT TOOLS AND SERVICES';
+  const metaDescription = config?.metaDescription || 'Premium Industrial & E-commerce solutions.';
+  const metaImage = config?.metaImage || '';
+  const currentUrl = window.location.href;
+  const googleSiteVerification = config?.googleSiteVerification || '';
+  const bingSiteVerification = config?.bingSiteVerification || '';
+  const ga4Id = config?.ga4Id || '';
+  const gtmId = config?.gtmId || '';
+  const companyEmail = config?.companyEmail || 'sales@concept-tools.com';
 
-      if (config.metaImage) {
-        let metaImg = document.querySelector('meta[property="og:image"]');
-        if (!metaImg) {
-          metaImg = document.createElement('meta');
-          metaImg.setAttribute("property", "og:image");
-          document.head.appendChild(metaImg);
-        }
-        metaImg.content = config.metaImage;
-      }
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Concept Tools and Services (CTS)",
+    "url": currentUrl,
+    "logo": metaImage || `${currentUrl}logo.png`,
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": companyEmail,
+      "contactType": "customer service"
     }
-  }, [config]);
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": currentUrl,
+    "name": "Concept Tools and Services"
+  };
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Concept Tools and Services (CTS)",
+    "image": metaImage || `${currentUrl}logo.png`,
+    "url": currentUrl,
+    "telephone": config?.companyPhone || "",
+    "email": companyEmail,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": config?.companyAddress || "",
+      "addressCountry": "QA"
+    }
+  };
 
   // Disable scrolling while the intro screen is active
   useEffect(() => {
@@ -79,6 +105,18 @@ function LandingPage() {
 
   return (
     <div className="relative min-h-screen bg-primary-navy font-sans text-slate-800">
+      <SeoHead 
+        title={metaTitle}
+        description={metaDescription}
+        imageUrl={metaImage}
+        pageUrl={currentUrl}
+        canonicalUrl={currentUrl}
+        googleSiteVerification={googleSiteVerification}
+        bingSiteVerification={bingSiteVerification}
+        ga4Id={ga4Id}
+        gtmId={gtmId}
+        schema={[orgSchema, websiteSchema, localBusinessSchema]}
+      />
       <Navbar isVisible={!showIntro} />
       <AnimatePresence>
         {showIntro && (
@@ -129,15 +167,44 @@ function LandingPage() {
 }
 
 function App() {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  if (isOffline) {
+    return <OfflinePage />;
+  }
+
+  // Maintenance Mode toggle via environment variable
+  if (import.meta.env.VITE_MAINTENANCE_MODE === 'true') {
+    return <MaintenancePage />;
+  }
+
   return (
-    <>
+    <ErrorBoundary>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/shop" element={<ShopPage />} />
-      </Routes>
-    </>
+      <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950 text-white font-bold text-2xl tracking-widest animate-pulse">LOADING...</div>}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/product/:productId" element={<ShopPage />} />
+          {/* Catch-all 404 Route */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

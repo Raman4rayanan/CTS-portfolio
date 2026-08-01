@@ -1,0 +1,26 @@
+{
+  "name": "Concept Tools and Services",
+  "short_name": "CTS",
+  "description": "Premium industrial tools, MRO solutions, and technical support.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#2796a9",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/admin/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/admin/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { optimizeCloudinaryUrl } from '../utils/imageOptimizer';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,6 +42,7 @@ import {
   X
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
+import SeoHead from './SeoHead';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -424,7 +426,7 @@ export default function AdminPanel() {
         {
           title: 'New Slider Title',
           subtitle: 'New slider description text',
-          image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+          image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png',
           tag: 'TAG'
         }
       ]
@@ -1089,6 +1091,11 @@ export default function AdminPanel() {
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800 relative">
+      <SeoHead 
+        title="Admin Portal"
+        description="CTS Secure Admin Portal"
+        robots="noindex, nofollow"
+      />
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div 
@@ -2103,6 +2110,57 @@ export default function AdminPanel() {
                     </div>
                   </div>
 
+                  {/* Search Engine Integrations Card */}
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-slate-200 pb-3">
+                      <h4 className="font-bold text-base text-[#0F4C81]">Search Engine & Tracking Integrations</h4>
+                      <p className="text-xs text-slate-500 font-light mt-0.5">Configure your Google Analytics, Tag Manager, and Search Console verification IDs.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Google Analytics 4 (GA4) ID</label>
+                        <input
+                          type="text"
+                          value={customizeForm.ga4Id || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, ga4Id: e.target.value }))}
+                          placeholder="G-XXXXXXXXXX"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Google Tag Manager (GTM) ID</label>
+                        <input
+                          type="text"
+                          value={customizeForm.gtmId || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, gtmId: e.target.value }))}
+                          placeholder="GTM-XXXXXXX"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Google Site Verification Code</label>
+                        <input
+                          type="text"
+                          value={customizeForm.googleSiteVerification || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, googleSiteVerification: e.target.value }))}
+                          placeholder="paste content from meta tag..."
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Bing Site Verification Code</label>
+                        <input
+                          type="text"
+                          value={customizeForm.bingSiteVerification || ''}
+                          onChange={e => setCustomizeForm(prev => ({ ...prev, bingSiteVerification: e.target.value }))}
+                          placeholder="paste content from meta tag..."
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Cloudinary Settings Card */}
                   <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
                     <div className="border-b border-slate-200 pb-3">
@@ -2893,7 +2951,7 @@ export default function AdminPanel() {
                             {/* Logo Preview */}
                             <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
                               <img
-                                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
+                                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'}
                                 alt={brand.name}
                                 className="max-w-full max-h-full object-contain opacity-80"
                                 style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}
@@ -3695,7 +3753,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
       product_name: product.product_name || '',
       description: product.description || '',
       specifications: product.specifications || '',
-      image: product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+      image: product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'
     });
     setActiveModal('edit_ecomm_product');
   };
@@ -3713,7 +3771,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
       product_name: '',
       description: '',
       specifications: '',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'
     });
     setActiveModal('create_ecomm_product');
   };
@@ -3850,10 +3908,10 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
                   <td className="p-4">
                     <div className="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden bg-[#F5F7FA] flex items-center justify-center p-1">
                       <img 
-                        src={prod.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
+                        src={optimizeCloudinaryUrl(prod.images?.[0]) || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'} 
                         alt={prod.product_name} 
                         className="max-w-full max-h-full object-contain"
-                        onError={(e) => { e.target.src = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'; }}
+                        onError={(e) => { e.target.src = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'; }}
                       />
                     </div>
                   </td>
@@ -4350,7 +4408,7 @@ function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchS
         product_name: cols[headerMap.product_name] || '',
         description: headerMap.description !== undefined ? cols[headerMap.description] || '' : '',
         specifications: headerMap.specifications !== undefined ? cols[headerMap.specifications] || '' : '',
-        images: headerMap.image !== undefined && cols[headerMap.image] && cols[headerMap.image].trim() ? [cols[headerMap.image].trim()] : ['https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png']
+        images: headerMap.image !== undefined && cols[headerMap.image] && cols[headerMap.image].trim() ? [cols[headerMap.image].trim()] : ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png']
       };
 
       // Validation check
@@ -5509,7 +5567,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
               title="Click to delete this brand"
             >
               <img
-                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
+                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'}
                 alt={brand.name}
                 className="max-w-full max-h-full object-contain opacity-80"
                 style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}

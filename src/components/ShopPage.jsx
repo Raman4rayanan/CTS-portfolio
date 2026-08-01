@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Search,
   Grid,
@@ -24,44 +24,53 @@ import {
   Cpu,
   ArrowUp
 } from 'lucide-react';
+import SeoHead from './SeoHead';
 import html2pdf from 'html2pdf.js';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { sampleProducts } from '../data/sampleProducts';
+import { optimizeCloudinaryUrl } from '../utils/imageOptimizer';
 
 // Brand logos with Cloudinary URLs and scale specifications (6 Authorized Partners Only)
 const brandLogos = [
-  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/ctrjijbpcixvkfvv636m.png', scale: 1.35 },
-  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png', scale: 1.25 },
-  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png', scale: 1.00 },
-  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png', scale: 2.5 },
-  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278518/port/khritkvs9abfqepsxpa9.png', scale: 1.8 },
-  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
+  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278558/port/ctrjijbpcixvkfvv636m.png', scale: 1.35 },
+  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278517/port/svdnbsmz2mkirhr9oqes.png', scale: 1.25 },
+  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png', scale: 1.00 },
+  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278519/port/wkn0oyaxl2jgzwklcupo.png', scale: 2.5 },
+  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278518/port/khritkvs9abfqepsxpa9.png', scale: 1.8 },
+  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
 ];
 
 // Carousel items placeholder (will be replaced by state on mount)
 
+export function generateSlug(name) {
+  if (!name) return '';
+  return name.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+}
+
 export default function ShopPage() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { productId } = useParams();
   const [config, setConfig] = useState(null);
   const [brandsList, setBrandsList] = useState([]);
   const [carouselSlides, setCarouselSlides] = useState([
     {
       title: 'Industrial Storage Units',
       subtitle: 'Heavy-duty storage solutions for your workspace',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
       tag: 'STORAGE'
     },
     {
       title: 'Precision German Engineering',
       subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png',
       tag: 'POWER TOOLS'
     },
     {
       title: 'HSE Safety Standard Gear',
       subtitle: 'Full protective equipment for hazardous work sites',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg',
+      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/i57qdajixxllurowpkev.jpg',
       tag: 'SAFETY'
     }
   ]);
@@ -70,13 +79,13 @@ export default function ShopPage() {
     const nameLower = b.name.toLowerCase();
     let fallbackLogo = '';
     if (nameLower.includes('bosch')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png';
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278517/port/svdnbsmz2mkirhr9oqes.png';
     } else if (nameLower.includes('atlas')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png';
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278516/port/hym3rag4eal3xxn9bx6d.png';
     } else if (nameLower.includes('eibenstock')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png';
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278519/port/wkn0oyaxl2jgzwklcupo.png';
     } else {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png';
+      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png';
     }
 
     const matchingPortfolioPartner = config?.partners?.find(
@@ -107,7 +116,7 @@ export default function ShopPage() {
               slides[0] = {
                 title: 'Industrial Storage Units',
                 subtitle: 'Heavy-duty storage solutions for your workspace',
-                image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+                image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
                 tag: 'STORAGE'
               };
             }
@@ -133,7 +142,18 @@ export default function ShopPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentView, setCurrentView] = useState('home');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [internalSelectedProduct, setInternalSelectedProduct] = useState(null);
+  
+  const selectedProduct = internalSelectedProduct;
+  const setSelectedProduct = (prod) => {
+    if (prod) {
+      const slug = generateSlug(prod.product_name || prod.model) || prod.product_id;
+      navigate(`/shop/product/${slug}`, { replace: false });
+    } else {
+      navigate('/shop', { replace: false });
+    }
+  };
+
   const [viewMode, setViewMode] = useState('grid'); // grid or list
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login'); // login or signup
@@ -175,7 +195,6 @@ export default function ShopPage() {
     showNewlyAdded: true,
     newlyAddedTag: 'Latest Arrivals',
     newlyAddedTitle: 'Newly Added Products',
-    newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
     newlyAddedSubtitle: 'Explore the latest cutting-edge industrial equipment and tools recently added to our catalog.',
     newlyAddedLimit: 8,
     newlyAddedProductIDs: []
@@ -321,6 +340,20 @@ export default function ShopPage() {
     fetchConfig();
   }, []);
 
+  // Sync route param to selected product
+  useEffect(() => {
+    if (productId && products.length > 0) {
+      const prod = products.find(
+        p => generateSlug(p.product_name || p.model) === productId || p.product_id === productId || p.model === productId
+      );
+      if (prod && (!selectedProduct || prod.product_id !== selectedProduct.product_id)) {
+        setInternalSelectedProduct(prod);
+      }
+    } else if (!productId && selectedProduct) {
+      setInternalSelectedProduct(null);
+    }
+  }, [productId, products, selectedProduct]);
+
   // Route State Handling
   useEffect(() => {
     if (location.state && location.state.category) {
@@ -335,7 +368,8 @@ export default function ShopPage() {
       }, 300);
       
       // Clear the state so it doesn't re-trigger on refresh
-      window.history.replaceState({}, document.title);
+      // Keep URL clean, SEO handled by SeoHead now
+      window.history.replaceState({}, '');
     }
   }, [location.state]);
 
@@ -794,8 +828,60 @@ export default function ShopPage() {
     html2pdf().from(wrapper).set(opt).save();
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": window.location.origin
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Shop",
+        "item": `${window.location.origin}/shop`
+      }
+    ]
+  };
+
+  const schemas = [breadcrumbSchema];
+
+  if (selectedProduct) {
+    const productSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": selectedProduct.product_name || selectedProduct.model,
+      "description": selectedProduct.description || 'Premium industrial product',
+      "sku": selectedProduct.sku || selectedProduct.product_id,
+      "brand": {
+        "@type": "Brand",
+        "name": selectedProduct.brand || 'CTS'
+      },
+      "category": selectedProduct.category,
+      "image": selectedProduct.images?.[0] || '',
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": "USD" // No fake pricing provided, only structure
+      }
+    };
+    schemas.push(productSchema);
+  }
+
+  const currentFullUrl = `${window.location.origin}${location.pathname}`;
+
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100 font-sans">
+      <SeoHead 
+        title={selectedProduct ? `${selectedProduct.product_name || selectedProduct.model} | Shop` : "Industrial E-Commerce Shop"}
+        description={selectedProduct ? selectedProduct.description : "Browse our extensive catalog of premium industrial tools, machinery, and protective equipment."}
+        canonicalUrl={currentFullUrl}
+        pageUrl={currentFullUrl}
+        schema={schemas}
+      />
       {/* Global Navbar */}
       <Navbar 
         isVisible={true} 
@@ -1105,7 +1191,7 @@ export default function ShopPage() {
                         .map((catName, index) => {
                           const isSelected = selectedCategories.includes(catName);
                           const repProduct = products.find(p => p.category === catName);
-                          const image = repProduct?.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png';
+                          const image = repProduct?.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png';
 
                           const handleCardMove = (e) => {
                             const c = e.currentTarget;
@@ -1321,7 +1407,7 @@ export default function ShopPage() {
                       onClick={() => setSelectedProduct(product)}
                     >
                       <img 
-                        src={product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
+                        src={optimizeCloudinaryUrl(product.images?.[0])} 
                         alt={product.product_name}
                         className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                       />
@@ -1335,12 +1421,15 @@ export default function ShopPage() {
                       <div className="flex justify-between items-start gap-2">
                         <div className="flex flex-col">
                           <span className="text-[#2796a9] text-xs font-bold uppercase tracking-wider">{product.brand}</span>
-                          <h4 
-                            className="text-sm font-bold text-white leading-snug line-clamp-2 mt-1 group-hover:text-[#2796a9] transition-colors cursor-pointer"
-                            onClick={() => setSelectedProduct(product)}
+                          <Link 
+                            to={`/shop/product/${generateSlug(product.product_name || product.model) || product.product_id}`}
+                            onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); }}
+                            className="block"
                           >
-                            {product.product_name}
-                          </h4>
+                            <h4 className="font-bold text-sm text-slate-100 group-hover:text-[#2796a9] truncate mb-1">
+                              {product.product_name}
+                            </h4>
+                          </Link>
                         </div>
                       </div>
                       
@@ -1404,7 +1493,7 @@ export default function ShopPage() {
                       onClick={() => setSelectedProduct(p)}
                     >
                       <img
-                        src={p.images?.[0] || 'https://via.placeholder.com/300x200?text=No+Image'}
+                        src={optimizeCloudinaryUrl(p.images?.[0])}
                         alt={p.product_name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -1435,12 +1524,15 @@ export default function ShopPage() {
                       <div className="text-[11px] text-slate-500 font-light tracking-wide mb-1 block">
                         Brand: <span className="text-slate-300 font-medium">{p.brand}</span>
                       </div>
-                      <h4
-                        className="font-bold text-base text-white hover:text-[#2796a9] cursor-pointer mb-2 line-clamp-1"
-                        onClick={() => setSelectedProduct(p)}
+                      <Link 
+                        to={`/shop/product/${generateSlug(p.product_name || p.model) || p.product_id}`}
+                        onClick={(e) => { e.stopPropagation(); setSelectedProduct(p); }}
+                        className="block"
                       >
-                        {p.product_name}
-                      </h4>
+                        <h4 className="text-lg font-bold text-white group-hover:text-[#2796a9] mb-2">
+                          {p.product_name}
+                        </h4>
+                      </Link>
                       <p className="text-slate-400 text-xs font-light leading-relaxed mb-6 line-clamp-2">
                         {p.description}
                       </p>
@@ -1481,7 +1573,7 @@ export default function ShopPage() {
                       onClick={() => setSelectedProduct(p)}
                     >
                       <img
-                        src={p.images?.[0] || 'https://via.placeholder.com/150'}
+                        src={optimizeCloudinaryUrl(p.images?.[0])}
                         alt={p.product_name}
                         className="max-h-full max-w-full object-contain"
                       />
@@ -1492,12 +1584,15 @@ export default function ShopPage() {
                       <div className="text-[11px] text-slate-500 font-light tracking-wide mb-1 block">
                         Brand: <span className="text-slate-300 font-medium">{p.brand}</span>
                       </div>
-                      <h4
-                        className="font-bold text-lg text-white hover:text-[#2796a9] cursor-pointer mb-2"
-                        onClick={() => setSelectedProduct(p)}
+                      <Link 
+                        to={`/shop/product/${generateSlug(p.product_name || p.model) || p.product_id}`}
+                        onClick={(e) => { e.stopPropagation(); setSelectedProduct(p); }}
+                        className="block"
                       >
-                        {p.product_name}
-                      </h4>
+                        <h4 className="text-lg font-bold text-white group-hover:text-[#2796a9] mb-2">
+                          {p.product_name}
+                        </h4>
+                      </Link>
                       <p className="text-slate-400 text-xs font-light leading-relaxed mb-4 line-clamp-2 max-w-2xl">
                         {p.description}
                       </p>
@@ -1602,7 +1697,7 @@ export default function ShopPage() {
                 <div className="flex flex-col gap-4">
                   <div className="bg-slate-950 rounded-2xl p-8 flex items-center justify-center h-80 md:h-[400px]">
                     <img
-                      src={selectedProduct.images?.[0] || 'https://via.placeholder.com/500x300'}
+                      src={optimizeCloudinaryUrl(selectedProduct.images?.[0])}
                       alt={selectedProduct.product_name}
                       className="max-h-full max-w-full object-contain"
                     />
@@ -1611,7 +1706,7 @@ export default function ShopPage() {
                   <div className="flex gap-2">
                     {selectedProduct.images?.map((img, i) => (
                       <div key={i} className="w-20 h-20 bg-slate-950 border-2 border-[#2796a9] rounded-xl flex items-center justify-center p-2 cursor-pointer">
-                        <img src={img} alt="thumbnail" className="max-h-full max-w-full object-contain" />
+                        <img src={optimizeCloudinaryUrl(img)} alt="thumbnail" className="max-h-full max-w-full object-contain" />
                       </div>
                     ))}
                   </div>
@@ -1622,6 +1717,18 @@ export default function ShopPage() {
                   <span className="text-[#2796a9] text-xs font-bold tracking-widest uppercase mb-2 block">
                     {selectedProduct.brand} | {selectedProduct.category}
                   </span>
+
+                  {/* Internal SEO Breadcrumbs */}
+                  <nav className="flex items-center gap-2 text-[10px] text-slate-400 font-medium mb-3" aria-label="Breadcrumb">
+                    <Link to="/shop" className="hover:text-white" onClick={() => setSelectedProduct(null)}>Shop</Link>
+                    <span className="text-slate-600">/</span>
+                    <span className="hover:text-white cursor-pointer" onClick={() => { setSelectedProduct(null); setCurrentView('products'); setSearchQuery(selectedProduct.category || ''); }}>
+                      {selectedProduct.category || 'Products'}
+                    </span>
+                    <span className="text-slate-600">/</span>
+                    <span className="text-white truncate max-w-[150px]">{selectedProduct.product_name}</span>
+                  </nav>
+
                   <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2 leading-snug">
                     {selectedProduct.product_name}
                   </h2>
@@ -1691,10 +1798,18 @@ export default function ShopPage() {
                         className="bg-slate-950/60 border border-slate-800 hover:border-slate-700 p-4 rounded-xl flex items-center gap-4 cursor-pointer group"
                       >
                         <div className="w-16 h-16 bg-slate-950 flex items-center justify-center p-2 rounded-lg flex-shrink-0">
-                          <img src={rel.images?.[0]} alt={rel.product_name} className="max-h-full max-w-full object-contain" />
+                          <img src={optimizeCloudinaryUrl(rel.images?.[0])} alt={rel.product_name} className="max-h-full max-w-full object-contain" />
                         </div>
                         <div className="min-w-0">
-                          <h5 className="font-bold text-sm text-slate-200 group-hover:text-[#2796a9] truncate mb-1">{rel.product_name}</h5>
+                          <Link 
+                            to={`/shop/product/${generateSlug(rel.product_name || rel.model) || rel.product_id}`}
+                            onClick={(e) => { e.stopPropagation(); setSelectedProduct(rel); }}
+                            className="block"
+                          >
+                            <h5 className="font-bold text-sm text-slate-200 group-hover:text-[#2796a9] truncate mb-1">
+                              {rel.product_name}
+                            </h5>
+                          </Link>
                           <span className="text-[10px] text-slate-500">{rel.brand} | {rel.model}</span>
                         </div>
                       </div>
@@ -1771,11 +1886,18 @@ export default function ShopPage() {
                       <div key={item.product_id} className="flex gap-4 p-4 bg-slate-950/40 border border-slate-800/80 rounded-xl relative group">
                         {/* Image */}
                         <div className="w-16 h-16 bg-slate-950 rounded-lg flex items-center justify-center p-2 flex-shrink-0">
-                          <img src={item.images?.[0]} alt={item.product_name} className="max-h-full max-w-full object-contain" />
+                          <img src={optimizeCloudinaryUrl(item.images?.[0])} alt={item.product_name} className="max-h-full max-w-full object-contain" />
                         </div>
                         {/* Info */}
                         <div className="flex-1 min-w-0 pr-6">
-                          <h4 className="font-bold text-sm text-slate-100 truncate mb-1">{item.product_name}</h4>
+                          <Link 
+                            to={`/shop/product/${generateSlug(item.product_name || item.model) || item.product_id}`}
+                            className="block"
+                          >
+                            <h4 className="font-bold text-sm text-slate-100 truncate mb-1 hover:text-[#2796a9] transition-colors">
+                              {item.product_name}
+                            </h4>
+                          </Link>
                           <div className="text-[10px] text-slate-500 mb-2 truncate">Model: {item.model} | Brand: {item.brand}</div>
                           {/* Qty edit */}
                           <div className="flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-lg w-fit px-2 py-0.5">

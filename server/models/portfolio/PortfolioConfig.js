@@ -73,6 +73,22 @@ const PortfolioConfigSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  googleSiteVerification: {
+    type: String,
+    default: ''
+  },
+  bingSiteVerification: {
+    type: String,
+    default: ''
+  },
+  ga4Id: {
+    type: String,
+    default: ''
+  },
+  gtmId: {
+    type: String,
+    default: ''
+  },
   ecommBannerText: {
     type: String,
     default: 'CTS B2B Procurement Desk - Fast Quotations & Logistics'
