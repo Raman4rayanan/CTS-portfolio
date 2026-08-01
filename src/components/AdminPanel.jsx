@@ -125,11 +125,11 @@ function EcommExportModal({ products, brands, setActiveModal }) {
     <div className="p-6">
       <div className="flex flex-col gap-4">
         <div>
-          <label className="text-xs text-white/50 mb-1 block">Filter by Brand</label>
+          <label className="text-xs text-slate-500 mb-1 block">Filter by Brand</label>
           <select
             value={exportBrand}
             onChange={(e) => setExportBrand(e.target.value)}
-            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none"
           >
             <option value="All">All Brands</option>
             {brands.map(b => (
@@ -138,11 +138,11 @@ function EcommExportModal({ products, brands, setActiveModal }) {
           </select>
         </div>
         <div>
-          <label className="text-xs text-white/50 mb-1 block">Filter by Category</label>
+          <label className="text-xs text-slate-500 mb-1 block">Filter by Category</label>
           <select
             value={exportCategory}
             onChange={(e) => setExportCategory(e.target.value)}
-            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none"
           >
             <option value="All">All Categories</option>
             {categories.map(c => (
@@ -154,13 +154,13 @@ function EcommExportModal({ products, brands, setActiveModal }) {
       <div className="flex justify-end gap-3 mt-6">
         <button
           onClick={() => setActiveModal(null)}
-          className="px-4 py-2 rounded-xl text-white/60 hover:text-white border border-transparent hover:bg-white/5 transition-all text-xs font-semibold cursor-pointer"
+          className="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-800 border border-transparent hover:bg-slate-50 transition-all text-xs font-semibold cursor-pointer"
         >
           Cancel
         </button>
         <button
           onClick={handleExportCSV}
-          className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white rounded-xl text-xs font-bold hover:brightness-110 cursor-pointer"
+          className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 rounded-xl text-xs font-bold hover:brightness-110 cursor-pointer"
         >
           Export CSV
         </button>
@@ -1085,18 +1085,18 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#02050c] text-white">
+    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900/60 backdrop-blur-md border-r border-white/5 flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
-        <div className="h-24 px-6 flex items-center justify-between border-b border-white/5">
-          <Link to="/" className="flex items-center gap-2 text-[#2796a9] font-bold text-lg hover:brightness-110 transition-all">
+      <aside className="w-64 bg-white/60 backdrop-blur-md border-r border-slate-200 flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
+        <div className="h-24 px-6 flex items-center justify-between border-b border-slate-200">
+          <Link to="/" className="flex items-center gap-2 text-[#0F4C81] font-bold text-lg hover:brightness-110 transition-all">
             <ArrowLeft size={16} />
             <span>Go to Site</span>
           </Link>
         </div>
         
         <nav className="flex-1 px-4 py-6 flex flex-col gap-1.5">
-          <div className="text-[10px] uppercase font-bold tracking-widest text-white/35 px-4 mb-2">
+          <div className="text-[10px] uppercase font-bold tracking-widest text-slate-800/35 px-4 mb-2">
             Main
           </div>
           <SidebarLink 
@@ -1119,7 +1119,7 @@ export default function AdminPanel() {
             onClick={() => setActiveTab('inquiries')} 
           />
 
-          <div className="text-[10px] uppercase font-bold tracking-widest text-white/35 px-4 mt-6 mb-2">
+          <div className="text-[10px] uppercase font-bold tracking-widest text-slate-800/35 px-4 mt-6 mb-2">
             Portfolio
           </div>
           <SidebarLink 
@@ -1141,7 +1141,7 @@ export default function AdminPanel() {
             onClick={() => setActiveTab('customize')} 
           />
 
-          <div className="text-[10px] uppercase font-bold tracking-widest text-white/35 px-4 mt-6 mb-2">
+          <div className="text-[10px] uppercase font-bold tracking-widest text-slate-800/35 px-4 mt-6 mb-2">
             E-commerce
           </div>
           <SidebarLink 
@@ -1165,14 +1165,14 @@ export default function AdminPanel() {
           />
         </nav>
 
-        <div className="p-4 border-t border-white/5 flex flex-col gap-2">
+        <div className="p-4 border-t border-slate-200 flex flex-col gap-2">
           <div className="flex items-center gap-3 px-2">
-            <div className="w-8 h-8 rounded-full bg-[#2796a9] flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-full bg-[#0F4C81] flex items-center justify-center font-bold text-sm">
               {user.username ? user.username.charAt(0).toUpperCase() : 'A'}
             </div>
             <div className="flex flex-col overflow-hidden">
               <span className="text-sm font-semibold truncate">{user.username}</span>
-              <span className="text-xs text-white/40 truncate">{user.email}</span>
+              <span className="text-xs text-slate-500 truncate">{user.email}</span>
             </div>
           </div>
           <button 
@@ -1188,10 +1188,10 @@ export default function AdminPanel() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="h-24 border-b border-white/5 px-8 flex items-center justify-between bg-slate-950/20 backdrop-blur-md">
+        <header className="h-24 border-b border-slate-200 px-8 flex items-center justify-between bg-white shadow-sm backdrop-blur-md">
           <div className="flex items-center gap-4">
             {activeTab !== 'dashboard' && (
-              <button onClick={() => setActiveTab('dashboard')} className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white cursor-pointer" title="Back to Dashboard">
+              <button onClick={() => setActiveTab('dashboard')} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600 hover:text-slate-800 cursor-pointer" title="Back to Dashboard">
                 <ArrowLeft size={20} />
               </button>
             )}
@@ -1205,7 +1205,7 @@ export default function AdminPanel() {
         <div className="flex-1 overflow-y-auto p-8">
           {loading ? (
             <div className="h-64 w-full flex items-center justify-center">
-              <div className="w-10 h-10 border-4 border-[#2796a9] border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-[#0F4C81] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : error ? (
             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-red-400 font-medium">
@@ -1235,8 +1235,8 @@ export default function AdminPanel() {
                     <DashboardCard 
                       title="Read Inquiries" 
                       value={stats.portfolio.readInquiries} 
-                      icon={<CheckCircle className="text-emerald-400" />} 
-                      color="from-emerald-500/10 to-emerald-500/5 border-emerald-500/10"
+                      icon={<CheckCircle className="text-green-600" />} 
+                      color="from-green-600/10 to-green-600/5 border-green-600/10"
                       onClick={() => setActiveTab('inquiries')}
                     />
                     <DashboardCard 
@@ -1263,15 +1263,15 @@ export default function AdminPanel() {
                     <DashboardCard 
                       title="Partner Brands" 
                       value={stats.ecommerce?.brands || 0} 
-                      icon={<SlidersHorizontal className="text-[#2796a9]" />} 
-                      color="from-[#2796a9]/10 to-[#2796a9]/5 border-[#2796a9]/10"
+                      icon={<SlidersHorizontal className="text-[#0F4C81]" />} 
+                      color="from-[#0F4C81]/10 to-[#0F4C81]/5 border-[#0F4C81]/10"
                       onClick={() => setActiveTab('ecommCustomize')}
                     />
                     <DashboardCard 
                       title="Quote Requests" 
                       value={stats.ecommerce?.orders || 0} 
-                      icon={<FileText className="text-emerald-400" />} 
-                      color="from-emerald-500/10 to-emerald-500/5 border-emerald-500/10"
+                      icon={<FileText className="text-green-600" />} 
+                      color="from-green-600/10 to-green-600/5 border-green-600/10"
                       onClick={() => setActiveTab('orders')}
                     />
                   </div>
@@ -1279,16 +1279,16 @@ export default function AdminPanel() {
                   {/* Activity Trends and Top Products Charts */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Activity Trends Chart */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
-                      <h3 className="font-bold text-lg text-white">Activity Trends (Last 30 Days)</h3>
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-4">
+                      <h3 className="font-bold text-lg text-slate-800">Activity Trends (Last 30 Days)</h3>
                       <div className="h-64 w-full">
                         {stats.trends?.activityTrends ? (
                           <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={stats.trends.activityTrends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                              <XAxis dataKey="date" stroke="#ffffff50" fontSize={10} />
-                              <YAxis stroke="#ffffff50" fontSize={10} />
-                              <Tooltip contentStyle={{ backgroundColor: '#02050c', borderColor: '#ffffff20', borderRadius: '8px' }} />
+                              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                              <XAxis dataKey="date" stroke="#64748b" fontSize={10} />
+                              <YAxis stroke="#64748b" fontSize={10} />
+                              <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px' }} />
                               <Line type="monotone" dataKey="orders" name="Quotation Requests" stroke="#0ae7f0" strokeWidth={2} dot={false} />
                               <Line type="monotone" dataKey="inquiries" name="General Inquiries" stroke="#f59e0b" strokeWidth={2} dot={false} />
                             </LineChart>
@@ -1300,17 +1300,17 @@ export default function AdminPanel() {
                     </div>
 
                     {/* Top Products Chart */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
-                      <h3 className="font-bold text-lg text-white">Most Requested Products</h3>
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-4">
+                      <h3 className="font-bold text-lg text-slate-800">Most Requested Products</h3>
                       <div className="h-64 w-full">
                         {stats.trends?.topProducts?.length > 0 ? (
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={stats.trends.topProducts} margin={{ top: 10, right: 10, left: 10, bottom: 0 }} layout="vertical">
-                              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" horizontal={true} vertical={false} />
-                              <XAxis type="number" stroke="#ffffff50" fontSize={10} />
-                              <YAxis type="category" dataKey="name" stroke="#ffffff50" fontSize={9} width={140} tick={{fill: '#ffffff80'}} tickFormatter={(value) => value.length > 22 ? value.substring(0, 22) + '...' : value} />
-                              <Tooltip contentStyle={{ backgroundColor: '#02050c', borderColor: '#ffffff20', borderRadius: '8px', color: '#fff' }} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
-                              <Bar dataKey="quantity" name="Quantity Requested" fill="#2796a9" radius={[0, 4, 4, 0]} barSize={20} />
+                              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={true} vertical={false} />
+                              <XAxis type="number" stroke="#64748b" fontSize={10} />
+                              <YAxis type="category" dataKey="name" stroke="#64748b" fontSize={9} width={140} tick={{fill: '#334155'}} tickFormatter={(value) => value.length > 22 ? value.substring(0, 22) + '...' : value} />
+                              <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px', color: '#1e293b' }} cursor={{fill: 'rgba(0,0,0,0.05)'}} />
+                              <Bar dataKey="quantity" name="Quantity Requested" fill="#0F4C81" radius={[0, 4, 4, 0]} barSize={20} />
                             </BarChart>
                           </ResponsiveContainer>
                         ) : (
@@ -1323,33 +1323,33 @@ export default function AdminPanel() {
                   {/* Quick Activity Lists / Overview */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Recent Inquiries Panel */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-4">
                       <div className="flex justify-between items-center">
                         <h3 className="font-bold text-lg">Unread Inquiries Inbox</h3>
-                        <button onClick={() => setActiveTab('inquiries')} className="text-xs text-[#2796a9] hover:underline">View All</button>
+                        <button onClick={() => setActiveTab('inquiries')} className="text-xs text-[#0F4C81] hover:underline">View All</button>
                       </div>
                       
                       <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-1">
                         {inquiries.filter(i => !i.read).slice(0, 5).map(inq => (
-                          <div key={inq._id} className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center gap-4">
+                          <div key={inq._id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center gap-4">
                             <div className="flex flex-col overflow-hidden">
                               <span className="font-semibold text-sm truncate">{inq.name}</span>
-                              <span className="text-xs text-white/50 truncate mb-1">{inq.email || inq.phone}</span>
-                              <p className="text-xs text-white/70 truncate">{inq.message}</p>
+                              <span className="text-xs text-slate-500 truncate mb-1">{inq.email || inq.phone}</span>
+                              <p className="text-xs text-slate-600 truncate">{inq.message}</p>
                             </div>
                             <button 
                               onClick={() => {
                                 setViewingInquiry(inq);
                                 setActiveTab('inquiries');
                               }}
-                              className="px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-semibold shrink-0 transition-colors cursor-pointer"
+                              className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold shrink-0 transition-colors cursor-pointer"
                             >
                               Open
                             </button>
                           </div>
                         ))}
                         {inquiries.filter(i => !i.read).length === 0 && (
-                          <div className="text-center py-8 text-white/40 text-sm">
+                          <div className="text-center py-8 text-slate-500 text-sm">
                             No unread inquiries. All caught up!
                           </div>
                         )}
@@ -1357,34 +1357,34 @@ export default function AdminPanel() {
                     </div>
 
                     {/* Fast Stats verification */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-6">
                       <h3 className="font-bold text-lg">System & Database Status</h3>
-                      <div className="flex flex-col gap-4 text-sm font-light text-white/70">
-                        <div className="flex justify-between border-b border-white/5 pb-2">
+                      <div className="flex flex-col gap-4 text-sm font-light text-slate-600">
+                        <div className="flex justify-between border-b border-slate-200 pb-2">
                           <span>Segregated Databases Connectors</span>
-                          <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Active
+                          <span className="text-green-600 font-semibold flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> Active
                           </span>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
+                        <div className="flex justify-between border-b border-slate-200 pb-2">
                           <span>Admin DB Connection (cts_admin)</span>
-                          <span className="font-semibold text-white">Connected</span>
+                          <span className="font-semibold text-slate-800">Connected</span>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
+                        <div className="flex justify-between border-b border-slate-200 pb-2">
                           <span>Portfolio DB Connection (cts_portfolio)</span>
-                          <span className="font-semibold text-white">Connected</span>
+                          <span className="font-semibold text-slate-800">Connected</span>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
+                        <div className="flex justify-between border-b border-slate-200 pb-2">
                           <span>E-commerce DB Connection (cts_ecomm)</span>
-                          <span className="font-semibold text-white">Connected</span>
+                          <span className="font-semibold text-slate-800">Connected</span>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
+                        <div className="flex justify-between border-b border-slate-200 pb-2">
                           <span>Registered Admin Users</span>
-                          <span className="font-semibold text-white">{stats.admin.users}</span>
+                          <span className="font-semibold text-slate-800">{stats.admin.users}</span>
                         </div>
                         <div className="flex justify-between pb-1">
                           <span>Total DB Entities Managed</span>
-                          <span className="font-semibold text-[#2796a9]">
+                          <span className="font-semibold text-[#0F4C81]">
                             {stats.portfolio.inquiries + 
                              stats.portfolio.activities + 
                              stats.portfolio.services + 
@@ -1398,15 +1398,15 @@ export default function AdminPanel() {
                   </div>
 
                   {/* B2B Procurement & Quotations Insights Panel */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mt-2">
-                    <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 mt-2">
+                    <div className="flex justify-between items-center border-b border-slate-200 pb-3">
                       <div>
-                        <h3 className="font-bold text-lg text-[#2796a9]">B2B RFQ Sales Pipeline Insights</h3>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Overview of live customer RFQ requests, status distribution, and sales worksheets.</p>
+                        <h3 className="font-bold text-lg text-[#0F4C81]">B2B RFQ Sales Pipeline Insights</h3>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Overview of live customer RFQ requests, status distribution, and sales worksheets.</p>
                       </div>
                       <button 
                         onClick={() => setActiveTab('orders')} 
-                        className="px-4 py-2 bg-[#2796a9]/10 hover:bg-[#2796a9] text-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#2796a9]/20 cursor-pointer"
+                        className="px-4 py-2 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 cursor-pointer"
                       >
                         View All Quotes ({ordersList.length})
                       </button>
@@ -1414,15 +1414,15 @@ export default function AdminPanel() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
                       {/* Pipeline breakdown */}
-                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
-                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">RFQ Status Pipeline</span>
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">RFQ Status Pipeline</span>
                         <div className="flex flex-col gap-2 mt-3">
                           {[
                             { name: 'Pending Review', status: 'Pending', color: 'bg-yellow-500' },
-                            { name: 'Approved / Priced', status: 'Approved', color: 'bg-emerald-400' },
+                            { name: 'Approved / Priced', status: 'Approved', color: 'bg-green-600' },
                             { name: 'Processing', status: 'Processing', color: 'bg-blue-400' },
-                            { name: 'Completed', status: 'Completed', color: 'bg-[#2796a9]' },
-                            { name: 'Cancelled', status: 'Cancelled', color: 'bg-white/20' }
+                            { name: 'Completed', status: 'Completed', color: 'bg-[#0F4C81]' },
+                            { name: 'Cancelled', status: 'Cancelled', color: 'bg-slate-200' }
                           ].map(st => {
                             const count = ordersList.filter(o => o.status === st.status).length;
                             return (
@@ -1439,24 +1439,24 @@ export default function AdminPanel() {
                       </div>
 
                       {/* Financial statistics */}
-                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
-                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Estimated pipeline value</span>
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Estimated pipeline value</span>
                         <div className="flex flex-col gap-3 mt-3">
                           <div className="flex justify-between items-center text-xs">
                             <span>Pending Quote Requests:</span>
-                            <span className="font-bold font-mono text-yellow-500">
+                            <span className="font-bold font-mono text-yellow-700">
                               {ordersList.filter(o => o.status === 'Pending').length} requests
                             </span>
                           </div>
-                          <div className="flex justify-between items-center text-xs border-b border-white/5 pb-2">
+                          <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-2">
                             <span>Total Priced & Approved Quotes:</span>
-                            <span className="font-bold font-mono text-emerald-400">
+                            <span className="font-bold font-mono text-green-600">
                               {ordersList.filter(o => o.status === 'Approved').length} requests
                             </span>
                           </div>
                           <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] text-white/40">TOTAL PIPELINE CONTRACT VALUE</span>
-                            <span className="text-2xl font-bold font-mono text-white mt-1">
+                            <span className="text-[10px] text-slate-500">TOTAL PIPELINE CONTRACT VALUE</span>
+                            <span className="text-2xl font-bold font-mono text-slate-800 mt-1">
                               ₹{ordersList.reduce((acc, order) => {
                                 const subtotal = (order.items || []).reduce((sum, it) => sum + (it.quantity * (it.unitPrice || 0)), 0);
                                 const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
@@ -1468,28 +1468,28 @@ export default function AdminPanel() {
                       </div>
 
                       {/* Recent quote list */}
-                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
-                        <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Latest B2B RFQs</span>
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-2">
+                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Latest B2B RFQs</span>
                         <div className="flex flex-col gap-2 mt-2 max-h-[160px] overflow-y-auto pr-1">
                           {ordersList.filter(o => !o.adminComments && o.status !== 'Approved').slice(0, 3).map(order => (
-                            <div key={order._id} className="p-2 bg-slate-950/40 rounded border border-white/5 flex justify-between items-center gap-3 text-[11px]">
+                            <div key={order._id} className="p-2 bg-white shadow-sm rounded border border-slate-200 flex justify-between items-center gap-3 text-[11px]">
                               <div className="flex flex-col truncate">
-                                <span className="font-bold font-mono text-white">{order.referenceId}</span>
-                                <span className="text-white/45 truncate">{order.customerDetails?.name} • {order.customerDetails?.company || 'No Company'}</span>
+                                <span className="font-bold font-mono text-slate-800">{order.referenceId}</span>
+                                <span className="text-slate-500 truncate">{order.customerDetails?.name} • {order.customerDetails?.company || 'No Company'}</span>
                               </div>
                               <button
                                 onClick={() => {
                                   setSelectedItem(order);
                                   setActiveModal('edit_order_ecomm');
                                 }}
-                                className="px-2.5 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded text-[10px] font-bold shrink-0 transition-colors cursor-pointer"
+                                className="px-2.5 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded text-[10px] font-bold shrink-0 transition-colors cursor-pointer"
                               >
                                 View RFQ
                               </button>
                             </div>
                           ))}
                           {ordersList.length === 0 && (
-                            <div className="text-center py-6 text-white/30 text-xs">
+                            <div className="text-center py-6 text-slate-600 text-xs">
                               No quote inquiries received yet.
                             </div>
                           )}
@@ -1502,14 +1502,14 @@ export default function AdminPanel() {
 
               {/* USERS TAB */}
               {activeTab === 'users' && (
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+                <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-xl">
                   <div className="flex justify-between items-center mb-8">
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
                         <Users size={24} className="text-[#04667b]" />
                         Storefront Customers
                       </h3>
-                      <p className="text-slate-400 text-sm">Manage registered eCommerce customer accounts.</p>
+                      <p className="text-slate-600 text-sm">Manage registered eCommerce customer accounts.</p>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="relative">
@@ -1518,11 +1518,11 @@ export default function AdminPanel() {
                           placeholder="Search users..."
                           value={userSearch}
                           onChange={(e) => setUserSearch(e.target.value)}
-                          className="px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-full text-sm text-white focus:border-[#2796a9] outline-none w-64 pr-10"
+                          className="px-4 py-2.5 bg-[#F5F7FA] border border-slate-200 rounded-full text-sm text-slate-800 focus:border-[#0F4C81] outline-none w-64 pr-10"
                         />
-                        <Search size={16} className="absolute right-3 top-3 text-slate-400" />
+                        <Search size={16} className="absolute right-3 top-3 text-slate-600" />
                       </div>
-                      <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#04667b] hover:bg-[#2796a9] text-white text-sm font-bold rounded-full shadow-lg transition-colors">
+                      <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#04667b] hover:bg-[#0F4C81] text-slate-800 text-sm font-bold rounded-full shadow-lg transition-colors">
                         Send Newsletter
                       </button>
                       <div className="text-sm font-semibold text-[#04667b] bg-[#04667b]/10 px-4 py-2 rounded-full border border-[#04667b]/20 flex items-center">
@@ -1532,16 +1532,16 @@ export default function AdminPanel() {
                   </div>
 
                   {storeCustomers.length === 0 ? (
-                    <div className="text-center py-16 bg-slate-950/50 rounded-xl border border-dashed border-slate-800">
+                    <div className="text-center py-16 bg-white shadow-sm rounded-xl border border-dashed border-slate-200">
                       <Users size={48} className="mx-auto text-slate-700 mb-4" />
-                      <h4 className="text-white font-bold mb-2">No Customers Found</h4>
+                      <h4 className="text-slate-800 font-bold mb-2">No Customers Found</h4>
                       <p className="text-slate-500 text-sm">No users have signed up on the storefront yet.</p>
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse">
                         <thead>
-                          <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500 bg-slate-950/50">
+                          <tr className="border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 bg-white shadow-sm">
                             <th className="p-4 font-bold">Username</th>
                             <th className="p-4 font-bold">Email</th>
                             <th className="p-4 font-bold">Company</th>
@@ -1549,7 +1549,7 @@ export default function AdminPanel() {
                             <th className="p-4 font-bold text-center">Actions</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-800/50">
+                        <tbody className="divide-y divide-slate-200/50">
                           {storeCustomers
                             .filter(c => 
                               (c.username || '').toLowerCase().includes(userSearch.toLowerCase()) || 
@@ -1557,14 +1557,14 @@ export default function AdminPanel() {
                               (c.companyName || '').toLowerCase().includes(userSearch.toLowerCase())
                             )
                             .map((user) => (
-                            <tr key={user._id} className="hover:bg-slate-800/20 transition-colors cursor-pointer" onClick={() => handleViewHistory(user.email)}>
+                            <tr key={user._id} className="hover:bg-white shadow-lg/20 transition-colors cursor-pointer" onClick={() => handleViewHistory(user.email)}>
                               <td className="p-4">
-                                <div className="font-bold text-slate-200">{user.username}</div>
+                                <div className="font-bold text-slate-800">{user.username}</div>
                                 <div className="text-[10px] text-slate-500 mt-1">Joined: {new Date(user.createdAt).toLocaleDateString()}</div>
                               </td>
-                              <td className="p-4 font-medium text-slate-300">{user.email}</td>
-                              <td className="p-4 text-slate-400">{user.companyName || '-'}</td>
-                              <td className="p-4 text-slate-400">{user.phone || '-'}</td>
+                              <td className="p-4 font-medium text-slate-700">{user.email}</td>
+                              <td className="p-4 text-slate-600">{user.companyName || '-'}</td>
+                              <td className="p-4 text-slate-600">{user.phone || '-'}</td>
                               <td className="p-4">
                                 <div className="flex items-center justify-center">
                                   <button
@@ -1589,7 +1589,7 @@ export default function AdminPanel() {
               {activeTab === 'inquiries' && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                   {/* Inquiry List */}
-                  <div className="lg:col-span-2 bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
+                  <div className="lg:col-span-2 bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-4">
                     <h3 className="font-bold text-lg mb-2">Received Inquiries Inbox</h3>
                     
                     <div className="flex flex-col gap-3">
@@ -1597,33 +1597,33 @@ export default function AdminPanel() {
                         <div 
                           key={inq._id} 
                           onClick={() => setViewingInquiry(inq)}
-                          className={`p-4 rounded-xl border transition-all duration-300 flex justify-between items-center gap-4 cursor-pointer hover:border-[#2796a9]/30 ${
+                          className={`p-4 rounded-xl border transition-all duration-300 flex justify-between items-center gap-4 cursor-pointer hover:border-[#0F4C81]/30 ${
                             viewingInquiry?._id === inq._id 
-                              ? 'bg-[#2796a9]/10 border-[#2796a9]/50' 
+                              ? 'bg-[#0F4C81]/10 border-[#0F4C81]/50' 
                               : inq.read 
-                                ? 'bg-white/5 border-white/5 opacity-70' 
-                                : 'bg-white/10 border-white/10 shadow-[0_0_10px_rgba(39,150,169,0.05)]'
+                                ? 'bg-slate-50 border-slate-200 opacity-70' 
+                                : 'bg-slate-100 border-slate-200 shadow-[0_0_10px_rgba(39,150,169,0.05)]'
                           }`}
                         >
                           <div className="flex flex-col overflow-hidden">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-sm truncate">{inq.name}</span>
                               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                                inq.read ? 'bg-emerald-500/10 text-emerald-400' : 'bg-orange-500/10 text-orange-400'
+                                inq.read ? 'bg-green-600/10 text-green-600' : 'bg-orange-500/10 text-orange-400'
                               }`}>
                                 {inq.read ? 'Read' : 'Unread'}
                               </span>
                             </div>
-                            <span className="text-xs text-white/40 truncate mt-0.5">{inq.email || inq.phone}</span>
-                            <p className="text-xs text-white/70 truncate mt-2">{inq.message}</p>
+                            <span className="text-xs text-slate-500 truncate mt-0.5">{inq.email || inq.phone}</span>
+                            <p className="text-xs text-slate-600 truncate mt-2">{inq.message}</p>
                           </div>
                           <div className="flex gap-2 shrink-0" onClick={e => e.stopPropagation()}>
                             <button
                               onClick={() => handleToggleInquiryRead(inq._id, inq.read)}
                               className={`p-2 rounded-lg border transition-colors cursor-pointer ${
                                 inq.read 
-                                  ? 'bg-orange-500/10 border-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-white' 
-                                  : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white'
+                                  ? 'bg-orange-500/10 border-orange-500/20 text-orange-400 hover:bg-orange-500 hover:text-slate-800' 
+                                  : 'bg-green-600/10 border-green-600/20 text-green-600 hover:bg-green-600 hover:text-slate-800'
                               }`}
                               title={inq.read ? 'Mark as Unread' : 'Mark as Read'}
                             >
@@ -1631,7 +1631,7 @@ export default function AdminPanel() {
                             </button>
                             <button
                               onClick={() => handleDeleteInquiry(inq._id)}
-                              className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                              className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                               title="Delete Inquiry"
                             >
                               <Trash2 size={16} />
@@ -1640,7 +1640,7 @@ export default function AdminPanel() {
                         </div>
                       ))}
                       {inquiries.length === 0 && (
-                        <div className="text-center py-12 text-white/30 text-sm">
+                        <div className="text-center py-12 text-slate-600 text-sm">
                           No inquiries received yet.
                         </div>
                       )}
@@ -1648,48 +1648,48 @@ export default function AdminPanel() {
                   </div>
 
                   {/* Inquiry Detail Panel */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 sticky top-8">
-                    <h3 className="font-bold text-lg border-b border-white/5 pb-4">Inquiry Details</h3>
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 sticky top-8">
+                    <h3 className="font-bold text-lg border-b border-slate-200 pb-4">Inquiry Details</h3>
                     {viewingInquiry ? (
                       <div className="flex flex-col gap-4 text-sm">
                         <div>
-                          <span className="text-xs text-white/40 block mb-1">Name:</span>
-                          <span className="font-semibold text-white text-base">{viewingInquiry.name}</span>
+                          <span className="text-xs text-slate-500 block mb-1">Name:</span>
+                          <span className="font-semibold text-slate-800 text-base">{viewingInquiry.name}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-xs text-white/40 block mb-1">Email:</span>
-                            <span className="font-medium text-white truncate block">{viewingInquiry.email || 'N/A'}</span>
+                            <span className="text-xs text-slate-500 block mb-1">Email:</span>
+                            <span className="font-medium text-slate-800 truncate block">{viewingInquiry.email || 'N/A'}</span>
                           </div>
                           <div>
-                            <span className="text-xs text-white/40 block mb-1">Phone:</span>
-                            <span className="font-medium text-white block">{viewingInquiry.phone}</span>
+                            <span className="text-xs text-slate-500 block mb-1">Phone:</span>
+                            <span className="font-medium text-slate-800 block">{viewingInquiry.phone}</span>
                           </div>
                         </div>
                         <div>
-                          <span className="text-xs text-white/40 block mb-1">Received Date:</span>
-                          <span className="font-light text-white/80">{new Date(viewingInquiry.createdAt).toLocaleString()}</span>
+                          <span className="text-xs text-slate-500 block mb-1">Received Date:</span>
+                          <span className="font-light text-slate-700">{new Date(viewingInquiry.createdAt).toLocaleString()}</span>
                         </div>
                         <div>
-                          <span className="text-xs text-white/40 block mb-1">Message:</span>
-                          <div className="p-4 bg-white/5 border border-white/5 rounded-xl text-white/80 leading-relaxed font-light min-h-[120px] whitespace-pre-line">
+                          <span className="text-xs text-slate-500 block mb-1">Message:</span>
+                          <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 leading-relaxed font-light min-h-[120px] whitespace-pre-line">
                             {viewingInquiry.message}
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-2">
-                          <label className="text-xs text-white/40 font-semibold uppercase">Send Reply</label>
+                        <div className="mt-4 pt-4 border-t border-slate-200 flex flex-col gap-2">
+                          <label className="text-xs text-slate-500 font-semibold uppercase">Send Reply</label>
                           <textarea
                             value={replyMessage}
                             onChange={e => setReplyMessage(e.target.value)}
                             placeholder="Type your reply here... (Will be emailed to the user and CC'd to company)"
                             rows={4}
-                            className="w-full bg-slate-800 border border-white/10 rounded-xl p-3 text-sm text-white focus:border-[#2796a9] outline-none resize-none"
+                            className="w-full bg-white shadow-lg border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:border-[#0F4C81] outline-none resize-none"
                           />
                           <button
                             onClick={handleReplyToInquiry}
                             disabled={submittingReply || !replyMessage.trim()}
-                            className="self-end px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl transition-all disabled:opacity-50"
+                            className="self-end px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-green-600 border border-green-600/30 text-xs font-bold rounded-xl transition-all disabled:opacity-50"
                           >
                             {submittingReply ? 'Sending...' : 'Send Reply'}
                           </button>
@@ -1698,14 +1698,14 @@ export default function AdminPanel() {
                         <div className="flex gap-3 mt-2">
                           <button
                             onClick={() => handleToggleInquiryRead(viewingInquiry._id, viewingInquiry.read)}
-                            className="flex-1 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="flex-1 py-2.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             {viewingInquiry.read ? <XCircle size={14} /> : <CheckCircle size={14} />}
                             {viewingInquiry.read ? 'Mark Unread' : 'Mark Read'}
                           </button>
                           <button
                             onClick={() => handleDeleteInquiry(viewingInquiry._id)}
-                            className="py-2.5 px-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/20 hover:border-red-500 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="py-2.5 px-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-800 border border-red-500/20 hover:border-red-500 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             <Trash2 size={14} />
                             <span>Delete</span>
@@ -1713,7 +1713,7 @@ export default function AdminPanel() {
                         </div>
                       </div>
                     ) : (
-                      <div className="text-center py-16 text-white/30 text-sm flex flex-col items-center gap-2">
+                      <div className="text-center py-16 text-slate-600 text-sm flex flex-col items-center gap-2">
                         <FileText size={32} className="opacity-50" />
                         <span>Select an inquiry from the left to read details</span>
                       </div>
@@ -1732,17 +1732,17 @@ export default function AdminPanel() {
                         setActivityForm({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
                         setActiveModal('create_activity');
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
                     >
                       <Plus size={16} />
                       <span>Add Activity</span>
                     </button>
                   </div>
 
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden">
                     <table className="w-full text-left text-sm border-collapse">
                       <thead>
-                        <tr className="bg-white/5 border-b border-white/5 text-white/50 text-xs uppercase tracking-wider">
+                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
                           <th className="p-4">Image & Preview</th>
                           <th className="p-4">Title</th>
                           <th className="p-4">Subtitle</th>
@@ -1752,15 +1752,15 @@ export default function AdminPanel() {
                       </thead>
                       <tbody>
                         {activities.map(act => (
-                          <tr key={act._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                          <tr key={act._id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                             <td className="p-4">
-                              <div className="w-24 h-14 rounded-lg overflow-hidden relative border border-white/10 flex items-center justify-center" style={{ background: act.gradient }}>
+                              <div className="w-24 h-14 rounded-lg overflow-hidden relative border border-slate-200 flex items-center justify-center" style={{ background: act.gradient }}>
                                 <img src={act.image} alt={act.title} className="w-full h-full object-cover opacity-60" onError={(e) => {e.target.style.display='none';}} />
                               </div>
                             </td>
-                            <td className="p-4 font-bold text-white max-w-[200px] truncate">{act.title}</td>
-                            <td className="p-4 font-light text-white/70 max-w-[350px] truncate">{act.subtitle}</td>
-                            <td className="p-4 text-xs font-light text-white/40">{new Date(act.createdAt).toLocaleDateString()}</td>
+                            <td className="p-4 font-bold text-slate-800 max-w-[200px] truncate">{act.title}</td>
+                            <td className="p-4 font-light text-slate-600 max-w-[350px] truncate">{act.subtitle}</td>
+                            <td className="p-4 text-xs font-light text-slate-500">{new Date(act.createdAt).toLocaleDateString()}</td>
                             <td className="p-4 text-right">
                               <div className="flex gap-2 justify-end">
                                 <button
@@ -1774,14 +1774,14 @@ export default function AdminPanel() {
                                     });
                                     setActiveModal('edit_activity');
                                   }}
-                                  className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                                  className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                                   title="Edit"
                                 >
                                   <Edit size={14} />
                                 </button>
                                 <button
                                   onClick={() => handleDeleteActivity(act._id)}
-                                  className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                                  className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                                   title="Delete"
                                 >
                                   <Trash2 size={14} />
@@ -1792,7 +1792,7 @@ export default function AdminPanel() {
                         ))}
                         {activities.length === 0 && (
                           <tr>
-                            <td colSpan="5" className="text-center py-12 text-white/30 text-sm">
+                            <td colSpan="5" className="text-center py-12 text-slate-600 text-sm">
                               No activities found. Please add one.
                             </td>
                           </tr>
@@ -1813,17 +1813,17 @@ export default function AdminPanel() {
                         setServiceForm({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
                         setActiveModal('create_service');
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
                     >
                       <Plus size={16} />
                       <span>Add Capability</span>
                     </button>
                   </div>
 
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden">
                     <table className="w-full text-left text-sm border-collapse">
                       <thead>
-                        <tr className="bg-white/5 border-b border-white/5 text-white/50 text-xs uppercase tracking-wider">
+                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
                           <th className="p-4">Icon & Preview</th>
                           <th className="p-4">Title</th>
                           <th className="p-4">Description</th>
@@ -1835,20 +1835,20 @@ export default function AdminPanel() {
                         {services.map(srv => {
                           const IconComponent = iconMap[srv.icon] || Settings;
                           return (
-                            <tr key={srv._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <tr key={srv._id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                               <td className="p-4">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#2796a9]">
+                                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[#0F4C81]">
                                     <IconComponent size={20} />
                                   </div>
-                                  <div className="w-14 h-10 rounded overflow-hidden border border-white/5 bg-slate-950">
+                                  <div className="w-14 h-10 rounded overflow-hidden border border-slate-200 bg-[#F5F7FA]">
                                     <img src={srv.image} alt={srv.title} className="w-full h-full object-cover" onError={(e) => {e.target.style.display='none';}} />
                                   </div>
                                 </div>
                               </td>
-                              <td className="p-4 font-bold text-white max-w-[200px] truncate">{srv.title}</td>
-                              <td className="p-4 font-light text-white/70 max-w-[400px] truncate">{srv.desc}</td>
-                              <td className="p-4 text-xs font-light text-white/40">{new Date(srv.createdAt).toLocaleDateString()}</td>
+                              <td className="p-4 font-bold text-slate-800 max-w-[200px] truncate">{srv.title}</td>
+                              <td className="p-4 font-light text-slate-600 max-w-[400px] truncate">{srv.desc}</td>
+                              <td className="p-4 text-xs font-light text-slate-500">{new Date(srv.createdAt).toLocaleDateString()}</td>
                               <td className="p-4 text-right">
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -1862,14 +1862,14 @@ export default function AdminPanel() {
                                       });
                                       setActiveModal('edit_service');
                                     }}
-                                    className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                                    className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                                     title="Edit"
                                   >
                                     <Edit size={14} />
                                   </button>
                                   <button
                                     onClick={() => handleDeleteService(srv._id)}
-                                    className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                                    className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                                     title="Delete"
                                   >
                                     <Trash2 size={14} />
@@ -1881,7 +1881,7 @@ export default function AdminPanel() {
                         })}
                         {services.length === 0 && (
                           <tr>
-                            <td colSpan="5" className="text-center py-12 text-white/30 text-sm">
+                            <td colSpan="5" className="text-center py-12 text-slate-600 text-sm">
                               No products or capabilities found. Please add one.
                             </td>
                           </tr>
@@ -1897,7 +1897,7 @@ export default function AdminPanel() {
                 <form onSubmit={handleUpdateConfig} className="flex flex-col gap-8">
                   {/* Status Notification Alerts */}
                   {saveSuccess && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-xl text-sm font-semibold animate-pulse">
+                    <div className="bg-green-600/10 border border-green-600/20 text-green-600 p-4 rounded-xl text-sm font-semibold animate-pulse">
                       {saveSuccess}
                     </div>
                   )}
@@ -1908,14 +1908,14 @@ export default function AdminPanel() {
                   )}
 
                   {/* Actions Header Bar */}
-                  <div className="flex justify-between items-center bg-slate-900/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                  <div className="flex justify-between items-center bg-slate-200 p-4 rounded-2xl border border-slate-200 backdrop-blur-sm">
                     <div className="flex flex-col">
                       <h3 className="font-bold text-lg">Site Settings & Landing Page Copy</h3>
-                      <p className="text-xs text-white/50 font-light mt-0.5">Customize copy and branding assets in real-time. Make sure to click save to push updates live.</p>
+                      <p className="text-xs text-slate-500 font-light mt-0.5">Customize copy and branding assets in real-time. Make sure to click save to push updates live.</p>
                     </div>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-white"
+                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-slate-800"
                     >
                       <CheckCircle size={16} />
                       <span>Save All Changes</span>
@@ -1925,82 +1925,82 @@ export default function AdminPanel() {
                   {/* Grid 1: General Copy & Journey Milestones */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                     {/* General Copy Card */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                      <div className="border-b border-white/5 pb-3">
-                        <h4 className="font-bold text-base text-[#2796a9]">General Section Copy</h4>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Edit main titles and descriptions shown on landing page.</p>
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-slate-200 pb-3">
+                        <h4 className="font-bold text-base text-[#0F4C81]">General Section Copy</h4>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Edit main titles and descriptions shown on landing page.</p>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Hero Headline Title</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Hero Headline Title</label>
                         <input
                           type="text"
                           value={customizeForm.heroTitle}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, heroTitle: e.target.value }))}
                           placeholder="Precision & Reliability"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-medium"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-medium"
                           required
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Hero Subtitle</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Hero Subtitle</label>
                         <textarea
                           value={customizeForm.heroSubtitle}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, heroSubtitle: e.target.value }))}
                           placeholder="Hero section subtitle description copy..."
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none min-h-[100px] text-white transition-all font-light resize-none leading-relaxed"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none min-h-[100px] text-slate-800 transition-all font-light resize-none leading-relaxed"
                           required
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">About Core Description</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">About Core Description</label>
                         <textarea
                           value={customizeForm.aboutText}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, aboutText: e.target.value }))}
                           placeholder="About section core summary/description copy..."
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none min-h-[110px] text-white transition-all font-light resize-none leading-relaxed"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none min-h-[110px] text-slate-800 transition-all font-light resize-none leading-relaxed"
                           required
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">About Title Header (Light text)</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">About Title Header (Light text)</label>
                         <input
                           type="text"
                           value={customizeForm.aboutHeaderLight}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, aboutHeaderLight: e.target.value }))}
                           placeholder="Powering Industries with"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-medium"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-medium"
                           required
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">About Title Header (Bold text)</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">About Title Header (Bold text)</label>
                         <input
                           type="text"
                           value={customizeForm.aboutHeaderBold}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, aboutHeaderBold: e.target.value }))}
                           placeholder="Precision & Reliability"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-medium"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-medium"
                           required
                         />
                       </div>
                     </div>
 
                     {/* Timeline Journey Milestones Card */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                      <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                         <div>
-                          <h4 className="font-bold text-base text-[#2796a9]">Our Journey Milestones</h4>
-                          <p className="text-xs text-white/40 font-light mt-0.5">Add, edit, or remove milestones in the company history timeline.</p>
+                          <h4 className="font-bold text-base text-[#0F4C81]">Our Journey Milestones</h4>
+                          <p className="text-xs text-slate-500 font-light mt-0.5">Add, edit, or remove milestones in the company history timeline.</p>
                         </div>
                         <button
                           type="button"
                           onClick={handleAddJourney}
-                          className="px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Row</span>
@@ -2009,13 +2009,13 @@ export default function AdminPanel() {
 
                       <div className="flex flex-col gap-3 max-h-[360px] overflow-y-auto pr-1">
                         {customizeForm.journey.map((item, idx) => (
-                          <div key={idx} className="flex gap-3 items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                          <div key={idx} className="flex gap-3 items-center bg-slate-50 p-3 rounded-xl border border-slate-200">
                             <input
                               type="text"
                               value={item.year}
                               onChange={e => handleUpdateJourney(idx, 'year', e.target.value)}
                               placeholder="Year (e.g. 2021)"
-                              className="w-24 bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white transition-all font-bold text-center"
+                              className="w-24 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 transition-all font-bold text-center"
                               required
                             />
                             <input
@@ -2023,13 +2023,13 @@ export default function AdminPanel() {
                               value={item.event}
                               onChange={e => handleUpdateJourney(idx, 'event', e.target.value)}
                               placeholder="Describe milestone event..."
-                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white transition-all"
+                              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 transition-all"
                               required
                             />
                             <button
                               type="button"
                               onClick={() => handleRemoveJourney(idx)}
-                              className="p-1.5 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/10 hover:border-red-500 rounded-lg transition-colors cursor-pointer shrink-0"
+                              className="p-1.5 bg-red-500/10 hover:bg-red-500 hover:text-slate-800 text-red-400 border border-red-500/10 hover:border-red-500 rounded-lg transition-colors cursor-pointer shrink-0"
                               title="Delete Row"
                             >
                               <Trash2 size={14} />
@@ -2037,7 +2037,7 @@ export default function AdminPanel() {
                           </div>
                         ))}
                         {customizeForm.journey.length === 0 && (
-                          <div className="text-center py-12 text-white/30 text-xs">
+                          <div className="text-center py-12 text-slate-600 text-xs">
                             No journey milestones added yet. Click Add Row.
                           </div>
                         )}
@@ -2046,88 +2046,88 @@ export default function AdminPanel() {
                   </div>
 
                   {/* SEO / Meta Tags Settings Card */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                    <div className="border-b border-white/5 pb-3">
-                      <h4 className="font-bold text-base text-[#2796a9]">SEO / Meta Tags Settings</h4>
-                      <p className="text-xs text-white/40 font-light mt-0.5">Edit the website's Title, Meta Description, and Social Media preview images to improve Google ranking.</p>
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-slate-200 pb-3">
+                      <h4 className="font-bold text-base text-[#0F4C81]">SEO / Meta Tags Settings</h4>
+                      <p className="text-xs text-slate-500 font-light mt-0.5">Edit the website's Title, Meta Description, and Social Media preview images to improve Google ranking.</p>
                     </div>
 
                     <div className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Meta Title</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Meta Title</label>
                         <input
                           type="text"
                           value={customizeForm.metaTitle || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, metaTitle: e.target.value }))}
                           placeholder="Concept Tools and Services | Industrial Supply & MRO"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Meta Description</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Meta Description</label>
                         <textarea
                           value={customizeForm.metaDescription || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, metaDescription: e.target.value }))}
                           placeholder="Providing reliable industrial tools..."
                           rows={2}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light resize-y"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light resize-y"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Social Preview Image URL (Open Graph)</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Social Preview Image URL (Open Graph)</label>
                         <input
                           type="text"
                           value={customizeForm.metaImage || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, metaImage: e.target.value }))}
                           placeholder="https://yourwebsite.com/preview.jpg"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Cloudinary Settings Card */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                    <div className="border-b border-white/5 pb-3">
-                      <h4 className="font-bold text-base text-[#2796a9]">Cloudinary Settings</h4>
-                      <p className="text-xs text-white/40 font-light mt-0.5">Configure your Cloudinary credentials to enable direct image uploads from this admin panel. Files will be organized under portfolio/e-commerce folders.</p>
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-slate-200 pb-3">
+                      <h4 className="font-bold text-base text-[#0F4C81]">Cloudinary Settings</h4>
+                      <p className="text-xs text-slate-500 font-light mt-0.5">Configure your Cloudinary credentials to enable direct image uploads from this admin panel. Files will be organized under portfolio/e-commerce folders.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Cloudinary Cloud Name</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Cloudinary Cloud Name</label>
                         <input
                           type="text"
                           value={customizeForm.cloudinaryCloudName || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, cloudinaryCloudName: e.target.value }))}
                           placeholder="e.g., dxxabcde"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Unsigned Upload Preset</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Unsigned Upload Preset</label>
                         <input
                           type="text"
                           value={customizeForm.cloudinaryUploadPreset || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, cloudinaryUploadPreset: e.target.value }))}
                           placeholder="e.g., unsigned_preset_name"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all font-light"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Why Choose Us Values Card */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                    <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                    <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                       <div>
-                        <h4 className="font-bold text-base text-[#2796a9]">Why Choose Us (Core Value Cards)</h4>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Customize the value proposition boxes displayed in the About section.</p>
+                        <h4 className="font-bold text-base text-[#0F4C81]">Why Choose Us (Core Value Cards)</h4>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Customize the value proposition boxes displayed in the About section.</p>
                       </div>
                       <button
                         type="button"
                         onClick={handleAddReason}
-                        className="px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                        className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <Plus size={14} />
                         <span>Add Value Card</span>
@@ -2136,12 +2136,12 @@ export default function AdminPanel() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {customizeForm.reasons.map((reason, idx) => (
-                        <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-start group">
+                        <div key={idx} className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 relative items-start group">
                           {/* Remove Card button */}
                           <button
                             type="button"
                             onClick={() => handleRemoveReason(idx)}
-                            className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
+                            className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-800 border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
                             title="Remove Reason Card"
                           >
                             <Trash2 size={12} />
@@ -2149,18 +2149,18 @@ export default function AdminPanel() {
 
                           {/* Left Column: Icon Select */}
                           <div className="flex flex-col gap-2 shrink-0 items-center">
-                            <label className="text-[10px] text-white/40 font-semibold uppercase tracking-wider">Icon</label>
+                            <label className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Icon</label>
                             <select
                               value={reason.icon}
                               onChange={e => handleUpdateReason(idx, 'icon', e.target.value)}
-                              className="bg-slate-800 border border-white/10 rounded-lg p-1.5 text-xs text-white outline-none focus:border-[#2796a9] w-24 text-center"
+                              className="bg-white shadow-lg border border-slate-200 rounded-lg p-1.5 text-xs text-slate-800 outline-none focus:border-[#0F4C81] w-24 text-center"
                             >
                               <option value="ShieldCheck">Shield</option>
                               <option value="Cpu">CPU</option>
                               <option value="ThumbsUp">ThumbsUp</option>
                               <option value="HardHat">Safety</option>
                             </select>
-                            <div className="w-10 h-10 rounded-full bg-slate-800/80 border border-white/10 flex items-center justify-center text-[#2796a9] mt-1">
+                            <div className="w-10 h-10 rounded-full bg-white shadow-lg/80 border border-slate-200 flex items-center justify-center text-[#0F4C81] mt-1">
                               {reason.icon === 'ShieldCheck' && <ShieldCheck size={18} />}
                               {reason.icon === 'Cpu' && <Cpu size={18} />}
                               {reason.icon === 'ThumbsUp' && <ThumbsUp size={18} />}
@@ -2175,21 +2175,21 @@ export default function AdminPanel() {
                               value={reason.title}
                               onChange={e => handleUpdateReason(idx, 'title', e.target.value)}
                               placeholder="Title (e.g. HSE Compliance)"
-                              className="bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-bold transition-all w-full"
+                              className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-bold transition-all w-full"
                               required
                             />
                             <textarea
                               value={reason.desc}
                               onChange={e => handleUpdateReason(idx, 'desc', e.target.value)}
                               placeholder="Description copy detailing why this choice matter..."
-                              className="bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-light transition-all w-full min-h-[48px] resize-none leading-relaxed"
+                              className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-light transition-all w-full min-h-[48px] resize-none leading-relaxed"
                               required
                             />
                           </div>
                         </div>
                       ))}
                       {customizeForm.reasons.length === 0 && (
-                        <div className="col-span-2 text-center py-12 text-white/30 text-xs">
+                        <div className="col-span-2 text-center py-12 text-slate-600 text-xs">
                           No value cards configured. Click Add Value Card to get started.
                         </div>
                       )}
@@ -2199,16 +2199,16 @@ export default function AdminPanel() {
                   {/* Partners & Customers Brand Logo Lists */}
                   <div className="grid grid-cols-1 gap-8">
                     {/* Partners & Customers Section Background Card */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                      <div className="border-b border-white/5 pb-3">
-                        <h4 className="font-bold text-base text-[#2796a9]">Partners & Customers Section Background Gradient</h4>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Customize the radial gradient background of the Partners and Customers sections. You can pick colors visually or type standard Hex/RGB color codes.</p>
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-slate-200 pb-3">
+                        <h4 className="font-bold text-base text-[#0F4C81]">Partners & Customers Section Background Gradient</h4>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Customize the radial gradient background of the Partners and Customers sections. You can pick colors visually or type standard Hex/RGB color codes.</p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Color 1 */}
-                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
-                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Center Color (0%)</label>
+                        <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Center Color (0%)</label>
                           <div className="flex gap-3 items-center">
                             <input 
                               type="color" 
@@ -2221,15 +2221,15 @@ export default function AdminPanel() {
                               value={customizeForm.partnersBgColor1} 
                               onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor1: e.target.value }))}
                               placeholder="#112A4F" 
-                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-mono"
                               required
                             />
                           </div>
                         </div>
 
                         {/* Color 2 */}
-                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
-                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Middle Color (65%)</label>
+                        <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Middle Color (65%)</label>
                           <div className="flex gap-3 items-center">
                             <input 
                               type="color" 
@@ -2242,15 +2242,15 @@ export default function AdminPanel() {
                               value={customizeForm.partnersBgColor2} 
                               onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor2: e.target.value }))}
                               placeholder="#040C19" 
-                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-mono"
                               required
                             />
                           </div>
                         </div>
 
                         {/* Color 3 */}
-                        <div className="flex flex-col gap-2 p-4 bg-white/5 rounded-xl border border-white/5">
-                          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Outer Color (100%)</label>
+                        <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Outer Color (100%)</label>
                           <div className="flex gap-3 items-center">
                             <input 
                               type="color" 
@@ -2263,7 +2263,7 @@ export default function AdminPanel() {
                               value={customizeForm.partnersBgColor3} 
                               onChange={e => setCustomizeForm(prev => ({ ...prev, partnersBgColor3: e.target.value }))}
                               placeholder="#02060C" 
-                              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-mono"
+                              className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-mono"
                               required
                             />
                           </div>
@@ -2272,9 +2272,9 @@ export default function AdminPanel() {
 
                       {/* Live Gradient Preview inside admin */}
                       <div className="flex flex-col gap-2 mt-2">
-                        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Gradient Preview</label>
+                        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Gradient Preview</label>
                         <div 
-                          className="h-20 w-full rounded-xl border border-white/10 shadow-inner flex items-center justify-center font-bold text-xs tracking-wider text-white/70"
+                          className="h-20 w-full rounded-xl border border-slate-200 shadow-inner flex items-center justify-center font-bold text-xs tracking-wider text-slate-600"
                           style={{
                             background: `radial-gradient(ellipse at center, ${customizeForm.partnersBgColor1 || '#112A4F'} 0%, ${customizeForm.partnersBgColor2 || '#040C19'} 65%, ${customizeForm.partnersBgColor3 || '#02060C'} 100%)`
                           }}
@@ -2285,16 +2285,16 @@ export default function AdminPanel() {
                     </div>
 
                     {/* Partners List */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                      <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                         <div>
-                          <h4 className="font-bold text-base text-[#2796a9]">Brand Partner Logos</h4>
-                          <p className="text-xs text-white/40 font-light mt-0.5">Manage companies we partner with logo slider.</p>
+                          <h4 className="font-bold text-base text-[#0F4C81]">Brand Partner Logos</h4>
+                          <p className="text-xs text-slate-500 font-light mt-0.5">Manage companies we partner with logo slider.</p>
                         </div>
                         <button
                           type="button"
                           onClick={handleAddPartner}
-                          className="px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Partner Logo</span>
@@ -2303,19 +2303,19 @@ export default function AdminPanel() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {customizeForm.partners.map((partner, idx) => (
-                          <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-center group">
+                          <div key={idx} className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 relative items-center group">
                             {/* Delete Button */}
                             <button
                               type="button"
                               onClick={() => handleRemovePartner(idx)}
-                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
+                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-800 border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
                               title="Delete Logo Card"
                             >
                               <Trash2 size={12} />
                             </button>
 
                             {/* Logo Preview */}
-                            <div className="w-16 h-16 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
+                            <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
                               <img
                                 src={partner.src}
                                 alt={partner.name}
@@ -2332,7 +2332,7 @@ export default function AdminPanel() {
                                 value={partner.name}
                                 onChange={e => handleUpdatePartner(idx, 'name', e.target.value)}
                                 placeholder="Company Name"
-                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-semibold transition-all w-full"
                                 required
                               />
                               <div className="flex gap-2 items-center">
@@ -2341,10 +2341,10 @@ export default function AdminPanel() {
                                   value={partner.src}
                                   onChange={e => handleUpdatePartner(idx, 'src', e.target.value)}
                                   placeholder="Image Path (e.g. /port/atlas.png)"
-                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `partner-${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -2365,7 +2365,7 @@ export default function AdminPanel() {
                                 </label>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
+                                <span className="text-[10px] text-slate-500 uppercase font-semibold">Scale:</span>
                                 <input
                                   type="number"
                                   step="0.05"
@@ -2373,16 +2373,16 @@ export default function AdminPanel() {
                                   max="5.0"
                                   value={partner.scale ?? ''}
                                   onChange={e => handleUpdatePartner(idx, 'scale', e.target.value)}
-                                  className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
+                                  className="w-16 bg-slate-50 border border-slate-200 rounded-lg px-2 py-0.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 text-center font-mono"
                                   required
                                 />
-                                <span className="text-[10px] text-white/30">(e.g. 1.35)</span>
+                                <span className="text-[10px] text-slate-600">(e.g. 1.35)</span>
                               </div>
                             </div>
                           </div>
                         ))}
                         {customizeForm.partners.length === 0 && (
-                          <div className="col-span-3 text-center py-12 text-white/30 text-xs">
+                          <div className="col-span-3 text-center py-12 text-slate-600 text-xs">
                             No brand partners configured. Click Add Partner Logo.
                           </div>
                         )}
@@ -2390,16 +2390,16 @@ export default function AdminPanel() {
                     </div>
 
                     {/* Customers List */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5">
-                      <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                      <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                         <div>
-                          <h4 className="font-bold text-base text-[#2796a9]">Brand Customer Logos</h4>
-                          <p className="text-xs text-white/40 font-light mt-0.5">Manage prestigious customers logo marquee.</p>
+                          <h4 className="font-bold text-base text-[#0F4C81]">Brand Customer Logos</h4>
+                          <p className="text-xs text-slate-500 font-light mt-0.5">Manage prestigious customers logo marquee.</p>
                         </div>
                         <button
                           type="button"
                           onClick={handleAddCustomer}
-                          className="px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Customer Logo</span>
@@ -2408,19 +2408,19 @@ export default function AdminPanel() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {customizeForm.customers.map((customer, idx) => (
-                          <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-center group">
+                          <div key={idx} className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 relative items-center group">
                             {/* Delete Button */}
                             <button
                               type="button"
                               onClick={() => handleRemoveCustomer(idx)}
-                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
+                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-800 border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
                               title="Delete Logo Card"
                             >
                               <Trash2 size={12} />
                             </button>
 
                             {/* Logo Preview */}
-                            <div className="w-16 h-16 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
+                            <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
                               <img
                                 src={customer.src}
                                 alt={customer.name}
@@ -2437,7 +2437,7 @@ export default function AdminPanel() {
                                 value={customer.name}
                                 onChange={e => handleUpdateCustomer(idx, 'name', e.target.value)}
                                 placeholder="Company Name"
-                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-semibold transition-all w-full"
                                 required
                               />
                               <div className="flex gap-2 items-center">
@@ -2446,10 +2446,10 @@ export default function AdminPanel() {
                                   value={customer.src}
                                   onChange={e => handleUpdateCustomer(idx, 'src', e.target.value)}
                                   placeholder="Image Path (e.g. /port/suzlon.png)"
-                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `customer-${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -2470,7 +2470,7 @@ export default function AdminPanel() {
                                 </label>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
+                                <span className="text-[10px] text-slate-500 uppercase font-semibold">Scale:</span>
                                 <input
                                   type="number"
                                   step="0.05"
@@ -2478,16 +2478,16 @@ export default function AdminPanel() {
                                   max="5.0"
                                   value={customer.scale ?? ''}
                                   onChange={e => handleUpdateCustomer(idx, 'scale', e.target.value)}
-                                  className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
+                                  className="w-16 bg-slate-50 border border-slate-200 rounded-lg px-2 py-0.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 text-center font-mono"
                                   required
                                 />
-                                <span className="text-[10px] text-white/30">(e.g. 1.35)</span>
+                                <span className="text-[10px] text-slate-600">(e.g. 1.35)</span>
                               </div>
                             </div>
                           </div>
                         ))}
                         {customizeForm.customers.length === 0 && (
-                          <div className="col-span-3 text-center py-12 text-white/30 text-xs">
+                          <div className="col-span-3 text-center py-12 text-slate-600 text-xs">
                             No brand customers configured. Click Add Customer Logo.
                           </div>
                         )}
@@ -2503,7 +2503,7 @@ export default function AdminPanel() {
                 <form onSubmit={handleUpdateConfig} className="flex flex-col gap-8">
                   {/* Status Notification Alerts */}
                   {saveSuccess && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-xl text-sm font-semibold animate-pulse">
+                    <div className="bg-green-600/10 border border-green-600/20 text-green-600 p-4 rounded-xl text-sm font-semibold animate-pulse">
                       {saveSuccess}
                     </div>
                   )}
@@ -2514,14 +2514,14 @@ export default function AdminPanel() {
                   )}
 
                   {/* Actions Header Bar */}
-                  <div className="flex justify-between items-center bg-slate-900/20 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                  <div className="flex justify-between items-center bg-slate-200 p-4 rounded-2xl border border-slate-200 backdrop-blur-sm">
                     <div className="flex flex-col">
                       <h3 className="font-bold text-lg">E-Commerce Storefront Customization</h3>
-                      <p className="text-xs text-white/50 font-light mt-0.5">Customize your storefront banners, marquees, and carousels. Make sure to click save to push updates live.</p>
+                      <p className="text-xs text-slate-500 font-light mt-0.5">Customize your storefront banners, marquees, and carousels. Make sure to click save to push updates live.</p>
                     </div>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-white"
+                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-slate-800"
                     >
                       <CheckCircle size={16} />
                       <span>Save All Changes</span>
@@ -2529,30 +2529,30 @@ export default function AdminPanel() {
                   </div>
 
                   {/* E-commerce Settings & Hero Carousel Slider Customization */}
-                  <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
-                    <div className="border-b border-white/5 pb-3 flex justify-between items-center">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                    <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                       <div>
-                        <h4 className="font-bold text-base text-[#2796a9]">E-commerce Customization & Carousels</h4>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Control the slides and headline text displayed in the storefront hero section.</p>
+                        <h4 className="font-bold text-base text-[#0F4C81]">E-commerce Customization & Carousels</h4>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Control the slides and headline text displayed in the storefront hero section.</p>
                       </div>
                       <button
                         type="button"
                         onClick={handleAddEcommSlide}
-                        className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20"
+                        className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
                       >
                         + Add Slider Slide
                       </button>
                     </div>
 
                     <div className="flex flex-col gap-1.5 max-w-xl">
-                      <div className="text-xs text-white/60 font-semibold uppercase tracking-wider flex justify-between mb-1">
+                      <div className="text-xs text-slate-600 font-semibold uppercase tracking-wider flex justify-between mb-1">
                         <span>Top Banner News / Announcement Text</span>
-                        <label className="flex items-center gap-2 cursor-pointer text-[#2796a9] font-bold normal-case tracking-normal">
+                        <label className="flex items-center gap-2 cursor-pointer text-[#0F4C81] font-bold normal-case tracking-normal">
                           <input
                             type="checkbox"
                             checked={customizeForm.showEcommBanner !== false}
                             onChange={(e) => setCustomizeForm(prev => ({ ...prev, showEcommBanner: e.target.checked }))}
-                            className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9]"
+                            className="w-4 h-4 rounded bg-white border-slate-200 text-[#0F4C81] focus:ring-[#0F4C81]"
                           />
                           Make Banner Alive
                         </label>
@@ -2562,12 +2562,12 @@ export default function AdminPanel() {
                         value={customizeForm.ecommBannerText || ''}
                         onChange={e => setCustomizeForm(prev => ({ ...prev, ecommBannerText: e.target.value }))}
                         placeholder="e.g. CTS B2B Procurement Desk - Fast Quotations & Logistics"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all"
                       />
                     </div>
 
                     <div className="flex flex-col gap-1.5 max-w-xl">
-                      <div className="text-xs text-white/60 font-semibold uppercase tracking-wider mb-1">
+                      <div className="text-xs text-slate-600 font-semibold uppercase tracking-wider mb-1">
                         Company Email (For Order & Inquiry CCs)
                       </div>
                       <input
@@ -2575,75 +2575,75 @@ export default function AdminPanel() {
                         value={customizeForm.companyEmail || ''}
                         onChange={e => setCustomizeForm(prev => ({ ...prev, companyEmail: e.target.value }))}
                         placeholder="e.g. sales@yourcompany.com"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none text-white transition-all"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {(customizeForm.ecommSlides || []).map((slide, idx) => (
-                        <div key={idx} className="p-5 rounded-xl border border-white/5 bg-white/5 relative flex flex-col gap-4">
+                        <div key={idx} className="p-5 rounded-xl border border-slate-200 bg-slate-50 relative flex flex-col gap-4">
                           <button
                             type="button"
                             onClick={() => handleRemoveEcommSlide(idx)}
-                            className="absolute top-4 right-4 text-white/40 hover:text-red-400 transition-colors cursor-pointer"
+                            className="absolute top-4 right-4 text-slate-500 hover:text-red-400 transition-colors cursor-pointer"
                             title="Remove slide"
                           >
                             <Trash2 size={16} />
                           </button>
 
-                          <div className="text-xs font-bold text-white/60 uppercase tracking-wider">
+                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                             Hero Slide #{idx + 1}
                           </div>
 
                           <div className="grid grid-cols-2 gap-3">
                             <div className="flex flex-col gap-1">
-                              <label className="text-[10px] text-white/50 uppercase">Tag (Category / Highlight)</label>
+                              <label className="text-[10px] text-slate-500 uppercase">Tag (Category / Highlight)</label>
                               <input
                                 type="text"
                                 value={slide.tag || ''}
                                 onChange={e => handleUpdateEcommSlide(idx, 'tag', e.target.value)}
                                 placeholder="POWER TOOLS"
-                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                 required
                               />
                             </div>
                             <div className="flex flex-col gap-1">
-                              <label className="text-[10px] text-white/50 uppercase">Title</label>
+                              <label className="text-[10px] text-slate-500 uppercase">Title</label>
                               <input
                                 type="text"
                                 value={slide.title || ''}
                                 onChange={e => handleUpdateEcommSlide(idx, 'title', e.target.value)}
                                 placeholder="Precision German Engineering"
-                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                 required
                               />
                             </div>
                           </div>
 
                           <div className="flex flex-col gap-1">
-                            <label className="text-[10px] text-white/50 uppercase">Subtitle Description</label>
+                            <label className="text-[10px] text-slate-500 uppercase">Subtitle Description</label>
                             <input
                               type="text"
                               value={slide.subtitle || ''}
                               onChange={e => handleUpdateEcommSlide(idx, 'subtitle', e.target.value)}
                               placeholder="Heavy duty drilling and core machines..."
-                              className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                               required
                             />
                           </div>
 
                           <div className="flex flex-col gap-1">
-                            <label className="text-[10px] text-white/50 uppercase">Image URL / Resource Path</label>
+                            <label className="text-[10px] text-slate-500 uppercase">Image URL / Resource Path</label>
                             <div className="flex gap-2">
                               <input
                                 type="text"
                                 value={slide.image || ''}
                                 onChange={e => handleUpdateEcommSlide(idx, 'image', e.target.value)}
                                 placeholder="Cloudinary URL or local path"
-                                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                 required
                               />
-                              <label className="shrink-0 px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                              <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                                 {uploadingField === `slide-${idx}` ? 'Uploading...' : 'Upload'}
                                 <input
                                   type="file"
@@ -2667,28 +2667,28 @@ export default function AdminPanel() {
                         </div>
                       ))}
                       {(customizeForm.ecommSlides || []).length === 0 && (
-                        <div className="col-span-2 text-center py-12 text-white/30 text-xs border border-dashed border-white/10 rounded-xl">
+                        <div className="col-span-2 text-center py-12 text-slate-600 text-xs border border-dashed border-slate-200 rounded-xl">
                           No slides configured. Click Add Slider Slide.
                         </div>
                       )}
                     </div>
 
                     {/* E-COMMERCE STOREFRONT SETTINGS */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
-                      <div className="border-b border-white/5 pb-3">
-                        <h4 className="font-bold text-base text-[#2796a9]">Storefront Dynamic Sections</h4>
-                        <p className="text-xs text-white/40 font-light mt-0.5">Toggle and customize the Brand Spotlight and Newly Added sections on your E-commerce shop page.</p>
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                      <div className="border-b border-slate-200 pb-3">
+                        <h4 className="font-bold text-base text-[#0F4C81]">Storefront Dynamic Sections</h4>
+                        <p className="text-xs text-slate-500 font-light mt-0.5">Toggle and customize the Brand Spotlight and Newly Added sections on your E-commerce shop page.</p>
                       </div>
 
                       <div className="flex flex-col gap-4">
                         {/* Brand Spotlight */}
-                        <div className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-3">
+                        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col gap-3">
                           <label className="flex items-center gap-3 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={ecommCustomizeForm.showBrandSpotlight}
                               onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, showBrandSpotlight: e.target.checked })}
-                              className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9] focus:ring-offset-slate-900"
+                              className="w-4 h-4 rounded bg-white border-slate-200 text-[#0F4C81] focus:ring-[#0F4C81] focus:ring-offset-slate-900"
                             />
                             <span className="text-sm font-semibold">Show Brand Spotlight Section</span>
                           </label>
@@ -2696,21 +2696,21 @@ export default function AdminPanel() {
                           {ecommCustomizeForm.showBrandSpotlight && (
                             <div className="flex gap-4 ml-7">
                               <div className="flex-1 flex flex-col gap-1.5">
-                                <label className="text-[10px] text-white/50 uppercase">Tagline</label>
+                                <label className="text-[10px] text-slate-500 uppercase">Tagline</label>
                                 <input
                                   type="text"
                                   value={ecommCustomizeForm.brandSpotlightTag || ''}
                                   onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, brandSpotlightTag: e.target.value })}
-                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none"
+                                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                 />
                               </div>
                               <div className="flex-2 flex flex-col gap-1.5">
-                                <label className="text-[10px] text-white/50 uppercase">Title</label>
+                                <label className="text-[10px] text-slate-500 uppercase">Title</label>
                                 <input
                                   type="text"
                                   value={ecommCustomizeForm.brandSpotlightTitle || ''}
                                   onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, brandSpotlightTitle: e.target.value })}
-                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none w-full"
                                 />
                               </div>
                             </div>
@@ -2718,13 +2718,13 @@ export default function AdminPanel() {
                         </div>
 
                         {/* Newly Added */}
-                        <div className="p-4 rounded-xl border border-white/5 bg-white/5 flex flex-col gap-3">
+                        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col gap-3">
                           <label className="flex items-center gap-3 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={ecommCustomizeForm.showNewlyAdded}
                               onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, showNewlyAdded: e.target.checked })}
-                              className="w-4 h-4 rounded bg-slate-900 border-white/10 text-[#2796a9] focus:ring-[#2796a9] focus:ring-offset-slate-900"
+                              className="w-4 h-4 rounded bg-white border-slate-200 text-[#0F4C81] focus:ring-[#0F4C81] focus:ring-offset-slate-900"
                             />
                             <span className="text-sm font-semibold">Show Newly Added Products Section</span>
                           </label>
@@ -2733,53 +2733,53 @@ export default function AdminPanel() {
                             <div className="flex flex-col gap-3 ml-7">
                               <div className="flex gap-4">
                                 <div className="flex-1 flex flex-col gap-1.5">
-                                  <label className="text-[10px] text-white/50 uppercase">Tagline</label>
+                                  <label className="text-[10px] text-slate-500 uppercase">Tagline</label>
                                   <input
                                     type="text"
                                     value={ecommCustomizeForm.newlyAddedTag || ''}
                                     onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedTag: e.target.value })}
-                                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none"
+                                    className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                   />
                                 </div>
                                 <div className="flex-2 flex flex-col gap-1.5">
-                                  <label className="text-[10px] text-white/50 uppercase">Title</label>
+                                  <label className="text-[10px] text-slate-500 uppercase">Title</label>
                                   <input
                                     type="text"
                                     value={ecommCustomizeForm.newlyAddedTitle || ''}
                                     onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedTitle: e.target.value })}
-                                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                    className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none w-full"
                                   />
                                 </div>
                               </div>
                               <div className="flex flex-col gap-1.5">
-                                <label className="text-[10px] text-white/50 uppercase">Subtitle / Description</label>
+                                <label className="text-[10px] text-slate-500 uppercase">Subtitle / Description</label>
                                 <textarea
                                   value={ecommCustomizeForm.newlyAddedSubtitle || ''}
                                   onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedSubtitle: e.target.value })}
-                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none resize-none h-16"
+                                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none resize-none h-16"
                                 />
                               </div>
                               <div className="flex items-center gap-4 mt-2">
-                                <label className="text-[10px] text-white/50 uppercase tracking-wide">Number of Products to Display</label>
+                                <label className="text-[10px] text-slate-500 uppercase tracking-wide">Number of Products to Display</label>
                                 <input
                                   type="number"
                                   min="1"
                                   max="50"
                                   value={ecommCustomizeForm.newlyAddedLimit}
                                   onChange={e => setEcommCustomizeForm({ ...ecommCustomizeForm, newlyAddedLimit: parseInt(e.target.value) || 8 })}
-                                  className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none w-24 font-mono"
+                                  className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none w-24 font-mono"
                                 />
                               </div>
                               <div className="flex flex-col gap-1.5 relative">
-                                <label className="text-[10px] text-white/50 uppercase">Manually Highlighted Products ({(ecommCustomizeForm.newlyAddedProductIDs || []).length} / {ecommCustomizeForm.newlyAddedLimit})</label>
-                                <p className="text-[10px] text-white/40">Search and add specific products to feature on the homepage.</p>
+                                <label className="text-[10px] text-slate-500 uppercase">Manually Highlighted Products ({(ecommCustomizeForm.newlyAddedProductIDs || []).length} / {ecommCustomizeForm.newlyAddedLimit})</label>
+                                <p className="text-[10px] text-slate-500">Search and add specific products to feature on the homepage.</p>
                                 
                                 <div className="flex flex-wrap gap-2 mb-1">
                                   {(ecommCustomizeForm.newlyAddedProductIDs || []).map((id, idx) => {
                                     const prod = ecommProducts.find(p => p.model === id || p.product_id === id);
                                     return (
-                                      <div key={idx} className="flex items-center gap-1.5 bg-[#2796a9]/10 border border-[#2796a9]/30 px-2 py-1 rounded-md">
-                                        <span className="text-[10px] text-[#2796a9] font-bold">{prod ? prod.model || prod.product_id : id}</span>
+                                      <div key={idx} className="flex items-center gap-1.5 bg-[#0F4C81]/10 border border-[#0F4C81]/30 px-2 py-1 rounded-md">
+                                        <span className="text-[10px] text-[#0F4C81] font-bold">{prod ? prod.model || prod.product_id : id}</span>
                                         <button
                                           onClick={() => {
                                             setEcommCustomizeForm(prev => ({
@@ -2787,7 +2787,7 @@ export default function AdminPanel() {
                                               newlyAddedProductIDs: prev.newlyAddedProductIDs.filter(pid => pid !== id)
                                             }));
                                           }}
-                                          className="text-[#2796a9] hover:text-white"
+                                          className="text-[#0F4C81] hover:text-slate-800"
                                         >
                                           <XCircle size={12} />
                                         </button>
@@ -2803,10 +2803,10 @@ export default function AdminPanel() {
                                       placeholder="Search product by name or model..."
                                       value={highlightSearchTerm}
                                       onChange={e => setHighlightSearchTerm(e.target.value)}
-                                      className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-[#2796a9] outline-none w-full"
+                                      className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:border-[#0F4C81] outline-none w-full"
                                     />
                                     {highlightSearchTerm && (
-                                      <div className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-white/10 rounded-xl max-h-48 overflow-y-auto z-50 shadow-xl custom-scrollbar p-1">
+                                      <div className="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg border border-slate-200 rounded-xl max-h-48 overflow-y-auto z-50 shadow-xl custom-scrollbar p-1">
                                         {ecommProducts
                                           .filter(p => (p.product_name || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()) || (p.model || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()))
                                           .slice(0, 10)
@@ -2822,15 +2822,15 @@ export default function AdminPanel() {
                                                 }
                                                 setHighlightSearchTerm('');
                                               }}
-                                              className="px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-[#2796a9]/20 rounded-lg cursor-pointer flex justify-between items-center"
+                                              className="px-3 py-2 text-xs text-slate-700 hover:text-slate-800 hover:bg-[#0F4C81]/20 rounded-lg cursor-pointer flex justify-between items-center"
                                             >
                                               <span className="truncate pr-2">{p.product_name}</span>
-                                              <span className="text-[9px] text-[#2796a9] font-mono shrink-0">{p.model}</span>
+                                              <span className="text-[9px] text-[#0F4C81] font-mono shrink-0">{p.model}</span>
                                             </div>
                                           ))
                                         }
                                         {ecommProducts.filter(p => (p.product_name || '').toLowerCase().includes(highlightSearchTerm.toLowerCase()) || (p.model || '').toLowerCase().includes(highlightSearchTerm.toLowerCase())).length === 0 && (
-                                          <div className="px-3 py-2 text-xs text-white/40 text-center">No products found</div>
+                                          <div className="px-3 py-2 text-xs text-slate-500 text-center">No products found</div>
                                         )}
                                       </div>
                                     )}
@@ -2844,16 +2844,16 @@ export default function AdminPanel() {
                     </div>
 
                     {/* E-COMMERCE BRANDS / PARTNER LOGOS */}
-                    <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-6 mt-6">
-                      <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-6 flex flex-col gap-6 mt-6">
+                      <div className="flex justify-between items-center border-b border-slate-200 pb-3">
                         <div className="flex flex-col">
-                          <h4 className="font-bold text-base text-[#2796a9]">E-Commerce Brand Partner Logos</h4>
-                          <p className="text-xs text-white/40 font-light mt-0.5">Manage the brand logos displayed in the "Brand Spotlight" slider.</p>
+                          <h4 className="font-bold text-base text-[#0F4C81]">E-Commerce Brand Partner Logos</h4>
+                          <p className="text-xs text-slate-500 font-light mt-0.5">Manage the brand logos displayed in the "Brand Spotlight" slider.</p>
                         </div>
                         <button
                           type="button"
                           onClick={handleAddEcommBrand}
-                          className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20 flex items-center gap-2"
+                          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20 flex items-center gap-2"
                         >
                           <Plus size={14} />
                           <span>Add Brand Logo</span>
@@ -2862,19 +2862,19 @@ export default function AdminPanel() {
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {ecommBrandsLocal.map((brand, idx) => (
-                          <div key={idx} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 relative items-center group">
+                          <div key={idx} className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 relative items-center group">
                             {/* Delete Button */}
                             <button
                               type="button"
                               onClick={() => handleRemoveEcommBrand(idx)}
-                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
+                              className="absolute top-2 right-2 p-1 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-800 border border-red-500/10 hover:border-red-500 rounded-lg transition-all opacity-40 group-hover:opacity-100 cursor-pointer"
                               title="Delete Brand Logo"
                             >
                               <Trash2 size={12} />
                             </button>
 
                             {/* Logo Preview */}
-                            <div className="w-16 h-16 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
+                            <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
                               <img
                                 src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'}
                                 alt={brand.name}
@@ -2891,7 +2891,7 @@ export default function AdminPanel() {
                                 value={brand.name}
                                 onChange={e => handleUpdateEcommBrand(idx, 'name', e.target.value)}
                                 placeholder="Brand Name"
-                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+                                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-semibold transition-all w-full"
                                 required
                               />
                               <div className="flex gap-2 items-center">
@@ -2900,10 +2900,10 @@ export default function AdminPanel() {
                                   value={brand.src || brand.logoUrl || ''}
                                   onChange={e => handleUpdateEcommBrand(idx, 'src', e.target.value)}
                                   placeholder="Image Path"
-                                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all font-light"
+                                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `ecomm_brand_${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -2924,7 +2924,7 @@ export default function AdminPanel() {
                                 </label>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-white/40 uppercase font-semibold">Scale:</span>
+                                <span className="text-[10px] text-slate-500 uppercase font-semibold">Scale:</span>
                                 <input
                                   type="number"
                                   step="0.05"
@@ -2932,14 +2932,14 @@ export default function AdminPanel() {
                                   max="5.0"
                                   value={brand.scale ?? 1.0}
                                   onChange={e => handleUpdateEcommBrand(idx, 'scale', e.target.value)}
-                                  className="w-16 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 text-xs focus:border-[#2796a9] outline-none text-white text-center font-mono"
+                                  className="w-16 bg-slate-50 border border-slate-200 rounded-lg px-2 py-0.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 text-center font-mono"
                                 />
                               </div>
                             </div>
                           </div>
                         ))}
                         {ecommBrandsLocal.length === 0 && (
-                          <div className="col-span-3 text-center py-12 text-white/30 text-xs border border-dashed border-white/10 rounded-xl mt-4">
+                          <div className="col-span-3 text-center py-12 text-slate-600 text-xs border border-dashed border-slate-200 rounded-xl mt-4">
                             No brands configured. Click Add Brand Logo to create one.
                           </div>
                         )}
@@ -2992,15 +2992,15 @@ export default function AdminPanel() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className={`bg-slate-900 border border-white/10 rounded-2xl w-full overflow-hidden shadow-2xl relative z-10 text-white transition-all duration-300 ${
+              className={`bg-white border border-slate-200 rounded-2xl w-full overflow-hidden shadow-2xl relative z-10 text-slate-800 transition-all duration-300 ${
                 activeModal === 'import_ecomm_csv' || activeModal === 'create_ecomm_product' || activeModal === 'edit_ecomm_product' || activeModal === 'edit_order_ecomm' || activeModal === 'manage_brands_ecomm'
                   ? 'max-w-3xl'
                   : 'max-w-lg'
               }`}
             >
               {/* Modal Header */}
-              <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-bold text-lg text-white">
+              <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+                <h3 className="font-bold text-lg text-slate-800">
                   {activeModal === 'create_activity' && 'Add New Activity'}
                   {activeModal === 'edit_activity' && 'Edit Activity'}
                   {activeModal === 'create_service' && 'Add Product/Service Capability'}
@@ -3014,7 +3014,7 @@ export default function AdminPanel() {
                   {activeModal === 'storefront_settings_ecomm' && 'E-Commerce Storefront Settings'}
                   {activeModal === 'edit_order_ecomm' && 'Process RFQ & Price Quotation Worksheet'}
                 </h3>
-                <button onClick={() => setActiveModal(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
+                <button onClick={() => setActiveModal(null)} className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">
                   <XCircle size={20} />
                 </button>
               </div>
@@ -3024,40 +3024,40 @@ export default function AdminPanel() {
               {(activeModal === 'create_activity' || activeModal === 'edit_activity') && (
                 <form onSubmit={activeModal === 'create_activity' ? handleCreateActivitySubmit : handleEditActivitySubmit} className="p-6 flex flex-col gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Activity Title</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Activity Title</label>
                     <input 
                       type="text" 
                       value={activityForm.title} 
                       onChange={e => setActivityForm(prev => ({ ...prev, title: e.target.value }))}
                       placeholder="e.g., Project Highlights" 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                       required
                     />
                   </div>
                   
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Subtitle / Description</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Subtitle / Description</label>
                     <textarea 
                       value={activityForm.subtitle} 
                       onChange={e => setActivityForm(prev => ({ ...prev, subtitle: e.target.value }))}
                       placeholder="Enter a brief summary of the activity..." 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none min-h-[80px] transition-all resize-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none min-h-[80px] transition-all resize-none"
                       required
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Image Resource Path</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Image Resource Path</label>
                     <div className="flex gap-2">
                       <input 
                         type="text" 
                         value={activityForm.image} 
                         onChange={e => setActivityForm(prev => ({ ...prev, image: e.target.value }))}
                         placeholder="e.g., /port/image1.png" 
-                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                         required
                       />
-                      <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                         {uploadingField === 'activity' ? 'Uploading...' : 'Upload'}
                         <input
                           type="file"
@@ -3080,11 +3080,11 @@ export default function AdminPanel() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Select Theme Gradient</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Select Theme Gradient</label>
                     <select
                       value={activityForm.gradient}
                       onChange={e => setActivityForm(prev => ({ ...prev, gradient: e.target.value }))}
-                      className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+                      className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
                     >
                       {defaultGradients.map((g, idx) => (
                         <option key={idx} value={g}>Theme Gradient {idx + 1}</option>
@@ -3094,15 +3094,15 @@ export default function AdminPanel() {
 
                   {/* Gradient Preview */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Preview Card Background</label>
-                    <div className="h-16 rounded-xl flex items-center justify-center font-bold text-sm text-white border border-white/10 shadow-inner" style={{ background: activityForm.gradient }}>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Preview Card Background</label>
+                    <div className="h-16 rounded-xl flex items-center justify-center font-bold text-sm text-slate-800 border border-slate-200 shadow-inner" style={{ background: activityForm.gradient }}>
                       {activityForm.title || 'Gradient Preview'}
                     </div>
                   </div>
 
-                  <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
-                    <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer">Cancel</button>
-                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
+                  <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
+                    <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer">Cancel</button>
+                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
                       {activeModal === 'create_activity' ? 'Save Activity' : 'Update Activity'}
                     </button>
                   </div>
@@ -3114,22 +3114,22 @@ export default function AdminPanel() {
                 <form onSubmit={activeModal === 'create_service' ? handleCreateServiceSubmit : handleEditServiceSubmit} className="p-6 flex flex-col gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Capability Title</label>
+                      <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Capability Title</label>
                       <input 
                         type="text" 
                         value={serviceForm.title} 
                         onChange={e => setServiceForm(prev => ({ ...prev, title: e.target.value }))}
                         placeholder="e.g., Heavy Pneumatics" 
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                         required
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Select Lucide Icon</label>
+                      <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Select Lucide Icon</label>
                       <select
                         value={serviceForm.icon}
                         onChange={e => setServiceForm(prev => ({ ...prev, icon: e.target.value }))}
-                        className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+                        className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
                       >
                         {Object.keys(iconMap).map(iconName => (
                           <option key={iconName} value={iconName}>{iconName}</option>
@@ -3139,17 +3139,17 @@ export default function AdminPanel() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Image Path</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Image Path</label>
                     <div className="flex gap-2">
                       <input 
                         type="text" 
                         value={serviceForm.image} 
                         onChange={e => setServiceForm(prev => ({ ...prev, image: e.target.value }))}
                         placeholder="e.g., /port/pneumatic.png" 
-                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none transition-all"
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                         required
                       />
-                      <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                         {uploadingField === 'service' ? 'Uploading...' : 'Upload'}
                         <input
                           type="file"
@@ -3172,19 +3172,19 @@ export default function AdminPanel() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Description</label>
+                    <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Description</label>
                     <textarea 
                       value={serviceForm.desc} 
                       onChange={e => setServiceForm(prev => ({ ...prev, desc: e.target.value }))}
                       placeholder="Describe what is provided in this category..." 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] focus:bg-white/10 outline-none min-h-[90px] transition-all resize-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none min-h-[90px] transition-all resize-none"
                       required
                     />
                   </div>
 
-                  <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
-                    <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer">Cancel</button>
-                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
+                  <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
+                    <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer">Cancel</button>
+                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
                       {activeModal === 'create_service' ? 'Save Capability' : 'Update Capability'}
                     </button>
                   </div>
@@ -3261,8 +3261,8 @@ export default function AdminPanel() {
               {activeModal === 'storefront_settings_ecomm' && (
                 <div className="p-6 text-center">
                   <h3 className="text-xl font-bold mb-4">Redirecting...</h3>
-                  <p className="text-sm text-white/50 mb-6">Storefront Settings are managed in the Customization section.</p>
-                  <button onClick={() => { setActiveModal(null); setActiveTab('ecommCustomize'); }} className="px-6 py-2.5 bg-[#2796a9] text-white rounded-xl font-bold">
+                  <p className="text-sm text-slate-500 mb-6">Storefront Settings are managed in the Customization section.</p>
+                  <button onClick={() => { setActiveModal(null); setActiveTab('ecommCustomize'); }} className="px-6 py-2.5 bg-[#0F4C81] text-slate-800 rounded-xl font-bold">
                     Go to Storefront Settings
                   </button>
                 </div>
@@ -3291,17 +3291,17 @@ export default function AdminPanel() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative z-10 text-white p-6 flex flex-col gap-4"
+              className="bg-white border border-slate-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative z-10 text-slate-800 p-6 flex flex-col gap-4"
             >
-              <h3 className="font-bold text-lg text-white tracking-wide">{deleteConfirmData.title}</h3>
-              <p className="text-sm font-light text-white/70 leading-relaxed">
+              <h3 className="font-bold text-lg text-slate-800 tracking-wide">{deleteConfirmData.title}</h3>
+              <p className="text-sm font-light text-slate-600 leading-relaxed">
                 {deleteConfirmData.message}
               </p>
-              <div className="flex gap-3 justify-end mt-2 pt-2 border-t border-white/5">
+              <div className="flex gap-3 justify-end mt-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setDeleteConfirmData(null)}
-                  className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -3311,7 +3311,7 @@ export default function AdminPanel() {
                     deleteConfirmData.onConfirm();
                     setDeleteConfirmData(null);
                   }}
-                  className="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl text-xs font-semibold cursor-pointer text-white shadow-lg shadow-red-600/20"
+                  className="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl text-xs font-semibold cursor-pointer text-slate-800 shadow-lg shadow-red-600/20"
                 >
                   Confirm Delete
                 </button>
@@ -3329,51 +3329,51 @@ export default function AdminPanel() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl relative z-10 flex flex-col"
+              className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl relative z-10 flex flex-col"
             >
-              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+              <div className="p-6 border-b border-slate-200 flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-lg text-white">Customer History</h3>
-                  <p className="text-xs text-[#2796a9]">{selectedUserHistory.email}</p>
+                  <h3 className="font-bold text-lg text-slate-800">Customer History</h3>
+                  <p className="text-xs text-[#0F4C81]">{selectedUserHistory.email}</p>
                 </div>
-                <button onClick={() => setSelectedUserHistory(null)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
+                <button onClick={() => setSelectedUserHistory(null)} className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">
                   <XCircle size={20} />
                 </button>
               </div>
               <div className="p-6 overflow-y-auto flex flex-col gap-6">
                 <div>
-                  <h4 className="font-bold text-white mb-3 text-sm flex items-center gap-2"><ShoppingCart size={16} /> Quotation Requests</h4>
+                  <h4 className="font-bold text-slate-800 mb-3 text-sm flex items-center gap-2"><ShoppingCart size={16} /> Quotation Requests</h4>
                   {selectedUserHistory.orders?.length > 0 ? (
                     <div className="flex flex-col gap-2">
                       {selectedUserHistory.orders.map(o => (
-                        <div key={o._id} className="p-3 bg-white/5 border border-white/10 rounded-xl flex justify-between items-center text-xs">
+                        <div key={o._id} className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs">
                           <div>
-                            <span className="font-bold text-white mr-2">{o.referenceId}</span>
-                            <span className="text-white/50">{new Date(o.createdAt).toLocaleDateString()}</span>
+                            <span className="font-bold text-slate-800 mr-2">{o.referenceId}</span>
+                            <span className="text-slate-500">{new Date(o.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <span className={`px-2 py-1 rounded-md ${o.status === 'Completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-orange-500/20 text-orange-400'}`}>
+                          <span className={`px-2 py-1 rounded-md ${o.status === 'Completed' ? 'bg-green-600/20 text-green-600' : 'bg-orange-500/20 text-orange-400'}`}>
                             {o.status}
                           </span>
                         </div>
                       ))}
                     </div>
-                  ) : <p className="text-xs text-white/40 italic">No quotation requests found.</p>}
+                  ) : <p className="text-xs text-slate-500 italic">No quotation requests found.</p>}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white mb-3 text-sm flex items-center gap-2"><Inbox size={16} /> General Inquiries</h4>
+                  <h4 className="font-bold text-slate-800 mb-3 text-sm flex items-center gap-2"><Inbox size={16} /> General Inquiries</h4>
                   {selectedUserHistory.inquiries?.length > 0 ? (
                     <div className="flex flex-col gap-2">
                       {selectedUserHistory.inquiries.map(i => (
-                        <div key={i._id} className="p-3 bg-white/5 border border-white/10 rounded-xl flex flex-col gap-1 text-xs">
+                        <div key={i._id} className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col gap-1 text-xs">
                           <div className="flex justify-between items-center">
-                            <span className="font-bold text-[#2796a9]">{i.subject}</span>
-                            <span className="text-white/50">{new Date(i.createdAt).toLocaleDateString()}</span>
+                            <span className="font-bold text-[#0F4C81]">{i.subject}</span>
+                            <span className="text-slate-500">{new Date(i.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <span className="text-white/70 line-clamp-2">{i.message}</span>
+                          <span className="text-slate-600 line-clamp-2">{i.message}</span>
                         </div>
                       ))}
                     </div>
-                  ) : <p className="text-xs text-white/40 italic">No inquiries found.</p>}
+                  ) : <p className="text-xs text-slate-500 italic">No inquiries found.</p>}
                 </div>
               </div>
             </motion.div>
@@ -3390,20 +3390,20 @@ export default function AdminPanel() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-xl shadow-2xl relative z-10 flex flex-col"
+              className="bg-white border border-slate-200 rounded-2xl w-full max-w-xl shadow-2xl relative z-10 flex flex-col"
             >
-              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+              <div className="p-6 border-b border-slate-200 flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-lg text-white">Send Newsletter</h3>
-                  <p className="text-xs text-slate-400">Blast an email to all registered storefront customers.</p>
+                  <h3 className="font-bold text-lg text-slate-800">Send Newsletter</h3>
+                  <p className="text-xs text-slate-600">Blast an email to all registered storefront customers.</p>
                 </div>
-                <button onClick={() => setIsNewsletterOpen(false)} className="text-white/40 hover:text-white transition-colors cursor-pointer">
+                <button onClick={() => setIsNewsletterOpen(false)} className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">
                   <XCircle size={20} />
                 </button>
               </div>
               <form onSubmit={handleSendNewsletter} className="p-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-white/60 font-semibold uppercase">Banner Image (Optional)</label>
+                  <label className="text-xs text-slate-600 font-semibold uppercase">Banner Image (Optional)</label>
                   <input
                     type="file"
                     accept="image/*"
@@ -3423,34 +3423,34 @@ export default function AdminPanel() {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:border-[#2796a9] outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#2796a9]/20 file:text-[#2796a9] hover:file:bg-[#2796a9]/30"
+                    className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:border-[#0F4C81] outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#0F4C81]/20 file:text-[#0F4C81] hover:file:bg-[#0F4C81]/30"
                   />
-                  {newsletterForm.bannerName && <span className="text-xs text-[#2796a9]">Selected: {newsletterForm.bannerName}</span>}
+                  {newsletterForm.bannerName && <span className="text-xs text-[#0F4C81]">Selected: {newsletterForm.bannerName}</span>}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-white/60 font-semibold uppercase">Email Subject</label>
+                  <label className="text-xs text-slate-600 font-semibold uppercase">Email Subject</label>
                   <input
                     type="text"
                     required
                     value={newsletterForm.subject}
                     onChange={e => setNewsletterForm({...newsletterForm, subject: e.target.value})}
                     placeholder="e.g. New Product Line Announcement!"
-                    className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+                    className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-white/60 font-semibold uppercase">HTML Content</label>
+                  <label className="text-xs text-slate-600 font-semibold uppercase">HTML Content</label>
                   <textarea
                     required
                     value={newsletterForm.htmlContent}
                     onChange={e => setNewsletterForm({...newsletterForm, htmlContent: e.target.value})}
                     placeholder="<h1>Hello!</h1><p>Check out our new products...</p>"
                     rows={6}
-                    className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-[#2796a9] outline-none font-mono resize-none overflow-y-auto"
+                    className="w-full bg-white shadow-lg border border-slate-200 rounded-xl p-4 text-sm text-slate-800 focus:border-[#0F4C81] outline-none font-mono resize-none overflow-y-auto"
                   />
                 </div>
-                <div className="flex justify-end pt-4 mt-2 border-t border-white/5">
-                  <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
+                <div className="flex justify-end pt-4 mt-2 border-t border-slate-200">
+                  <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
                     Send
                   </button>
                 </div>
@@ -3470,8 +3470,8 @@ function SidebarLink({ label, icon, badge, active, onClick }) {
       onClick={onClick}
       className={`w-full flex items-center justify-between py-3 px-4 rounded-xl text-sm font-medium transition-all cursor-pointer ${
         active 
-          ? 'bg-gradient-to-r from-[#04667b]/20 to-[#2796a9]/10 text-[#2796a9] border-l-4 border-[#2796a9] pl-3 shadow-[0_4px_12px_rgba(4,102,123,0.05)]' 
-          : 'text-white/60 hover:text-white hover:bg-white/5 border-l-4 border-transparent'
+          ? 'bg-gradient-to-r from-[#04667b]/20 to-[#0F4C81]/10 text-[#0F4C81] border-l-4 border-[#0F4C81] pl-3 shadow-[0_4px_12px_rgba(4,102,123,0.05)]' 
+          : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50 border-l-4 border-transparent'
       }`}
     >
       <div className="flex items-center gap-3">
@@ -3479,7 +3479,7 @@ function SidebarLink({ label, icon, badge, active, onClick }) {
         <span>{label}</span>
       </div>
       {badge > 0 && (
-        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#2796a9] text-white">
+        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#0F4C81] text-slate-800">
           {badge}
         </span>
       )}
@@ -3495,12 +3495,12 @@ function DashboardCard({ title, value, icon, color, onClick }) {
       className={`p-6 rounded-2xl bg-gradient-to-b border flex flex-col gap-4 shadow-md ${color} ${onClick ? 'cursor-pointer hover:brightness-110 transition-all' : ''}`}
     >
       <div className="flex justify-between items-center">
-        <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">{title}</span>
-        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
+        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</span>
+        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-200 shrink-0">
           {icon}
         </div>
       </div>
-      <span className="text-3xl font-extrabold tracking-tight text-white leading-none">
+      <span className="text-3xl font-extrabold tracking-tight text-slate-800 leading-none">
         {value !== undefined ? value : '-'}
       </span>
     </div>
@@ -3519,21 +3519,21 @@ function AdminLogin({ onSubmit, error, loading }) {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#02050c] p-6 text-white">
+    <div className="flex items-center justify-center min-h-screen bg-[#F5F7FA] p-6 text-slate-800">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#04667b_0%,_transparent_60%)] opacity-20" />
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl relative z-10 flex flex-col gap-6"
+        className="w-full max-w-md bg-white/60 backdrop-blur-xl border border-slate-200 rounded-3xl p-8 shadow-2xl relative z-10 flex flex-col gap-6"
       >
         <div className="flex flex-col gap-2 items-center text-center">
-          <Link to="/" className="text-xs text-white/50 hover:text-white transition-colors flex items-center gap-1.5 mb-2">
+          <Link to="/" className="text-xs text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1.5 mb-2">
             <ArrowLeft size={12} />
             <span>Back to site</span>
           </Link>
-          <h2 className="text-2xl font-extrabold text-white tracking-wide">Admin Dashboard</h2>
-          <p className="text-sm font-light text-white/50">Please authenticate to access administrator settings.</p>
+          <h2 className="text-2xl font-extrabold text-slate-800 tracking-wide">Admin Dashboard</h2>
+          <p className="text-sm font-light text-slate-500">Please authenticate to access administrator settings.</p>
         </div>
 
         {error && (
@@ -3544,36 +3544,36 @@ function AdminLogin({ onSubmit, error, loading }) {
 
         <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Email Address</label>
+            <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Email Address</label>
             <div className="relative flex items-center">
-              <span className="absolute left-3 text-white/40"><Mail size={16} /></span>
+              <span className="absolute left-3 text-slate-500"><Mail size={16} /></span>
               <input
                 type="email"
                 placeholder="admin@gmail.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all placeholder:text-white/20 text-white"
+                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#0F4C81] focus:bg-slate-100 text-sm outline-none transition-all placeholder:text-slate-700 text-slate-800"
                 required
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Password</label>
+            <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Password</label>
             <div className="relative flex items-center">
-              <span className="absolute left-3 text-white/40"><Lock size={16} /></span>
+              <span className="absolute left-3 text-slate-500"><Lock size={16} /></span>
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full pl-9 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:border-[#2796a9] focus:bg-white/10 text-sm outline-none transition-all placeholder:text-white/20 text-white"
+                className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#0F4C81] focus:bg-slate-100 text-sm outline-none transition-all placeholder:text-slate-700 text-slate-800"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(prev => !prev)}
-                className="absolute right-3 text-white/40 hover:text-white transition-colors cursor-pointer"
+                className="absolute right-3 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -3583,7 +3583,7 @@ function AdminLogin({ onSubmit, error, loading }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 active:scale-[0.98] text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50 mt-2"
+            className="w-full py-3 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] text-slate-800 text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50 mt-2"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
@@ -3733,15 +3733,15 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
   return (
     <div className="flex flex-col gap-6">
       {/* Header controls bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/20 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-200 p-5 rounded-2xl border border-slate-200 backdrop-blur-sm">
         <div className="relative flex-1 w-full max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" size={16} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
           <input
             type="text"
             placeholder="Search by name, SKU, ID, model..."
             value={searchQuery}
             onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:border-[#2796a9] outline-none text-white transition-all font-light"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-[#0F4C81] outline-none text-slate-800 transition-all font-light"
           />
         </div>
         
@@ -3750,7 +3750,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           <select
             value={brandFilter}
             onChange={e => { setBrandFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none transition-all cursor-pointer"
+            className="bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none transition-all cursor-pointer"
           >
             <option value="All">All Brands</option>
             {approvedBrands.map(b => (
@@ -3770,7 +3770,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           {/* Import CSV */}
           <button
             onClick={() => setActiveModal('import_ecomm_csv')}
-            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/10 transition-all cursor-pointer text-white"
+            className="px-4 py-2.5 bg-white shadow-lg hover:bg-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-slate-200 transition-all cursor-pointer text-slate-800"
           >
             <Upload size={14} />
             <span>CSV Import</span>
@@ -3778,7 +3778,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
 
           <button
             onClick={() => setActiveModal('export_catalog_ecomm')}
-            className="px-4 py-2.5 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-4 py-2.5 bg-emerald-600/10 hover:bg-emerald-600/20 border border-green-600/20 text-green-600 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Download size={14} />
             <span>Export CSV</span>
@@ -3787,7 +3787,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           {/* Manage Brands */}
           <button
             onClick={() => setActiveModal('manage_brands_ecomm')}
-            className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-4 py-2.5 bg-[#0F4C81]/10 hover:bg-[#0F4C81]/20 text-[#0F4C81] border border-[#0F4C81]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <SlidersHorizontal size={14} />
             <span>Manage Brands</span>
@@ -3796,7 +3796,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           {/* Storefront Settings */}
           <button
             onClick={() => setActiveTab('ecommCustomize')}
-            className="px-4 py-2.5 bg-[#2796a9]/10 hover:bg-[#2796a9]/20 text-[#2796a9] border border-[#2796a9]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-4 py-2.5 bg-[#0F4C81]/10 hover:bg-[#0F4C81]/20 text-[#0F4C81] border border-[#0F4C81]/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Cog size={14} />
             <span>Storefront Settings</span>
@@ -3805,7 +3805,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           {/* Add Product */}
           <button
             onClick={handleAddClick}
-            className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-white"
+            className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-slate-800"
           >
             <Plus size={16} />
             <span>Add Product</span>
@@ -3814,11 +3814,11 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
       </div>
 
       {/* Products Table */}
-      <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse">
             <thead>
-              <tr className="bg-white/5 border-b border-white/5 text-white/50 text-xs uppercase tracking-wider">
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
                 <th className="p-4">Image</th>
                 <th className="p-4">Product ID / SKU</th>
                 <th className="p-4">Name / Model</th>
@@ -3829,9 +3829,9 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
             </thead>
             <tbody>
               {paginatedProducts.map(prod => (
-                <tr key={prod._id || prod.product_id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <tr key={prod._id || prod.product_id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                   <td className="p-4">
-                    <div className="w-12 h-12 rounded-lg border border-white/10 overflow-hidden bg-slate-950 flex items-center justify-center p-1">
+                    <div className="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden bg-[#F5F7FA] flex items-center justify-center p-1">
                       <img 
                         src={prod.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'} 
                         alt={prod.product_name} 
@@ -3841,30 +3841,30 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
                     </div>
                   </td>
                   <td className="p-4 text-xs font-sans font-medium">
-                    <div className="text-white font-semibold">{prod.product_id}</div>
-                    <div className="text-white/40 mt-0.5">{prod.sku}</div>
+                    <div className="text-slate-800 font-semibold">{prod.product_id}</div>
+                    <div className="text-slate-500 mt-0.5">{prod.sku}</div>
                   </td>
                   <td className="p-4 max-w-[240px]">
-                    <div className="font-bold text-white truncate">{prod.product_name}</div>
-                    <div className="text-xs text-white/50 mt-0.5 truncate">{prod.model || 'No model'}</div>
+                    <div className="font-bold text-slate-800 truncate">{prod.product_name}</div>
+                    <div className="text-xs text-slate-500 mt-0.5 truncate">{prod.model || 'No model'}</div>
                   </td>
-                  <td className="p-4 text-xs font-semibold text-white/80">{prod.brand}</td>
-                  <td className="p-4 text-xs text-white/60">
+                  <td className="p-4 text-xs font-semibold text-slate-700">{prod.brand}</td>
+                  <td className="p-4 text-xs text-slate-600">
                     <div>{prod.category}</div>
-                    <div className="text-[10px] text-white/40 mt-0.5">{prod.type || '-'}</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5">{prod.type || '-'}</div>
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleEditClick(prod)}
-                        className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                        className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                         title="Edit Product"
                       >
                         <Edit size={14} />
                       </button>
                       <button
                         onClick={() => handleDeleteProduct(prod._id)}
-                        className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer"
+                        className="p-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
                         title="Delete Product"
                       >
                         <Trash2 size={14} />
@@ -3875,7 +3875,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
               ))}
               {paginatedProducts.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-white/30 text-sm">
+                  <td colSpan="6" className="text-center py-16 text-slate-600 text-sm">
                     No products found matching filters.
                   </td>
                 </tr>
@@ -3886,20 +3886,20 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
 
         {/* Pagination controls */}
         {totalPages > 1 && (
-          <div className="flex justify-between items-center p-4 bg-slate-950/20 border-t border-white/5 text-xs text-white/50">
+          <div className="flex justify-between items-center p-4 bg-white shadow-sm border-t border-slate-200 text-xs text-slate-500">
             <span>Showing {Math.min(filteredProducts.length, (currentPage - 1) * itemsPerPage + 1)} to {Math.min(filteredProducts.length, currentPage * itemsPerPage)} of {filteredProducts.length} entries</span>
             <div className="flex gap-2">
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(prev => prev - 1)}
-                className="px-3 py-1.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg disabled:opacity-30 disabled:hover:bg-white/5 cursor-pointer transition-all"
+                className="px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:hover:bg-slate-50 cursor-pointer transition-all"
               >
                 Previous
               </button>
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(prev => prev + 1)}
-                className="px-3 py-1.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg disabled:opacity-30 disabled:hover:bg-white/5 cursor-pointer transition-all"
+                className="px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:hover:bg-slate-50 cursor-pointer transition-all"
               >
                 Next
               </button>
@@ -4027,25 +4027,25 @@ function EcommProductFormModal({
       {/* Grid: ID and SKU */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product ID</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product ID</label>
           <input
             type="text"
             value={ecommProductForm.product_id}
             onChange={e => setEcommProductForm(prev => ({ ...prev, product_id: e.target.value }))}
             disabled={activeModal === 'edit_ecomm_product'}
             placeholder="FI-POW-005"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all disabled:opacity-50 text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all disabled:opacity-50 text-slate-800"
             required
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">SKU</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">SKU</label>
           <input
             type="text"
             value={ecommProductForm.sku}
             onChange={e => setEcommProductForm(prev => ({ ...prev, sku: e.target.value }))}
             placeholder="GSB-18V-50"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
             required
           />
         </div>
@@ -4054,11 +4054,11 @@ function EcommProductFormModal({
       {/* Grid: Brand and Category */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Brand Name</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Brand Name</label>
           <select
             value={ecommProductForm.brand}
             onChange={e => setEcommProductForm(prev => ({ ...prev, brand: e.target.value }))}
-            className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white cursor-pointer"
+            className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800 cursor-pointer"
           >
             {approvedBrands.map(b => (
               <option key={b} value={b}>{b}</option>
@@ -4066,11 +4066,11 @@ function EcommProductFormModal({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Category</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Category</label>
           <select
             value={ecommProductForm.category}
             onChange={e => setEcommProductForm(prev => ({ ...prev, category: e.target.value }))}
-            className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white cursor-pointer"
+            className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800 cursor-pointer"
           >
             {categories.map(c => (
               <option key={c} value={c}>{c}</option>
@@ -4082,23 +4082,23 @@ function EcommProductFormModal({
       {/* Grid: Type and Sub-type */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Type</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product Type</label>
           <input
             type="text"
             value={ecommProductForm.type}
             onChange={e => setEcommProductForm(prev => ({ ...prev, type: e.target.value }))}
             placeholder="e.g. Drilling Machine"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Sub-Type</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Sub-Type</label>
           <input
             type="text"
             value={ecommProductForm.sub_type}
             onChange={e => setEcommProductForm(prev => ({ ...prev, sub_type: e.target.value }))}
             placeholder="e.g. Cordless Drills"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
           />
         </div>
       </div>
@@ -4106,23 +4106,23 @@ function EcommProductFormModal({
       {/* Grid: Model and Name */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Model</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Model</label>
           <input
             type="text"
             value={ecommProductForm.model}
             onChange={e => setEcommProductForm(prev => ({ ...prev, model: e.target.value }))}
             placeholder="e.g. GSB 18V-50"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Name</label>
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product Name</label>
           <input
             type="text"
             value={ecommProductForm.product_name}
             onChange={e => setEcommProductForm(prev => ({ ...prev, product_name: e.target.value }))}
             placeholder="e.g. Bosch GSB 18V-50 Cordless Drill"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
             required
           />
         </div>
@@ -4130,39 +4130,39 @@ function EcommProductFormModal({
 
       {/* Description */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Description</label>
+        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Description</label>
         <textarea
           value={ecommProductForm.description}
           onChange={e => setEcommProductForm(prev => ({ ...prev, description: e.target.value }))}
           placeholder="Brief summary detailing specifications and applications..."
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none min-h-[80px] transition-all resize-none text-white font-light"
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none min-h-[80px] transition-all resize-none text-slate-800 font-light"
         />
       </div>
 
       {/* Specifications */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Technical Specifications</label>
+        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Technical Specifications</label>
         <textarea
           value={ecommProductForm.specifications}
           onChange={e => setEcommProductForm(prev => ({ ...prev, specifications: e.target.value }))}
           placeholder="e.g. Voltage: 18 V | Weight: 1.10 kg | Chuck Capacity: 13 mm"
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none min-h-[60px] transition-all resize-none text-white font-mono text-xs"
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none min-h-[60px] transition-all resize-none text-slate-800 font-mono text-xs"
         />
       </div>
 
       {/* Product Image URL and upload */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Product Image URL</label>
+        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product Image URL</label>
         <div className="flex gap-2">
           <input
             type="text"
             value={ecommProductForm.image}
             onChange={e => setEcommProductForm(prev => ({ ...prev, image: e.target.value }))}
             placeholder="Cloudinary resource link..."
-            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-[#2796a9] outline-none transition-all text-white"
+            className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
             required
           />
-          <label className="shrink-0 px-4 py-2.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#2796a9]/20">
+          <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
             {uploadingField === 'ecomm_prod' ? 'Uploading...' : 'Upload'}
             <input
               type="file"
@@ -4185,18 +4185,18 @@ function EcommProductFormModal({
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
+      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
         <button
           type="button"
           onClick={() => setActiveModal(null)}
-          className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-white disabled:opacity-50"
+          className="px-5 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-slate-800 disabled:opacity-50"
         >
           {submitting ? 'Saving...' : activeModal === 'create_ecomm_product' ? 'Save Product' : 'Update Product'}
         </button>
@@ -4443,7 +4443,7 @@ function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchS
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold">Paste CSV Spreadsheet Data</span>
-            <label className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold border border-white/10 cursor-pointer transition-all flex items-center gap-1.5">
+            <label className="px-3 py-1.5 bg-white shadow-lg hover:bg-slate-700 text-slate-800 rounded-lg text-xs font-bold border border-slate-200 cursor-pointer transition-all flex items-center gap-1.5">
               <Upload size={12} />
               <span>Choose CSV File</span>
               <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
@@ -4455,13 +4455,13 @@ function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchS
             onChange={e => setCsvText(e.target.value)}
             placeholder={`Product ID, SKU, Brand, Category, Type, Sub-Type, Model, Product Name, Description, Specifications, Images
 FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordless Drills, GSB 18V-50, Bosch Cordless Drill, Heavy-duty drill, Chuck capacity: 13mm, https://image-url.jpg`}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#2796a9] outline-none min-h-[160px] font-mono text-white resize-y placeholder:text-white/20"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-[#0F4C81] outline-none min-h-[160px] font-mono text-slate-800 resize-y placeholder:text-slate-700"
           />
 
           <button
             type="button"
             onClick={() => parseCSV(csvText)}
-            className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl border border-white/10 transition-colors cursor-pointer"
+            className="w-full py-2.5 bg-white shadow-lg hover:bg-slate-700 text-slate-800 text-xs font-bold rounded-xl border border-slate-200 transition-colors cursor-pointer"
           >
             Parse Catalog CSV Data
           </button>
@@ -4471,15 +4471,15 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
       {(parsedData.length > 0 || validationErrors.length > 0) && (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex flex-col justify-between">
-              <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">Valid Entries</span>
-              <span className="text-3xl font-extrabold text-white mt-2">{parsedData.length}</span>
-              <span className="text-[10px] text-white/50 mt-1">Ready for database synchronization</span>
+            <div className="p-4 bg-green-600/10 border border-green-600/20 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs text-green-600 font-semibold uppercase tracking-wider">Valid Entries</span>
+              <span className="text-3xl font-extrabold text-slate-800 mt-2">{parsedData.length}</span>
+              <span className="text-[10px] text-slate-500 mt-1">Ready for database synchronization</span>
             </div>
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col justify-between">
               <span className="text-xs text-red-400 font-semibold uppercase tracking-wider">Failed Validation</span>
-              <span className="text-3xl font-extrabold text-white mt-2">{validationErrors.length}</span>
-              <span className="text-[10px] text-white/50 mt-1">Contains invalid brands or empty keys</span>
+              <span className="text-3xl font-extrabold text-slate-800 mt-2">{validationErrors.length}</span>
+              <span className="text-[10px] text-slate-500 mt-1">Contains invalid brands or empty keys</span>
             </div>
           </div>
 
@@ -4487,7 +4487,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
             <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5 text-left">
                 <span className="text-xs text-amber-400 font-semibold uppercase tracking-wider">⚠️ Repeated SKUs Detected</span>
-                <span className="text-xs text-white/70 mt-1">
+                <span className="text-xs text-slate-600 mt-1">
                   The following SKUs are repeated in the CSV: <span className="font-mono text-amber-300 font-bold">{duplicateList.join(', ')}</span>. Click Rearrange to auto-format them.
                 </span>
               </div>
@@ -4504,7 +4504,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
           {validationErrors.length > 0 && (
             <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-3 max-h-[120px] overflow-y-auto">
               <div className="text-xs font-bold text-red-400 mb-1">Rejected Rows Summary:</div>
-              <ul className="text-[10px] text-white/70 list-disc pl-4 space-y-1">
+              <ul className="text-[10px] text-slate-600 list-disc pl-4 space-y-1">
                 {validationErrors.map((err, idx) => (
                   <li key={idx}>
                     Row {err.rowIndex}: {err.errors.join(' | ')} (SKU: {err.data.sku || 'N/A'})
@@ -4516,11 +4516,11 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
 
           {parsedData.length > 0 && (
             <div className="flex flex-col gap-2">
-              <span className="text-xs text-white/50 font-bold uppercase tracking-wider">Valid Parsed Catalog Preview</span>
-              <div className="border border-white/5 rounded-xl max-h-[180px] overflow-y-auto bg-slate-950/20">
+              <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Valid Parsed Catalog Preview</span>
+              <div className="border border-slate-200 rounded-xl max-h-[180px] overflow-y-auto bg-white shadow-sm">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-white/5 border-b border-white/5 text-white/40 font-semibold">
+                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
                       <th className="p-2">Product ID</th>
                       <th className="p-2">SKU</th>
                       <th className="p-2">Name</th>
@@ -4529,17 +4529,17 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
                   </thead>
                   <tbody>
                     {parsedData.slice(0, 10).map((row, idx) => (
-                      <tr key={idx} className="border-b border-white/5">
-                        <td className="p-2 font-mono text-white/80">{row.product_id}</td>
-                        <td className="p-2 font-mono text-white/50">{row.sku}</td>
-                        <td className="p-2 truncate max-w-[120px] text-white/90">{row.product_name}</td>
-                        <td className="p-2 text-white/70">{row.brand}</td>
+                      <tr key={idx} className="border-b border-slate-200">
+                        <td className="p-2 font-mono text-slate-700">{row.product_id}</td>
+                        <td className="p-2 font-mono text-slate-500">{row.sku}</td>
+                        <td className="p-2 truncate max-w-[120px] text-slate-800/90">{row.product_name}</td>
+                        <td className="p-2 text-slate-600">{row.brand}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 {parsedData.length > 10 && (
-                  <div className="text-center py-1.5 bg-white/5 text-[10px] text-white/40">
+                  <div className="text-center py-1.5 bg-slate-50 text-[10px] text-slate-500">
                     ...and {parsedData.length - 10} more rows
                   </div>
                 )}
@@ -4551,7 +4551,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
             <button
               type="button"
               onClick={() => { setParsedData([]); setValidationErrors([]); setHasDuplicates(false); setDuplicateList([]); }}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl border border-white/10 transition-colors cursor-pointer"
+              className="px-4 py-2 bg-white shadow-lg hover:bg-slate-700 text-slate-800 text-xs font-semibold rounded-xl border border-slate-200 transition-colors cursor-pointer"
             >
               Reset / Edit Text
             </button>
@@ -4559,7 +4559,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
               type="button"
               disabled={parsedData.length === 0 || syncing}
               onClick={handleSync}
-              className="px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] hover:brightness-110 text-white text-xs font-semibold rounded-xl cursor-pointer disabled:opacity-30 transition-all flex items-center gap-1.5"
+              className="px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 text-slate-800 text-xs font-semibold rounded-xl cursor-pointer disabled:opacity-30 transition-all flex items-center gap-1.5"
             >
               {syncing ? 'Syncing...' : 'Sync Valid Rows to DB'}
             </button>
@@ -4716,7 +4716,7 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 text-white">
+    <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 text-slate-800">
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
           {error}
@@ -4731,7 +4731,7 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">Deletion Method</label>
+        <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Deletion Method</label>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
           {[
             { value: 'brand', label: 'By Brand' },
@@ -4746,8 +4746,8 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
               onClick={() => setDeleteType(opt.value)}
               className={`py-2 px-1 text-center rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                 deleteType === opt.value
-                  ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/15'
-                  : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+                  ? 'bg-red-600 border-red-500 text-slate-800 shadow-lg shadow-red-600/15'
+                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
               }`}
             >
               {opt.label}
@@ -4758,7 +4758,7 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
 
       {deleteType !== 'all' && (
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs text-white/60 font-semibold uppercase tracking-wider">
+          <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">
             Select {deleteType === 'brand' ? 'Brand' : deleteType === 'category' ? 'Category' : deleteType === 'type' ? 'Product Type' : 'Sub-Type'}
           </label>
           
@@ -4766,7 +4766,7 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
             <select
               value={selectedValue}
               onChange={e => setSelectedValue(e.target.value)}
-              className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+              className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-slate-800 cursor-pointer"
             >
               {approvedBrands.map(b => (
                 <option key={b} value={b}>{b}</option>
@@ -4778,7 +4778,7 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
             <select
               value={selectedValue}
               onChange={e => setSelectedValue(e.target.value)}
-              className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+              className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-slate-800 cursor-pointer"
             >
               {categories.map(c => (
                 <option key={c} value={c}>{c}</option>
@@ -4791,14 +4791,14 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
               <select
                 value={selectedValue}
                 onChange={e => setSelectedValue(e.target.value)}
-                className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+                className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-slate-800 cursor-pointer"
               >
                 {uniqueTypes.map(t => (
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
             ) : (
-              <div className="text-white/40 text-xs py-2">No product types found in local catalog list.</div>
+              <div className="text-slate-500 text-xs py-2">No product types found in local catalog list.</div>
             )
           )}
 
@@ -4807,22 +4807,22 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
               <select
                 value={selectedValue}
                 onChange={e => setSelectedValue(e.target.value)}
-                className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-white cursor-pointer"
+                className="w-full bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 outline-none text-slate-800 cursor-pointer"
               >
                 {uniqueSubTypes.map(s => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
             ) : (
-              <div className="text-white/40 text-xs py-2">No product sub-types found in local catalog list.</div>
+              <div className="text-slate-500 text-xs py-2">No product sub-types found in local catalog list.</div>
             )
           )}
         </div>
       )}
 
       {/* Stats preview */}
-      <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between text-sm">
-        <span className="text-white/60">Products to be deleted:</span>
+      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-sm">
+        <span className="text-slate-600">Products to be deleted:</span>
         <span className="font-bold text-red-400 font-mono text-base">{matchingCount}</span>
       </div>
 
@@ -4830,31 +4830,31 @@ function EcommMassDeleteModal({ products, setProducts, setActiveModal, API_BASE_
         <label className="text-xs text-red-400 font-bold uppercase tracking-wider">
           Verification Required
         </label>
-        <p className="text-xs text-white/50 mb-1">
-          Type <span className="text-white font-mono bg-white/10 px-1 py-0.5 rounded">DELETE</span> below to confirm bulk deletion:
+        <p className="text-xs text-slate-500 mb-1">
+          Type <span className="text-slate-800 font-mono bg-slate-100 px-1 py-0.5 rounded">DELETE</span> below to confirm bulk deletion:
         </p>
         <input
           type="text"
           value={confirmText}
           onChange={e => setConfirmText(e.target.value)}
           placeholder="Type DELETE"
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 focus:bg-white/10 outline-none transition-all text-white font-mono"
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-red-500 focus:bg-slate-100 outline-none transition-all text-slate-800 font-mono"
           required
         />
       </div>
 
-      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-white/5">
+      <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
         <button
           type="button"
           onClick={() => setActiveModal(null)}
-          className="px-4 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={submitting || confirmText !== 'DELETE' || (deleteType !== 'all' && !selectedValue) || matchingCount === 0}
-          className="px-5 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:hover:bg-red-600 rounded-xl text-xs font-semibold cursor-pointer text-white shadow-lg shadow-red-600/20 transition-all"
+          className="px-5 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:hover:bg-red-600 rounded-xl text-xs font-semibold cursor-pointer text-slate-800 shadow-lg shadow-red-600/20 transition-all"
         >
           {submitting ? 'Deleting...' : `Confirm Bulk Delete (${matchingCount})`}
         </button>
@@ -4925,15 +4925,15 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
   return (
     <div className="flex flex-col gap-6">
       {/* Header controls bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/20 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-200 p-5 rounded-2xl border border-slate-200 backdrop-blur-sm">
         <div className="relative flex-1 w-full max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" size={16} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
           <input
             type="text"
             placeholder="Search by Ref ID, customer name, company..."
             value={searchQuery}
             onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:border-[#2796a9] outline-none text-white transition-all font-light"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-[#0F4C81] outline-none text-slate-800 transition-all font-light"
           />
         </div>
         
@@ -4942,7 +4942,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
           <select
             value={statusFilter}
             onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none transition-all cursor-pointer"
+            className="bg-white shadow-lg border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none transition-all cursor-pointer"
           >
             <option value="All">All Statuses</option>
             <option value="Pending">Pending Review</option>
@@ -4955,11 +4955,11 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
       </div>
 
       {/* Orders Table */}
-      <div className="bg-slate-900/40 border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-xs">
             <thead>
-              <tr className="bg-white/5 border-b border-white/5 text-white/55 text-[10px] uppercase font-bold tracking-wider">
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-800/55 text-[10px] uppercase font-bold tracking-wider">
                 <th className="p-4">Reference ID</th>
                 <th className="p-4">Customer Details</th>
                 <th className="p-4">Requested Items</th>
@@ -4976,40 +4976,40 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                 const hasPricedItems = (order.items || []).some(item => item.unitPrice > 0);
 
                 return (
-                  <tr key={order._id} className="hover:bg-white/5 transition-colors group">
-                    <td className="p-4 font-bold text-white font-sans text-sm">
+                  <tr key={order._id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="p-4 font-bold text-slate-800 font-sans text-sm">
                       {order.referenceId}
-                      <span className="text-[10px] text-white/30 block font-normal font-sans mt-0.5">
+                      <span className="text-[10px] text-slate-600 block font-normal font-sans mt-0.5">
                         {new Date(order.date || order.createdAt).toLocaleDateString()}
                       </span>
                     </td>
                     <td className="p-4">
-                      <span className="font-semibold text-white block text-sm">{order.customerDetails?.name}</span>
-                      <span className="text-white/45 text-[11px] block mt-0.5 truncate max-w-[200px]" title={`${order.customerDetails?.email} | ${order.customerDetails?.company}`}>
+                      <span className="font-semibold text-slate-800 block text-sm">{order.customerDetails?.name}</span>
+                      <span className="text-slate-500 text-[11px] block mt-0.5 truncate max-w-[200px]" title={`${order.customerDetails?.email} | ${order.customerDetails?.company}`}>
                         {order.customerDetails?.company ? `${order.customerDetails.company} • ` : ''}{order.customerDetails?.email}
                       </span>
                     </td>
-                    <td className="p-4 font-medium text-white/80">
+                    <td className="p-4 font-medium text-slate-700">
                       {order.items?.length || 0} items
-                      <span className="text-[10px] text-white/40 block mt-0.5">
+                      <span className="text-[10px] text-slate-500 block mt-0.5">
                         Qty total: {order.items?.reduce((acc, it) => acc + it.quantity, 0) || 0}
                       </span>
                     </td>
-                    <td className="p-4 font-bold font-sans text-white text-sm">
-                      {hasPricedItems ? `₹${grandTotal.toFixed(2)}` : <span className="text-yellow-500 font-sans font-normal text-xs">Unpriced RFQ</span>}
+                    <td className="p-4 font-bold font-sans text-slate-800 text-sm">
+                      {hasPricedItems ? `₹${grandTotal.toFixed(2)}` : <span className="text-yellow-700 font-sans font-normal text-xs">Unpriced RFQ</span>}
                     </td>
                     <td className="p-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                        order.status === 'Pending' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' :
+                        order.status === 'Pending' ? 'bg-yellow-100 border-yellow-200 text-yellow-700' :
                         order.status === 'Approved' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
                         order.status === 'Processing' ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' :
-                        order.status === 'Completed' ? 'bg-[#2796a9]/10 border-[#2796a9]/20 text-[#2796a9]' :
-                        'bg-white/5 border-white/10 text-white/50'
+                        order.status === 'Completed' ? 'bg-[#0F4C81]/10 border-[#0F4C81]/20 text-[#0F4C81]' :
+                        'bg-slate-50 border-slate-200 text-slate-500'
                       }`}>
                         {order.status || 'Pending'}
                       </span>
                       {order.adminComments && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20" title="You have already replied to this request">
+                        <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-600/10 px-1.5 py-0.5 rounded border border-green-600/20" title="You have already replied to this request">
                           <CheckCircle size={10} /> REPLIED
                         </span>
                       )}
@@ -5018,13 +5018,13 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={() => handleEditClick(order)}
-                          className="px-3 py-1.5 bg-[#2796a9]/10 hover:bg-[#2796a9] text-[#2796a9] hover:text-white rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#2796a9]/20"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
                         >
                           {order.adminComments ? 'View / Reply Again' : 'Process RFQ'}
                         </button>
                         <button
                           onClick={() => handleDeleteOrder(order._id, order.referenceId)}
-                          className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
                           title="Delete request"
                         >
                           <Trash2 size={15} />
@@ -5036,7 +5036,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
               })}
               {filteredOrders.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="p-12 text-center text-white/30 text-xs">
+                  <td colSpan="6" className="p-12 text-center text-slate-600 text-xs">
                     No quotation requests or orders found matching the filter.
                   </td>
                 </tr>
@@ -5047,22 +5047,22 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
 
         {/* Pagination footer */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-white/5 bg-slate-950/20 flex justify-between items-center text-xs">
-            <span className="text-white/40 font-light">
+          <div className="p-4 border-t border-slate-200 bg-white shadow-sm flex justify-between items-center text-xs">
+            <span className="text-slate-500 font-light">
               Showing page {currentPage} of {totalPages} ({filteredOrders.length} total orders)
             </span>
             <div className="flex gap-2">
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white disabled:opacity-30 disabled:hover:bg-white/5 transition-all cursor-pointer font-semibold"
+                className="px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-800 disabled:opacity-30 disabled:hover:bg-slate-50 transition-all cursor-pointer font-semibold"
               >
                 Previous
               </button>
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white disabled:opacity-30 disabled:hover:bg-white/5 transition-all cursor-pointer font-semibold"
+                className="px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-800 disabled:opacity-30 disabled:hover:bg-slate-50 transition-all cursor-pointer font-semibold"
               >
                 Next
               </button>
@@ -5169,7 +5169,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
   const total = subtotal + taxAmount + (Number(shippingCost) || 0);
 
   return (
-    <div className="p-6 flex flex-col gap-6 text-white max-h-[85vh] overflow-y-auto">
+    <div className="p-6 flex flex-col gap-6 text-slate-800 max-h-[85vh] overflow-y-auto">
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-semibold">
           {error}
@@ -5178,38 +5178,38 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
 
       <form onSubmit={handleSave} className="flex flex-col gap-6">
         {/* Customer Info Card */}
-        <div className="p-4 rounded-xl border border-white/5 bg-white/5 grid grid-cols-2 gap-4 text-xs">
+        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 grid grid-cols-2 gap-4 text-xs">
           <div>
-            <span className="text-white/40 block">Customer Name</span>
-            <span className="font-semibold text-white">{order.customerDetails?.name}</span>
+            <span className="text-slate-500 block">Customer Name</span>
+            <span className="font-semibold text-slate-800">{order.customerDetails?.name}</span>
           </div>
           <div>
-            <span className="text-white/40 block">Company / Enterprise</span>
-            <span className="font-semibold text-white">{order.customerDetails?.company || 'N/A'}</span>
+            <span className="text-slate-500 block">Company / Enterprise</span>
+            <span className="font-semibold text-slate-800">{order.customerDetails?.company || 'N/A'}</span>
           </div>
           <div>
-            <span className="text-white/40 block">Email Address</span>
-            <span className="font-semibold text-white">{order.customerDetails?.email}</span>
+            <span className="text-slate-500 block">Email Address</span>
+            <span className="font-semibold text-slate-800">{order.customerDetails?.email}</span>
           </div>
           <div>
-            <span className="text-white/40 block">Phone Contact</span>
-            <span className="font-semibold text-white">{order.customerDetails?.phone || 'N/A'}</span>
+            <span className="text-slate-500 block">Phone Contact</span>
+            <span className="font-semibold text-slate-800">{order.customerDetails?.phone || 'N/A'}</span>
           </div>
           {order.customerDetails?.message && (
-            <div className="col-span-2 border-t border-white/5 pt-2 mt-1">
-              <span className="text-white/40 block">Customer Notes/Instructions</span>
-              <span className="italic text-white/80">{order.customerDetails?.message}</span>
+            <div className="col-span-2 border-t border-slate-200 pt-2 mt-1">
+              <span className="text-slate-500 block">Customer Notes/Instructions</span>
+              <span className="italic text-slate-700">{order.customerDetails?.message}</span>
             </div>
           )}
         </div>
 
         {/* Status Dropdown */}
         <div className="flex flex-col gap-1.5 max-w-xs">
-          <label className="text-[10px] text-white/50 uppercase">Order / RFQ Status</label>
+          <label className="text-[10px] text-slate-500 uppercase">Order / RFQ Status</label>
           <select
             value={status}
             onChange={e => setStatus(e.target.value)}
-            className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#2796a9] outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#0F4C81] outline-none"
           >
             <option value="Pending">Pending Review</option>
             <option value="Approved">Approved / Priced</option>
@@ -5221,11 +5221,11 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
 
         {/* Items Listing & Unit Price Setting */}
         <div className="flex flex-col gap-3">
-          <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">Item Worksheet & Pricing</h4>
-          <div className="border border-white/5 rounded-xl overflow-hidden bg-slate-950/20">
+          <h4 className="text-xs font-bold text-slate-600 uppercase tracking-wider">Item Worksheet & Pricing</h4>
+          <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
             <table className="w-full border-collapse text-left text-xs">
               <thead>
-                <tr className="bg-white/5 border-b border-white/5 text-white/55 text-[10px] uppercase tracking-wider">
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-800/55 text-[10px] uppercase tracking-wider">
                   <th className="p-3">Product details</th>
                   <th className="p-3 text-center">Qty</th>
                   <th className="p-3">Unit Price (₹)</th>
@@ -5234,14 +5234,14 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
               </thead>
               <tbody className="divide-y divide-white/5">
                 {items.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-white/5 transition-colors">
+                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
                     <td className="p-3">
-                      <span className="font-semibold block text-white">{item.product_name}</span>
-                      <span className="text-[10px] text-white/45">
+                      <span className="font-semibold block text-slate-800">{item.product_name}</span>
+                      <span className="text-[10px] text-slate-500">
                         Brand: {item.brand} | SKU: {item.sku} | Model: {item.model || 'N/A'}
                       </span>
                     </td>
-                    <td className="p-3 text-center font-bold text-white/70">{item.quantity}</td>
+                    <td className="p-3 text-center font-bold text-slate-600">{item.quantity}</td>
                     <td className="p-3">
                       <input
                         type="number"
@@ -5250,11 +5250,11 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
                         value={item.unitPrice || ''}
                         onChange={e => handleItemPriceChange(idx, e.target.value)}
                         placeholder="0.00"
-                        className="w-24 bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white focus:border-[#2796a9] outline-none text-right font-mono"
+                        className="w-24 bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-800 focus:border-[#0F4C81] outline-none text-right font-mono"
                         required
                       />
                     </td>
-                    <td className="p-3 text-right font-mono text-white/80 font-bold">
+                    <td className="p-3 text-right font-mono text-slate-700 font-bold">
                       ₹{((item.quantity || 1) * (item.unitPrice || 0)).toFixed(2)}
                     </td>
                   </tr>
@@ -5265,12 +5265,12 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
         </div>
 
         {/* Costing Summary & Quote Terms Card */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-white/5 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-200 pt-6">
           {/* Quote Settings Form */}
           <div className="flex flex-col gap-4 text-xs">
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 uppercase">Shipping & Handling (₹)</label>
+                <label className="text-[10px] text-slate-500 uppercase">Shipping & Handling (₹)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -5278,11 +5278,11 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
                   value={shippingCost}
                   onChange={e => setShippingCost(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none font-mono"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 uppercase">Tax Rate (%)</label>
+                <label className="text-[10px] text-slate-500 uppercase">Tax Rate (%)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -5291,85 +5291,85 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
                   value={taxRate}
                   onChange={e => setTaxRate(e.target.value)}
                   placeholder="0.0"
-                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 uppercase">Payment Terms</label>
+                <label className="text-[10px] text-slate-500 uppercase">Payment Terms</label>
                 <input
                   type="text"
                   value={paymentTerms}
                   onChange={e => setPaymentTerms(e.target.value)}
                   placeholder="Net 30, COD, etc."
-                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-white/50 uppercase">Quote Validity Date</label>
+                <label className="text-[10px] text-slate-500 uppercase">Quote Validity Date</label>
                 <input
                   type="date"
                   value={validUntil}
                   onChange={e => setValidUntil(e.target.value)}
-                  className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:border-[#2796a9] outline-none font-mono text-white/80"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none font-mono text-slate-700"
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-white/50 uppercase">Procurement Officer Comments / Notes</label>
+              <label className="text-[10px] text-slate-500 uppercase">Procurement Officer Comments / Notes</label>
               <textarea
                 value={adminComments}
                 onChange={e => setAdminComments(e.target.value)}
                 placeholder="Add special terms, lead time details, shipping estimates..."
                 rows={3}
-                className="w-full bg-slate-900 border border-white/10 rounded-lg p-3 text-xs text-white focus:border-[#2796a9] outline-none resize-none"
+                className="w-full bg-white border border-slate-200 rounded-lg p-3 text-xs text-slate-800 focus:border-[#0F4C81] outline-none resize-none"
               />
             </div>
           </div>
 
           {/* Pricing Worksheet Totals Panel */}
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-3 text-xs justify-center">
-            <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest border-b border-white/5 pb-2">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-3 text-xs justify-center">
+            <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest border-b border-slate-200 pb-2">
               Worksheet Cost Summary
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Subtotal:</span>
-              <span className="font-mono text-white font-semibold">₹{subtotal.toFixed(2)}</span>
+              <span className="text-slate-600">Subtotal:</span>
+              <span className="font-mono text-slate-800 font-semibold">₹{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Shipping cost:</span>
-              <span className="font-mono text-white font-semibold">₹{Number(shippingCost).toFixed(2)}</span>
+              <span className="text-slate-600">Shipping cost:</span>
+              <span className="font-mono text-slate-800 font-semibold">₹{Number(shippingCost).toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Tax / GST ({taxRate}%):</span>
-              <span className="font-mono text-white font-semibold">₹{taxAmount.toFixed(2)}</span>
+              <span className="text-slate-600">Tax / GST ({taxRate}%):</span>
+              <span className="font-mono text-slate-800 font-semibold">₹{taxAmount.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between border-t border-white/5 pt-3 font-bold text-sm text-[#2796a9]">
+            <div className="flex justify-between border-t border-slate-200 pt-3 font-bold text-sm text-[#0F4C81]">
               <span>RFQ Grand Total:</span>
-              <span className="font-mono text-white">₹{total.toFixed(2)}</span>
+              <span className="font-mono text-slate-800">₹{total.toFixed(2)}</span>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between pt-4 border-t border-white/5">
+        <div className="flex justify-between pt-4 border-t border-slate-200">
           <button
             type="button"
             onClick={() => setActiveModal(null)}
-            className="px-5 py-2.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/5 text-xs font-semibold cursor-pointer"
+            className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
           >
             Cancel
           </button>
           <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
               <input
                 type="checkbox"
                 checked={includePricing}
                 onChange={(e) => setIncludePricing(e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-slate-800 text-[#2796a9] focus:ring-[#2796a9]"
+                className="w-4 h-4 rounded border-slate-300 bg-white shadow-lg text-[#0F4C81] focus:ring-[#0F4C81]"
               />
               Include Item Pricing Breakdown in Email
             </label>
@@ -5377,7 +5377,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
             >
               {submitting ? 'Saving...' : 'Save & Approve Quote'}
             </button>
@@ -5385,7 +5385,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
               type="button"
               onClick={handleReplyWithQuote}
               disabled={submitting}
-              className="px-6 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+              className="px-6 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-green-600 border border-green-600/30 text-xs font-bold rounded-xl active:scale-[0.98] transition-all cursor-pointer"
             >
               Reply with Quote
             </button>
@@ -5472,12 +5472,12 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
   };
 
   return (
-    <div className="p-6 max-h-[80vh] overflow-y-auto flex flex-col gap-6 custom-scrollbar text-white">
-      <div className="flex justify-between items-center border-b border-white/5 pb-3">
-        <p className="text-xs text-white/50">Add, edit, or remove partner brand logos.</p>
+    <div className="p-6 max-h-[80vh] overflow-y-auto flex flex-col gap-6 custom-scrollbar text-slate-800">
+      <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+        <p className="text-xs text-slate-500">Add, edit, or remove partner brand logos.</p>
         <button
           onClick={handleAddBrand}
-          className="px-4 py-2 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#2796a9]/20 flex items-center gap-2"
+          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 flex items-center gap-2"
         >
           <span>Add Brand Logo</span>
         </button>
@@ -5485,9 +5485,9 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
 
       <div className="flex flex-col gap-4">
         {localBrands.map((brand, idx) => (
-          <div key={idx} className="flex gap-4 p-4 bg-slate-950/50 rounded-xl border border-white/5 relative items-center">
+          <div key={idx} className="flex gap-4 p-4 bg-white shadow-sm rounded-xl border border-slate-200 relative items-center">
             <div 
-              className="w-16 h-16 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative group/logo cursor-pointer"
+              className="w-16 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative group/logo cursor-pointer"
               onClick={() => handleRemoveBrand(idx)}
               title="Click to delete this brand"
             >
@@ -5499,7 +5499,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
               <div className="absolute inset-0 bg-red-500/90 flex items-center justify-center opacity-0 group-hover/logo:opacity-100 transition-opacity">
-                <Trash2 size={20} className="text-white" />
+                <Trash2 size={20} className="text-slate-800" />
               </div>
             </div>
             <div className="flex-1 flex flex-col gap-2 pt-1 pr-6">
@@ -5508,7 +5508,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
                 value={brand.name}
                 onChange={e => handleUpdateBrand(idx, 'name', e.target.value)}
                 placeholder="Brand Name"
-                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:border-[#2796a9] outline-none text-white font-semibold transition-all w-full"
+                className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-[#0F4C81] outline-none text-slate-800 font-semibold transition-all w-full"
               />
               <div className="flex gap-2 items-center">
                 <input
@@ -5516,9 +5516,9 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
                   value={brand.src || brand.logoUrl || ''}
                   onChange={e => handleUpdateBrand(idx, 'src', e.target.value)}
                   placeholder="Image URL path"
-                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-[11px] focus:border-[#2796a9] outline-none text-white/80 transition-all"
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all"
                 />
-                <label className="shrink-0 px-3 py-1.5 bg-[#2796a9]/10 text-[#2796a9] hover:bg-[#2796a9] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-colors relative">
+                <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold cursor-pointer transition-colors relative">
                   {uploadingField === `brand_${idx}` ? 'Uploading...' : 'Upload Image'}
                   <input
                     type="file"
@@ -5536,23 +5536,23 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
           </div>
         ))}
         {localBrands.length === 0 && (
-          <div className="text-center py-8 text-white/30 text-xs border border-dashed border-white/10 rounded-xl">
+          <div className="text-center py-8 text-slate-600 text-xs border border-dashed border-slate-200 rounded-xl">
             No brands configured. Click Add Brand Logo to create one.
           </div>
         )}
       </div>
 
-      <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/5">
+      <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-slate-200">
         <button
           onClick={() => setActiveModal(null)}
-          className="px-4 py-2 rounded-xl text-white/60 hover:text-white border border-transparent hover:bg-white/5 transition-all text-xs font-semibold"
+          className="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-800 border border-transparent hover:bg-slate-50 transition-all text-xs font-semibold"
         >
           Cancel
         </button>
         <button
           onClick={handleSaveBrands}
           disabled={isSaving}
-          className="px-6 py-2 bg-gradient-to-r from-[#04667b] to-[#2796a9] text-white rounded-xl text-xs font-bold hover:brightness-110 shadow-lg disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 rounded-xl text-xs font-bold hover:brightness-110 shadow-lg disabled:opacity-50 flex items-center gap-2"
         >
           {isSaving ? 'Saving...' : 'Save All Brands'}
         </button>
