@@ -160,7 +160,7 @@ function EcommExportModal({ products, brands, setActiveModal }) {
         </button>
         <button
           onClick={handleExportCSV}
-          className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 rounded-xl text-xs font-bold hover:brightness-110 cursor-pointer"
+          className="px-4 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] text-white rounded-xl text-xs font-bold hover:brightness-110 cursor-pointer"
         >
           Export CSV
         </button>
@@ -1342,7 +1342,7 @@ export default function AdminPanel() {
                                 setViewingInquiry(inq);
                                 setActiveTab('inquiries');
                               }}
-                              className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold shrink-0 transition-colors cursor-pointer"
+                              className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-semibold shrink-0 transition-colors cursor-pointer"
                             >
                               Open
                             </button>
@@ -1406,7 +1406,7 @@ export default function AdminPanel() {
                       </div>
                       <button 
                         onClick={() => setActiveTab('orders')} 
-                        className="px-4 py-2 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 cursor-pointer"
+                        className="px-4 py-2 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 cursor-pointer"
                       >
                         View All Quotes ({ordersList.length})
                       </button>
@@ -1482,7 +1482,7 @@ export default function AdminPanel() {
                                   setSelectedItem(order);
                                   setActiveModal('edit_order_ecomm');
                                 }}
-                                className="px-2.5 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded text-[10px] font-bold shrink-0 transition-colors cursor-pointer"
+                                className="px-2.5 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded text-[10px] font-bold shrink-0 transition-colors cursor-pointer"
                               >
                                 View RFQ
                               </button>
@@ -1522,7 +1522,7 @@ export default function AdminPanel() {
                         />
                         <Search size={16} className="absolute right-3 top-3 text-slate-600" />
                       </div>
-                      <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#04667b] hover:bg-[#0F4C81] text-slate-800 text-sm font-bold rounded-full shadow-lg transition-colors">
+                      <button onClick={() => setIsNewsletterOpen(true)} className="px-4 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] text-white text-sm font-bold rounded-full shadow-lg transition-colors">
                         Send Newsletter
                       </button>
                       <div className="text-sm font-semibold text-[#04667b] bg-[#04667b]/10 px-4 py-2 rounded-full border border-[#04667b]/20 flex items-center">
@@ -1732,7 +1732,7 @@ export default function AdminPanel() {
                         setActivityForm({ title: '', subtitle: '', image: '/port/image1.png', gradient: defaultGradients[0] });
                         setActiveModal('create_activity');
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+                      className="px-4 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-white"
                     >
                       <Plus size={16} />
                       <span>Add Activity</span>
@@ -1813,7 +1813,7 @@ export default function AdminPanel() {
                         setServiceForm({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
                         setActiveModal('create_service');
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+                      className="px-4 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold tracking-wide flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-white"
                     >
                       <Plus size={16} />
                       <span>Add Capability</span>
@@ -1915,7 +1915,7 @@ export default function AdminPanel() {
                     </div>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-slate-800"
+                      className="px-6 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-white"
                     >
                       <CheckCircle size={16} />
                       <span>Save All Changes</span>
@@ -2000,7 +2000,7 @@ export default function AdminPanel() {
                         <button
                           type="button"
                           onClick={handleAddJourney}
-                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Row</span>
@@ -2127,7 +2127,7 @@ export default function AdminPanel() {
                       <button
                         type="button"
                         onClick={handleAddReason}
-                        className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                        className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <Plus size={14} />
                         <span>Add Value Card</span>
@@ -2294,7 +2294,7 @@ export default function AdminPanel() {
                         <button
                           type="button"
                           onClick={handleAddPartner}
-                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Partner Logo</span>
@@ -2344,7 +2344,7 @@ export default function AdminPanel() {
                                   className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `partner-${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -2399,7 +2399,7 @@ export default function AdminPanel() {
                         <button
                           type="button"
                           onClick={handleAddCustomer}
-                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Customer Logo</span>
@@ -2449,7 +2449,7 @@ export default function AdminPanel() {
                                   className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `customer-${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -2521,7 +2521,7 @@ export default function AdminPanel() {
                     </div>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-slate-800"
+                      className="px-6 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 active:scale-[0.98] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#04667b]/20 transition-all cursor-pointer text-white"
                     >
                       <CheckCircle size={16} />
                       <span>Save All Changes</span>
@@ -2538,7 +2538,7 @@ export default function AdminPanel() {
                       <button
                         type="button"
                         onClick={handleAddEcommSlide}
-                        className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
+                        className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
                       >
                         + Add Slider Slide
                       </button>
@@ -2643,7 +2643,7 @@ export default function AdminPanel() {
                                 className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:border-[#0F4C81] outline-none"
                                 required
                               />
-                              <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
+                              <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                                 {uploadingField === `slide-${idx}` ? 'Uploading...' : 'Upload'}
                                 <input
                                   type="file"
@@ -2853,7 +2853,7 @@ export default function AdminPanel() {
                         <button
                           type="button"
                           onClick={handleAddEcommBrand}
-                          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20 flex items-center gap-2"
+                          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20 flex items-center gap-2"
                         >
                           <Plus size={14} />
                           <span>Add Brand Logo</span>
@@ -2903,7 +2903,7 @@ export default function AdminPanel() {
                                   className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all font-light"
                                   required
                                 />
-                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
+                                <label className="shrink-0 px-2 py-1 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors relative flex items-center justify-center">
                                   {uploadingField === `ecomm_brand_${idx}` ? 'Uploading...' : 'Upload'}
                                   <input
                                     type="file"
@@ -3057,7 +3057,7 @@ export default function AdminPanel() {
                         className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                         required
                       />
-                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
+                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                         {uploadingField === 'activity' ? 'Uploading...' : 'Upload'}
                         <input
                           type="file"
@@ -3102,7 +3102,7 @@ export default function AdminPanel() {
 
                   <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
                     <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer">Cancel</button>
-                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
+                    <button type="submit" className="px-4 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-white">
                       {activeModal === 'create_activity' ? 'Save Activity' : 'Update Activity'}
                     </button>
                   </div>
@@ -3149,7 +3149,7 @@ export default function AdminPanel() {
                         className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none transition-all"
                         required
                       />
-                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
+                      <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
                         {uploadingField === 'service' ? 'Uploading...' : 'Upload'}
                         <input
                           type="file"
@@ -3184,7 +3184,7 @@ export default function AdminPanel() {
 
                   <div className="flex gap-3 justify-end mt-4 pt-4 border-t border-slate-200">
                     <button type="button" onClick={() => setActiveModal(null)} className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer">Cancel</button>
-                    <button type="submit" className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer">
+                    <button type="submit" className="px-4 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-white">
                       {activeModal === 'create_service' ? 'Save Capability' : 'Update Capability'}
                     </button>
                   </div>
@@ -3262,7 +3262,7 @@ export default function AdminPanel() {
                 <div className="p-6 text-center">
                   <h3 className="text-xl font-bold mb-4">Redirecting...</h3>
                   <p className="text-sm text-slate-500 mb-6">Storefront Settings are managed in the Customization section.</p>
-                  <button onClick={() => { setActiveModal(null); setActiveTab('ecommCustomize'); }} className="px-6 py-2.5 bg-[#0F4C81] text-slate-800 rounded-xl font-bold">
+                  <button onClick={() => { setActiveModal(null); setActiveTab('ecommCustomize'); }} className="px-6 py-2.5 bg-[#0F4C81] text-white rounded-xl font-bold">
                     Go to Storefront Settings
                   </button>
                 </div>
@@ -3450,7 +3450,7 @@ export default function AdminPanel() {
                   />
                 </div>
                 <div className="flex justify-end pt-4 mt-2 border-t border-slate-200">
-                  <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
+                  <button type="submit" className="px-6 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] text-white text-sm font-bold rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
                     Send
                   </button>
                 </div>
@@ -3479,7 +3479,7 @@ function SidebarLink({ label, icon, badge, active, onClick }) {
         <span>{label}</span>
       </div>
       {badge > 0 && (
-        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#0F4C81] text-slate-800">
+        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#0F4C81] text-white">
           {badge}
         </span>
       )}
@@ -3583,7 +3583,7 @@ function AdminLogin({ onSubmit, error, loading }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 active:scale-[0.98] text-slate-800 text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50 mt-2"
+            className="w-full py-3 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 active:scale-[0.98] text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-[0_4px_12px_rgba(4,102,123,0.3)] cursor-pointer disabled:opacity-50 mt-2"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
@@ -3805,7 +3805,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
           {/* Add Product */}
           <button
             onClick={handleAddClick}
-            className="px-4 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-slate-800"
+            className="px-4 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md transition-all cursor-pointer text-white"
           >
             <Plus size={16} />
             <span>Add Product</span>
@@ -4162,7 +4162,7 @@ function EcommProductFormModal({
             className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] outline-none transition-all text-slate-800"
             required
           />
-          <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
+          <label className="shrink-0 px-4 py-2.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold cursor-pointer transition-all flex items-center justify-center border border-[#0F4C81]/20">
             {uploadingField === 'ecomm_prod' ? 'Uploading...' : 'Upload'}
             <input
               type="file"
@@ -4196,7 +4196,7 @@ function EcommProductFormModal({
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-slate-800 disabled:opacity-50"
+          className="px-5 py-2.5 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 rounded-xl text-xs font-semibold cursor-pointer text-white disabled:opacity-50"
         >
           {submitting ? 'Saving...' : activeModal === 'create_ecomm_product' ? 'Save Product' : 'Update Product'}
         </button>
@@ -4559,7 +4559,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
               type="button"
               disabled={parsedData.length === 0 || syncing}
               onClick={handleSync}
-              className="px-5 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] hover:brightness-110 text-slate-800 text-xs font-semibold rounded-xl cursor-pointer disabled:opacity-30 transition-all flex items-center gap-1.5"
+              className="px-5 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] hover:brightness-110 text-white text-xs font-semibold rounded-xl cursor-pointer disabled:opacity-30 transition-all flex items-center gap-1.5"
             >
               {syncing ? 'Syncing...' : 'Sync Valid Rows to DB'}
             </button>
@@ -5018,7 +5018,7 @@ function EcommOrdersManager({ orders, setOrders, setActiveModal, setSelectedItem
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={() => handleEditClick(order)}
-                          className="px-3 py-1.5 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
+                          className="px-3 py-1.5 bg-[#0F4C81]/10 hover:bg-[#0F4C81] text-[#0F4C81] hover:text-white rounded-lg text-xs font-bold transition-all cursor-pointer border border-[#0F4C81]/20"
                         >
                           {order.adminComments ? 'View / Reply Again' : 'Process RFQ'}
                         </button>
@@ -5477,7 +5477,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
         <p className="text-xs text-slate-500">Add, edit, or remove partner brand logos.</p>
         <button
           onClick={handleAddBrand}
-          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 flex items-center gap-2"
+          className="px-4 py-2 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-xl text-xs font-bold transition-all border border-[#0F4C81]/20 flex items-center gap-2"
         >
           <span>Add Brand Logo</span>
         </button>
@@ -5518,7 +5518,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
                   placeholder="Image URL path"
                   className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-[11px] focus:border-[#0F4C81] outline-none text-slate-700 transition-all"
                 />
-                <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-slate-800 rounded-lg text-xs font-bold cursor-pointer transition-colors relative">
+                <label className="shrink-0 px-3 py-1.5 bg-[#0F4C81]/10 text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white rounded-lg text-xs font-bold cursor-pointer transition-colors relative">
                   {uploadingField === `brand_${idx}` ? 'Uploading...' : 'Upload Image'}
                   <input
                     type="file"
@@ -5552,7 +5552,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
         <button
           onClick={handleSaveBrands}
           disabled={isSaving}
-          className="px-6 py-2 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 rounded-xl text-xs font-bold hover:brightness-110 shadow-lg disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2 bg-[#0F4C81] hover:bg-[#0B1F3A] text-white rounded-xl text-xs font-bold hover:brightness-110 shadow-lg disabled:opacity-50 flex items-center gap-2"
         >
           {isSaving ? 'Saving...' : 'Save All Brands'}
         </button>
