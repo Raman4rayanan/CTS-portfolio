@@ -5377,7 +5377,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#04667b] to-[#0F4C81] text-slate-800 text-xs font-bold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer"
+              className="px-6 py-2.5 bg-[#0F4C81] text-white text-xs font-bold rounded-xl hover:bg-[#0B1F3A] active:scale-[0.98] transition-all cursor-pointer"
             >
               {submitting ? 'Saving...' : 'Save & Approve Quote'}
             </button>
