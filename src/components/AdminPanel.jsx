@@ -36,7 +36,9 @@ import {
   SlidersHorizontal,
   Download,
   Upload,
-  Users
+  Users,
+  Menu,
+  X
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 
@@ -172,6 +174,7 @@ function EcommExportModal({ products, brands, setActiveModal }) {
 export default function AdminPanel() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('cts_user');
@@ -1085,9 +1088,17 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
+    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800 relative">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm" 
+          onClick={() => setIsSidebarOpen(false)} 
+        />
+      )}
+      
       {/* Sidebar */}
-      <aside className="w-64 bg-white/60 backdrop-blur-md border-r border-slate-200 flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto">
+      <aside className={`w-64 bg-white/60 backdrop-blur-md border-r border-slate-200 flex flex-col shrink-0 fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 md:relative md:translate-x-0 h-screen overflow-y-auto ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="h-24 px-6 flex items-center justify-between border-b border-slate-200">
           <Link to="/" className="flex items-center gap-2 text-[#0F4C81] font-bold text-lg hover:brightness-110 transition-all">
             <ArrowLeft size={16} />
@@ -1188,15 +1199,21 @@ export default function AdminPanel() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="h-24 border-b border-slate-200 px-8 flex items-center justify-between bg-white shadow-sm backdrop-blur-md">
-          <div className="flex items-center gap-4">
+        <header className="h-24 border-b border-slate-200 px-4 md:px-8 flex items-center justify-between bg-white shadow-sm backdrop-blur-md">
+          <div className="flex items-center gap-3 md:gap-4">
+            <button 
+              onClick={() => setIsSidebarOpen(true)} 
+              className="md:hidden p-2 -ml-2 hover:bg-slate-100 rounded-lg text-[#0F4C81] transition-colors"
+            >
+              <Menu size={24} />
+            </button>
             {activeTab !== 'dashboard' && (
               <button onClick={() => setActiveTab('dashboard')} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600 hover:text-slate-800 cursor-pointer" title="Back to Dashboard">
                 <ArrowLeft size={20} />
               </button>
             )}
-            <h2 className="text-2xl font-bold tracking-wide capitalize">
-              {activeTab === 'services' ? 'Products & Services Management' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog Management' : `${activeTab} Management`}
+            <h2 className="text-lg md:text-2xl font-bold tracking-wide capitalize">
+              {activeTab === 'services' ? 'Products & Services' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog' : `${activeTab} Management`}
             </h2>
           </div>
         </header>
@@ -1656,7 +1673,7 @@ export default function AdminPanel() {
                           <span className="text-xs text-slate-500 block mb-1">Name:</span>
                           <span className="font-semibold text-slate-800 text-base">{viewingInquiry.name}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <span className="text-xs text-slate-500 block mb-1">Email:</span>
                             <span className="font-medium text-slate-800 truncate block">{viewingInquiry.email || 'N/A'}</span>
@@ -1739,7 +1756,7 @@ export default function AdminPanel() {
                     </button>
                   </div>
 
-                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden overflow-x-auto">
                     <table className="w-full text-left text-sm border-collapse">
                       <thead>
                         <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
@@ -1820,7 +1837,7 @@ export default function AdminPanel() {
                     </button>
                   </div>
 
-                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden">
+                  <div className="bg-white shadow-md border border-slate-200 rounded-2xl overflow-hidden overflow-x-auto">
                     <table className="w-full text-left text-sm border-collapse">
                       <thead>
                         <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
@@ -2424,7 +2441,7 @@ export default function AdminPanel() {
                               <img
                                 src={customer.src}
                                 alt={customer.name}
-                                className="max-w-full max-h-full object-contain brightness-0 invert opacity-70"
+                                className="max-w-full max-h-full object-contain opacity-70"
                                 style={{ transform: `scale(${parseFloat(customer.scale) || 1})` }}
                                 onError={(e) => { e.target.style.display = 'none'; }}
                               />
@@ -2595,7 +2612,7 @@ export default function AdminPanel() {
                             Hero Slide #{idx + 1}
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="flex flex-col gap-1">
                               <label className="text-[10px] text-slate-500 uppercase">Tag (Category / Highlight)</label>
                               <input
@@ -2694,7 +2711,7 @@ export default function AdminPanel() {
                           </label>
 
                           {ecommCustomizeForm.showBrandSpotlight && (
-                            <div className="flex gap-4 ml-7">
+                            <div className="flex flex-col sm:flex-row gap-4 sm:ml-7">
                               <div className="flex-1 flex flex-col gap-1.5">
                                 <label className="text-[10px] text-slate-500 uppercase">Tagline</label>
                                 <input
@@ -3112,7 +3129,7 @@ export default function AdminPanel() {
               {/* SERVICES FORMS */}
               {(activeModal === 'create_service' || activeModal === 'edit_service') && (
                 <form onSubmit={activeModal === 'create_service' ? handleCreateServiceSubmit : handleEditServiceSubmit} className="p-6 flex flex-col gap-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Capability Title</label>
                       <input 
@@ -4025,7 +4042,7 @@ function EcommProductFormModal({
       )}
 
       {/* Grid: ID and SKU */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product ID</label>
           <input
@@ -4052,7 +4069,7 @@ function EcommProductFormModal({
       </div>
 
       {/* Grid: Brand and Category */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Brand Name</label>
           <select
@@ -4080,7 +4097,7 @@ function EcommProductFormModal({
       </div>
 
       {/* Grid: Type and Sub-type */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Product Type</label>
           <input
@@ -4104,7 +4121,7 @@ function EcommProductFormModal({
       </div>
 
       {/* Grid: Model and Name */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs text-slate-600 font-semibold uppercase tracking-wider">Model</label>
           <input
@@ -4470,7 +4487,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
 
       {(parsedData.length > 0 || validationErrors.length > 0) && (
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 bg-green-600/10 border border-green-600/20 rounded-2xl flex flex-col justify-between">
               <span className="text-xs text-green-600 font-semibold uppercase tracking-wider">Valid Entries</span>
               <span className="text-3xl font-extrabold text-slate-800 mt-2">{parsedData.length}</span>
@@ -4517,7 +4534,7 @@ FI-POW-005, GSB-18V-50, Bosch Power Tools, Power Tools, Drilling Machine, Cordle
           {parsedData.length > 0 && (
             <div className="flex flex-col gap-2">
               <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Valid Parsed Catalog Preview</span>
-              <div className="border border-slate-200 rounded-xl max-h-[180px] overflow-y-auto bg-white shadow-sm">
+              <div className="border border-slate-200 rounded-xl max-h-[180px] overflow-auto bg-white shadow-sm">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
@@ -5178,7 +5195,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
 
       <form onSubmit={handleSave} className="flex flex-col gap-6">
         {/* Customer Info Card */}
-        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 grid grid-cols-2 gap-4 text-xs">
+        <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div>
             <span className="text-slate-500 block">Customer Name</span>
             <span className="font-semibold text-slate-800">{order.customerDetails?.name}</span>
@@ -5222,7 +5239,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
         {/* Items Listing & Unit Price Setting */}
         <div className="flex flex-col gap-3">
           <h4 className="text-xs font-bold text-slate-600 uppercase tracking-wider">Item Worksheet & Pricing</h4>
-          <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+          <div className="border border-slate-200 rounded-xl overflow-hidden overflow-x-auto bg-white shadow-sm">
             <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-slate-800/55 text-[10px] uppercase tracking-wider">
@@ -5268,7 +5285,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-200 pt-6">
           {/* Quote Settings Form */}
           <div className="flex flex-col gap-4 text-xs">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-slate-500 uppercase">Shipping & Handling (₹)</label>
                 <input
@@ -5296,7 +5313,7 @@ function EcommOrderEditModal({ order, setOrders, setActiveModal, API_BASE_URL })
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-slate-500 uppercase">Payment Terms</label>
                 <input
