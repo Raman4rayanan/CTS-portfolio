@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+import { optimizeCloudinaryUrl } from '../utils/imageOptimizer';
+
 const images = [
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png',
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
-  'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png'
+  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png'),
+  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png'),
+  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png')
 ];
 
 
@@ -30,8 +32,7 @@ export default function HeroSection({ isVisible, config }) {
         return (
           <motion.div
             key={src}
-            className="absolute inset-0 z-0 bg-cover bg-center origin-center"
-            style={{ backgroundImage: `url(${src})`, filter: 'blur(3px)' }}
+            className="absolute inset-0 z-0 bg-black overflow-hidden"
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{
               opacity: isActive ? 1 : 0,
@@ -41,7 +42,15 @@ export default function HeroSection({ isVisible, config }) {
               opacity: { duration: 1.5, ease: 'easeInOut' },
               scale: { duration: 6, ease: 'linear' },
             }}
-          />
+          >
+            <img 
+              src={src} 
+              alt="Industrial Hero Background"
+              fetchpriority={idx === 0 ? "high" : "auto"}
+              loading={idx === 0 ? "eager" : "lazy"}
+              className="w-full h-full object-cover blur-[3px]" 
+            />
+          </motion.div>
         );
       })}
 

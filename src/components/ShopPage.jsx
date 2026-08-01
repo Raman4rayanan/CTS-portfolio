@@ -1409,6 +1409,7 @@ export default function ShopPage() {
                       <img 
                         src={optimizeCloudinaryUrl(product.images?.[0])} 
                         alt={product.product_name}
+                        loading="lazy"
                         className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                       />
                       {/* NEW Badge */}
@@ -1495,6 +1496,7 @@ export default function ShopPage() {
                       <img
                         src={optimizeCloudinaryUrl(p.images?.[0])}
                         alt={p.product_name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {p.tag && (
@@ -1575,6 +1577,7 @@ export default function ShopPage() {
                       <img
                         src={optimizeCloudinaryUrl(p.images?.[0])}
                         alt={p.product_name}
+                        loading="lazy"
                         className="max-h-full max-w-full object-contain"
                       />
                     </div>
@@ -1699,6 +1702,7 @@ export default function ShopPage() {
                     <img
                       src={optimizeCloudinaryUrl(selectedProduct.images?.[0])}
                       alt={selectedProduct.product_name}
+                      loading="lazy"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
@@ -1706,7 +1710,7 @@ export default function ShopPage() {
                   <div className="flex gap-2">
                     {selectedProduct.images?.map((img, i) => (
                       <div key={i} className="w-20 h-20 bg-slate-950 border-2 border-[#2796a9] rounded-xl flex items-center justify-center p-2 cursor-pointer">
-                        <img src={optimizeCloudinaryUrl(img)} alt="thumbnail" className="max-h-full max-w-full object-contain" />
+                        <img src={optimizeCloudinaryUrl(img)} alt="thumbnail" loading="lazy" className="max-h-full max-w-full object-contain" />
                       </div>
                     ))}
                   </div>
@@ -1798,7 +1802,7 @@ export default function ShopPage() {
                         className="bg-slate-950/60 border border-slate-800 hover:border-slate-700 p-4 rounded-xl flex items-center gap-4 cursor-pointer group"
                       >
                         <div className="w-16 h-16 bg-slate-950 flex items-center justify-center p-2 rounded-lg flex-shrink-0">
-                          <img src={optimizeCloudinaryUrl(rel.images?.[0])} alt={rel.product_name} className="max-h-full max-w-full object-contain" />
+                          <img src={optimizeCloudinaryUrl(rel.images?.[0])} alt={rel.product_name} loading="lazy" className="max-h-full max-w-full object-contain" />
                         </div>
                         <div className="min-w-0">
                           <Link 
@@ -1886,7 +1890,7 @@ export default function ShopPage() {
                       <div key={item.product_id} className="flex gap-4 p-4 bg-slate-950/40 border border-slate-800/80 rounded-xl relative group">
                         {/* Image */}
                         <div className="w-16 h-16 bg-slate-950 rounded-lg flex items-center justify-center p-2 flex-shrink-0">
-                          <img src={optimizeCloudinaryUrl(item.images?.[0])} alt={item.product_name} className="max-h-full max-w-full object-contain" />
+                          <img src={optimizeCloudinaryUrl(item.images?.[0])} alt={item.product_name} loading="lazy" className="max-h-full max-w-full object-contain" />
                         </div>
                         {/* Info */}
                         <div className="flex-1 min-w-0 pr-6">
