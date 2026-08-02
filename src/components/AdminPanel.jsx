@@ -1105,7 +1105,7 @@ export default function AdminPanel() {
       )}
       
       {/* Sidebar */}
-      <aside className={`w-64 bg-white/60 backdrop-blur-md border-r border-slate-200 flex flex-col shrink-0 fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 md:relative md:translate-x-0 h-screen overflow-y-auto ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`w-64 bg-white/60 backdrop-blur-md border-r border-slate-200 flex flex-col shrink-0 fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 md:sticky md:top-0 md:translate-x-0 h-screen overflow-y-auto ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="h-24 px-6 flex items-center justify-between border-b border-slate-200">
           <Link to="/" className="flex items-center gap-2 text-[#0F4C81] font-bold text-lg hover:brightness-110 transition-all">
             <ArrowLeft size={16} />
@@ -1463,33 +1463,43 @@ export default function AdminPanel() {
                       </div>
 
                       {/* Financial statistics */}
-                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
-                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Estimated pipeline value</span>
-                        <div className="flex flex-col gap-3 mt-3">
-                          <div className="flex justify-between items-center text-xs">
-                            <span>Pending Quote Requests:</span>
-                            <span className="font-bold font-mono text-yellow-700">
-                              {ordersList.filter(o => o.status === 'Pending').length} requests
-                            </span>
+                      {(() => {
+                        const currentMonthOrders = ordersList.filter(o => {
+                          if (!o.createdAt) return false;
+                          const d = new Date(o.createdAt);
+                          const now = new Date();
+                          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                        });
+                        return (
+                          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                            <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Estimated pipeline value (This Month)</span>
+                            <div className="flex flex-col gap-3 mt-3">
+                              <div className="flex justify-between items-center text-xs">
+                                <span>Pending Quote Requests:</span>
+                                <span className="font-bold font-mono text-yellow-700">
+                                  {currentMonthOrders.filter(o => o.status === 'Pending').length} requests
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-2">
+                                <span>Total Priced & Approved Quotes:</span>
+                                <span className="font-bold font-mono text-green-600">
+                                  {currentMonthOrders.filter(o => o.status === 'Approved').length} requests
+                                </span>
+                              </div>
+                              <div className="flex flex-col gap-0.5">
+                                <span className="text-[10px] text-slate-500">TOTAL PIPELINE CONTRACT VALUE</span>
+                                <span className="text-2xl font-bold font-mono text-slate-800 mt-1">
+                                  ₹{currentMonthOrders.reduce((acc, order) => {
+                                    const subtotal = (order.items || []).reduce((sum, it) => sum + (it.quantity * (it.unitPrice || 0)), 0);
+                                    const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
+                                    return acc + subtotal + taxAmount + (order.shippingCost || 0);
+                                  }, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-2">
-                            <span>Total Priced & Approved Quotes:</span>
-                            <span className="font-bold font-mono text-green-600">
-                              {ordersList.filter(o => o.status === 'Approved').length} requests
-                            </span>
-                          </div>
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] text-slate-500">TOTAL PIPELINE CONTRACT VALUE</span>
-                            <span className="text-2xl font-bold font-mono text-slate-800 mt-1">
-                              ₹{ordersList.reduce((acc, order) => {
-                                const subtotal = (order.items || []).reduce((sum, it) => sum + (it.quantity * (it.unitPrice || 0)), 0);
-                                const taxAmount = (subtotal * (order.taxRate || 0)) / 100;
-                                return acc + subtotal + taxAmount + (order.shippingCost || 0);
-                              }, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                        );
+                      })()}
 
                       {/* Recent quote list */}
                       <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-2">
