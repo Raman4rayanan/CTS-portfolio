@@ -34,7 +34,7 @@ export default function MaintenancePage() {
         </h1>
         
         <p className="text-slate-400 text-lg md:text-xl font-light mb-12 max-w-lg mx-auto leading-relaxed">
-          Concept Tools and Services is currently undergoing scheduled maintenance to improve our platform. We expect to be back online shortly. Thank you for your patience!
+          Concept Tools and Service is currently undergoing scheduled maintenance to improve our platform. We expect to be back online shortly. Thank you for your patience!
         </p>
 
         <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md">

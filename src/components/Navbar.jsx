@@ -6,7 +6,7 @@ import { Menu, X, User, Eye, EyeOff, LogOut, Mail, Lock, Search, History, Shoppi
 const navLinks = [
   { label: 'Home', href: '#' },
   { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
+  { label: 'Service', href: '#services' },
   { label: 'Activities', href: '#activities' },
   { label: 'Contact', href: '#contact' },
 ];

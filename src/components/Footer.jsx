@@ -15,7 +15,7 @@ export default function Footer() {
               className="text-2xl font-bold bg-clip-text text-transparent"
               style={{ backgroundImage: 'linear-gradient(to right, #08BFB0, #228B88, #08BFB0)' }}
             >
-              Concept Tools &amp; Services
+              Concept Tools &amp; Service
             </span>
           </div>
           <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="md:w-1/4">
           <h4 className="text-lg font-semibold mb-4 text-white">Quick Links</h4>
           <ul className="space-y-3">
-            {['Home', 'About', 'Services', 'Contact'].map((link) => (
+            {['Home', 'About', 'Service', 'Contact'].map((link) => (
               <li key={link}>
                 <a
                   href={link === 'Home' ? '/' : `/#${link.toLowerCase()}`}
@@ -66,7 +66,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <p>&copy; {currentYear} Concept Tools and Services. All rights reserved.</p>
+        <p>&copy; {currentYear} Concept Tools and Service. All rights reserved.</p>
         <p>Built for precision. Built for industry.</p>
       </div>
     </footer>

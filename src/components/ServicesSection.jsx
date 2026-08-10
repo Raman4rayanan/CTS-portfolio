@@ -172,7 +172,7 @@ export default function ServicesSection() {
             transition={{ delay: 0.1 }}
             className="mt-3 text-3xl md:text-4xl font-bold text-primary-navy"
           >
-            Products &amp; Services
+            Products &amp; Service
           </motion.h2>
         </div>
 

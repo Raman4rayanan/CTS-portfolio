@@ -62,7 +62,7 @@ function LandingPage() {
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Concept Tools and Services (CTS)",
+    "name": "Concept Tools and Service (CTS)",
     "url": currentUrl,
     "logo": metaImage || `${currentUrl}logo.png`,
     "contactPoint": {
@@ -76,13 +76,13 @@ function LandingPage() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "url": currentUrl,
-    "name": "Concept Tools and Services"
+    "name": "Concept Tools and Service"
   };
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Concept Tools and Services (CTS)",
+    "name": "Concept Tools and Service (CTS)",
     "image": metaImage || `${currentUrl}logo.png`,
     "url": currentUrl,
     "telephone": config?.companyPhone || "",

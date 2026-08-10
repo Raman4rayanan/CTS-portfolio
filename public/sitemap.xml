@@ -11,17 +11,482 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-012</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-016</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-015</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-014</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-013</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-010</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-011</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-010</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-011</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-012</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-032</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-031</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-033</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-034</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-035</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-036</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-037</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-010</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-039</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-040</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-041</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-038</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-021</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-022</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-010</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-011</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-023</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-024</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-027</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-028</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-029</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-030</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-018</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-019</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-020</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-010</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-011</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-012</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-013</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-015</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-014</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-016</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-017</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-POU-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-LBO-006</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-POL-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-VAC-004</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-LBO-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -46,12 +511,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-VAC-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-POL-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-ACC-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-POL-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -66,12 +541,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-HTG-001</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-HTG-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-POL-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-HTG-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -96,11 +571,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-LBO-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-TBG-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -116,17 +586,17 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-HTG-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-PLN-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-POL-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-PLN-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-PLN-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -142,6 +612,11 @@
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-SAN-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-RCS-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -166,17 +641,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-ROU-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-RCS-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-RCS-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-RCS-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -196,22 +671,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-ROU-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-VAC-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-JIG-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-STC-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -221,7 +681,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-STC-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-JIG-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-JIG-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -241,7 +711,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-TBS-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DSC-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -257,11 +727,6 @@
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-CIS-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DSC-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -291,22 +756,27 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-TBS-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DEH-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-RTH-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-RTH-006</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-DEH-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DEH-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-RTH-005</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -351,12 +821,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DEH-007</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DEH-008</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-RTH-003</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-RDL-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -426,7 +896,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-RDL-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-RTH-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -541,7 +1011,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-019</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-015</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -556,27 +1026,27 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-STK-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-SAG-014</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-015</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-STK-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-017</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-018</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-SAG-016</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-019</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -601,7 +1071,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-018</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-017</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -671,7 +1141,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-ACC-001</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-JSA-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -686,7 +1156,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-007</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-ACC-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -721,6 +1191,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-SAG-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-SAG-004</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -741,11 +1216,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-JSA-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-PLA-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -756,12 +1226,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-RAW-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-005</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IMW-004</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -787,6 +1252,11 @@
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-IMD-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-005</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -821,12 +1291,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IMW-004</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-RAW-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-005</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-008</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -866,42 +1336,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/BOS-DRL-006</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDR-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-IDR-001</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-007</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -911,7 +1356,32 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BOS-DRL-007</loc>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDR-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDR-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BOS-IDD-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -926,7 +1396,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/AQW-HPW-004</loc>
+    <loc>https://www.concept-tools.com/shop/product/AQW-HPW-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -936,7 +1406,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/AQW-HPW-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/AQW-HPW-004</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -946,7 +1416,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-008</loc>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-010</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -956,7 +1426,37 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-010</loc>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-006</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-007</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -971,32 +1471,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/BSH-HPW-004</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-ACC-004</loc>
+    <loc>https://www.concept-tools.com/shop/product/BSH-HPW-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1011,492 +1491,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-HPW-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/BSH-HPW-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/BSH-HPW-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/BSH-HPW-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-014</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-012</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-013</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-015</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-016</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-012</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-010</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-010</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-032</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-029</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-030</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-035</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-033</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-034</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-031</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-036</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-038</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-039</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-010</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-040</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-041</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-037</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-023</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-021</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-020</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-019</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-028</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-026</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-025</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-027</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-010</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-022</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-024</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-010</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-013</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-012</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-017</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-018</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-BAG-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-015</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-014</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-016</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CHE-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-008</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-POU-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-TOO-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-007</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAS-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-006</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-003</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/KEN-CAB-001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1566,62 +1566,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-050</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/EP-051</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-062</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-058</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-060</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-059</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-061</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-057</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-054</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-053</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-056</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-055</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1631,27 +1576,57 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-019</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-055</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-012</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-056</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-018</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-053</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-017</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-054</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-016</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-057</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-061</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-059</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-060</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-058</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-062</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-050</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1661,17 +1636,42 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-011</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/EP-014</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-013</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-012</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-011</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-016</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-017</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-018</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-019</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1706,17 +1706,17 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/EP-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/EP-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/EP-013</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1776,12 +1776,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-021</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-023</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/EP-023</loc>
+    <loc>https://www.concept-tools.com/shop/product/EP-021</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2046,12 +2046,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-006</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-008</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-008</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-SHO-005</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2096,12 +2096,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-SHO-005</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-010</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-011</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-009</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2136,7 +2136,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-010</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-006</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2146,17 +2146,22 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-009</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-SHO-002</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-EYE-011</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/ATS-GLV-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-005</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATS-SHO-002</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2181,22 +2186,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/ATS-GLV-010</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/ATS-GLV-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-015</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2221,12 +2216,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-014</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ATS-GLV-018</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-014</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATS-GLV-015</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2256,17 +2256,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-030</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-032</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/ASP-GLV-028</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-032</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2306,32 +2301,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-031</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-033</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-038</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-034</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-037</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-036</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-030</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2346,37 +2316,42 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-028</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-036</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-020</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-037</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-023</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-034</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-018</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-038</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-021</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-033</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-017</loc>
+    <loc>https://www.concept-tools.com/shop/product/ASP-GLV-031</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-016</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-028</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2391,32 +2366,37 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-017</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-021</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-018</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-023</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-020</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-027</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-024</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-026</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-025</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-032</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-029</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2431,32 +2411,27 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-029</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-024</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-015</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-005</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-002</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-SLV-001</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-004</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2466,12 +2441,42 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-006</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-001</loc>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-002</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-004</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-SLV-001</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-009</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-005</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2487,11 +2492,6 @@
   </url>
   <url>
     <loc>https://www.concept-tools.com/shop/product/ATL-GLV-011</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ATL-GLV-009</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2516,16 +2516,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-853</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-852</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/ST-ACC-851</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -2536,37 +2526,22 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-818</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-852</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-811</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-853</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-819</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-825</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-820</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-821</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-822</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-823</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-827</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2576,7 +2551,32 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-825</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-823</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-822</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-821</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-820</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-819</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-818</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2611,6 +2611,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-811</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ST-ACC-810</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -2621,22 +2626,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-831</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.concept-tools.com/shop/product/ST-ACC-808</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-827</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-826</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-828</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2676,7 +2671,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-835</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-836</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -2696,6 +2691,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-831</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.concept-tools.com/shop/product/ST-ACC-830</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -2706,12 +2706,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-828</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-826</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.concept-tools.com/shop/product/ST-ACC-836</loc>
+    <loc>https://www.concept-tools.com/shop/product/ST-ACC-835</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

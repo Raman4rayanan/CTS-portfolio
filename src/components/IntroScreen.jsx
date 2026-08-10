@@ -65,7 +65,7 @@ export default function IntroScreen({ onComplete }) {
             className="mt-8 text-sm md:text-base tracking-[0.3em] uppercase font-medium"
             style={{ color: '#065F71' }}   // ✅ Updated color here
           >
-            Concept Tools and Services
+            Concept Tools and Service
           </motion.p>
         </motion.div>
       </div>

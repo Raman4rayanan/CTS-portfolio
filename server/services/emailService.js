@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 // We will use the Brevo REST API (port 443) instead of SMTP to bypass Railway's strict port blocking
-const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, senderName = 'Concept Tools and Services', ccEmail = null) => {
+const sendBrevoEmail = async (subject, htmlContent, toEmail, senderEmail, senderName = 'Concept Tools and Service', ccEmail = null) => {
   const brevoApiKey = process.env.BREVO_API_KEY;
   if (!brevoApiKey) {
     console.error('Missing BREVO_API_KEY in environment variables.');
@@ -54,7 +54,7 @@ const sendOtpEmail = async (toEmail, otpCode, username, context = 'signup') => {
     let htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #04667b; text-align: center;">Concept Tools and Services</h2>
+          <h2 style="color: #04667b; text-align: center;">Concept Tools and Service</h2>
         </div>
         <p style="font-size: 16px; color: #333;">Hello ${username || 'there'},</p>
         <p style="font-size: 16px; color: #333;">Please use the following 4-digit verification code to complete your ${actionText}:</p>
@@ -91,7 +91,7 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails, ccEmail =
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #04667b; text-align: center;">Concept Tools and Services</h2>
+          <h2 style="color: #04667b; text-align: center;">Concept Tools and Service</h2>
         </div>
         
         <div style="background-color: #04667b; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
@@ -135,7 +135,7 @@ const sendQuoteEmail = async (adminEmail, customerEmail, quoteDetails, ccEmail =
     const subject = `New Quotation Request - ${quoteDetails.customerDetails?.name || quoteDetails.customer?.name} (#${quoteDetails.referenceId || quoteDetails.quoteId})`;
 
     // Send to admin (with optional CC)
-    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Services', ccEmail);
+    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Service', ccEmail);
     // Send confirmation to customer
     const confirmationSubject = `We've received your quotation request (#${quoteDetails.referenceId || quoteDetails.quoteId})`;
     await sendBrevoEmail(confirmationSubject, htmlContent, customerEmail, senderEmail);
@@ -153,7 +153,7 @@ const sendInquiryEmail = async (adminEmail, customerEmail, inquiryDetails, ccEma
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #04667b; text-align: center;">Concept Tools and Services</h2>
+          <h2 style="color: #04667b; text-align: center;">Concept Tools and Service</h2>
         </div>
         
         <div style="background-color: #04667b; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
@@ -174,7 +174,7 @@ const sendInquiryEmail = async (adminEmail, customerEmail, inquiryDetails, ccEma
     const subject = `New Inquiry from ${inquiryDetails.name}`;
 
     // Send to admin (with optional CC)
-    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Services', ccEmail);
+    await sendBrevoEmail(subject, htmlContent, adminEmail, senderEmail, 'Concept Tools and Service', ccEmail);
     
     // Optionally, send confirmation to customer if they provided an email
     if (customerEmail) {
@@ -203,7 +203,7 @@ const sendNewsletterEmail = async (subject, htmlContent, bccEmails, bannerBase64
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 650px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         <!-- Header -->
         <div style="background-color: #02050c; padding: 20px; text-align: center; border-bottom: 4px solid #2796a9;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">Concept Tools & Services</h1>
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">Concept Tools & Service</h1>
         </div>
         
         <!-- Banner Image -->
@@ -216,14 +216,14 @@ const sendNewsletterEmail = async (subject, htmlContent, bccEmails, bannerBase64
         
         <!-- Footer -->
         <div style="background-color: #f5f7fa; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
-          <p style="margin: 0; font-size: 12px; color: #777777;">&copy; ${new Date().getFullYear()} Concept Tools and Services. All rights reserved.</p>
+          <p style="margin: 0; font-size: 12px; color: #777777;">&copy; ${new Date().getFullYear()} Concept Tools and Service. All rights reserved.</p>
           <p style="margin: 5px 0 0 0; font-size: 12px; color: #777777;">You are receiving this email because you are registered at CTS.</p>
         </div>
       </div>
     `;
 
     const payload = {
-      sender: { name: 'Concept Tools and Services', email: senderEmail },
+      sender: { name: 'Concept Tools and Service', email: senderEmail },
       to: [{ email: senderEmail }],
       bcc: bccList,
       subject: subject,
@@ -359,7 +359,7 @@ const sendInquiryReplyEmail = async (toEmail, inquiryDetails, replyMessage, ccEm
           ${replyMessage.replace(/\n/g, '<br>')}
         </div>
         
-        <p style="margin-top: 30px;">Best regards,<br>Concept Tools & Services Team</p>
+        <p style="margin-top: 30px;">Best regards,<br>Concept Tools & Service Team</p>
       </div>
     </div>
   `;

@@ -63,7 +63,7 @@ const PortfolioConfigSchema = new mongoose.Schema({
   },
   metaTitle: {
     type: String,
-    default: 'Concept Tools and Services | Industrial Supply & MRO'
+    default: 'Concept Tools and Service | Industrial Supply & MRO'
   },
   metaDescription: {
     type: String,

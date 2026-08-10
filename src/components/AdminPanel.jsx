@@ -1147,7 +1147,7 @@ export default function AdminPanel() {
             onClick={() => setActiveTab('activities')} 
           />
           <SidebarLink 
-            label="Product Services" 
+            label="Product Service" 
             icon={<Hammer size={18} />} 
             active={activeTab === 'services'} 
             onClick={() => setActiveTab('services')} 
@@ -1220,7 +1220,7 @@ export default function AdminPanel() {
               </button>
             )}
             <h2 className="text-lg md:text-2xl font-bold tracking-wide capitalize">
-              {activeTab === 'services' ? 'Products & Services' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog' : `${activeTab} Management`}
+              {activeTab === 'services' ? 'Products & Service' : activeTab === 'customize' ? 'Customization Management' : activeTab === 'ecomm' ? 'E-commerce Catalog' : `${activeTab} Management`}
             </h2>
           </div>
         </header>
@@ -1271,7 +1271,7 @@ export default function AdminPanel() {
                       onClick={() => setActiveTab('activities')}
                     />
                     <DashboardCard 
-                      title="Products & Services" 
+                      title="Products & Service" 
                       value={stats.portfolio.services} 
                       icon={<Hammer className="text-teal-400" />} 
                       color="from-teal-500/10 to-teal-500/5 border-teal-500/10"
@@ -1841,7 +1841,7 @@ export default function AdminPanel() {
               {activeTab === 'services' && (
                 <div className="flex flex-col gap-6">
                   <div className="flex justify-between items-center">
-                    <h3 className="font-bold text-lg">Product Services Capability List</h3>
+                    <h3 className="font-bold text-lg">Product Service Capability List</h3>
                     <button
                       onClick={() => {
                         setServiceForm({ title: '', icon: 'Settings', image: '/pneumatic.png', desc: '' });
@@ -2093,7 +2093,7 @@ export default function AdminPanel() {
                           type="text"
                           value={customizeForm.metaTitle || ''}
                           onChange={e => setCustomizeForm(prev => ({ ...prev, metaTitle: e.target.value }))}
-                          placeholder="Concept Tools and Services | Industrial Supply & MRO"
+                          placeholder="Concept Tools and Service | Industrial Supply & MRO"
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:border-[#0F4C81] focus:bg-slate-100 outline-none text-slate-800 transition-all font-light"
                         />
                       </div>

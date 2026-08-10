@@ -791,7 +791,7 @@ export default function ShopPage() {
         </div>
         ${element.innerHTML}
         <div style="margin-top: 40px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
-          Concept Tools and Services (CTS) - Procurement Desk
+          Concept Tools and Service (CTS) - Procurement Desk
         </div>
       </div>
     `;
@@ -2188,7 +2188,7 @@ export default function ShopPage() {
                 {/* Intro message */}
                 <div className="p-4 bg-slate-950/50 border border-slate-800 rounded-2xl">
                   <p className="text-slate-300 text-sm font-light leading-relaxed">
-                    Thank you for choosing **Concept Tools and Services (CTS)**. Our sales and engineering team will review your worksheet specifications, check available lead times, and contact you with a formal quotation shortly.
+                    Thank you for choosing **Concept Tools and Service (CTS)**. Our sales and engineering team will review your worksheet specifications, check available lead times, and contact you with a formal quotation shortly.
                   </p>
                 </div>
 
