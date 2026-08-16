@@ -13,11 +13,11 @@ const BrandSchema = new mongoose.Schema({
 const Brand = ecommDb.model('Brand', BrandSchema, 'brands');
 
 const brandUpdates = [
-  { name: 'Atlas', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png' },
-  { name: 'Bosch', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png' },
-  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png' },
-  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/ctrjijbpcixvkfvv636m.png' },
-  { name: 'Stanley Black', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png' }
+  { name: 'Atlas', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857702/y9ypyosfhfdnwicpli3j.png' },
+  { name: 'Bosch', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/iziqyyzfm4pk07bsf0xe.png' },
+  { name: 'Eibenstock', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857699/sr3zhdx7bmas7nscdd9c.png' },
+  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/u77micfxwbh6b7td5nsz.png' },
+  { name: 'Stanley Black', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857698/jcjic1y0hsv8jeydept7.png' }
 ];
 
 async function updateBrands() {

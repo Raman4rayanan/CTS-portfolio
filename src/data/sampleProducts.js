@@ -10,7 +10,7 @@ export const sampleProducts = [
     product_name: 'M2A090RP95 Angle Grinder',
     description: 'High-performance angle grinder designed for demanding industrial applications. Offers maximum durability and consistent power delivery under extreme loads.',
     specifications: 'Output: 0.900 hp | Weight: 1.02 kg | Height over spindle end: 200 mm | Air Flow: 15.0 l/s | Type: Max Drum - 5" max M14 THD',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857708/mwiwaarn1zhykjtpu4hp.jpg']
   },
   {
     product_id: 'FI-GRIN-002',
@@ -23,7 +23,7 @@ export const sampleProducts = [
     product_name: 'M2A120RG4 Angle Grinder',
     description: 'Heavy duty high-performance angle grinder designed for demanding industrial applications. Features ergonomic handle configuration to reduce operator fatigue.',
     specifications: 'Output: 1.200 hp | Weight: 1.52 kg | Height over spindle end: 227 mm | Air Flow: 18.0 l/s | Type: Collet (6mm & 1/4") Box',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857708/mwiwaarn1zhykjtpu4hp.jpg']
   },
   {
     product_id: 'FI-GRIN-003',
@@ -36,7 +36,7 @@ export const sampleProducts = [
     product_name: 'M2H180RG4 Straight Grinder',
     description: 'Ergonomic straight grinder optimized for precision material removal. Heavy-duty motor keeps speed high for fast cutting and cleaning.',
     specifications: 'Output: 1.800 hp | Weight: 0.77 kg | Length: 310 mm | Air Flow: 12.0 l/s | Type: Collet (6mm & 1/4") Box',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png']
   },
   {
     product_id: 'FI-GRIN-004',
@@ -49,7 +49,7 @@ export const sampleProducts = [
     product_name: 'M2H200RG4 Straight Grinder',
     description: 'High-performance straight grinder optimized for precision material removal. Strong internal construction protects against abrasive dust entry.',
     specifications: 'Output: 2.000 hp | Weight: 0.77 kg | Length: 310 mm | Air Flow: 13.0 l/s | Type: Collet (6mm & 1/4") Box',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png']
   },
   {
     product_id: 'FI-POW-005',
@@ -62,7 +62,7 @@ export const sampleProducts = [
     product_name: 'GSB 18V-50 Cordless Drill',
     description: 'Tough, brushless combi drill for efficiency, endurance, and power. Smart brushless motor communicates with battery cells to maximize running time.',
     specifications: 'Voltage: 18 V | Max Torque (Hard): 50 Nm | Weight: 1.10 kg | No-load speed: 1,800 rpm | Chuck Capacity: 13 mm',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png']
   },
   {
     product_id: 'FI-CLE-006',
@@ -75,7 +75,7 @@ export const sampleProducts = [
     product_name: 'DSS 35 M Industrial Dust Extractor',
     description: 'Professional wet/dry dust extractor for high-efficiency suction of concrete and stone dust. Includes electromagnetic pulse filter cleaning.',
     specifications: 'Power: 1600 W | Tank Capacity: 35 l | Max Air Flow: 75 l/s | Weight: 15.00 kg | Hose Length: 5 m',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278569/port/uyvemispshvvtup3frea.jpg']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857713/yuxz1jt5elpq341rlcno.jpg']
   },
   {
     product_id: 'FI-SAF-007',
@@ -88,7 +88,7 @@ export const sampleProducts = [
     product_name: 'ATH-PRO1 Industrial Hard Hat',
     description: 'Heavy-duty industrial hard hat with built-in adjustable ratchet suspension. Designed for optimal ventilation and certified head protection in tough MRO zones.',
     specifications: 'Material: ABS Plastic | Safety Standard: EN 397 | Weight: 0.35 kg | Adjustable size: 52-62 cm | Impact Absorption: High',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/i57qdajixxllurowpkev.jpg']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857710/mja5koba7dyakvpdae7c.jpg']
   },
   {
     product_id: 'FI-ACC-008',
@@ -101,7 +101,7 @@ export const sampleProducts = [
     product_name: 'Kennedy 5-Drawer Tool Cabinet',
     description: 'Heavy duty steel mobile tool cabinet with 5 drawers, central locking mechanism, and ball bearing slides for industrial workshops.',
     specifications: 'Material: Heavy-gauge Steel | Width: 680 mm | Height: 840 mm | Load Capacity: 350 kg | Finish: Powder Coated',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278522/port/zhzh2v9rozlz7q6askvl.jpg']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857709/usg5vkzqm5bvedfd8hqf.jpg']
   },
   {
     product_id: 'FI-ACC-009',
@@ -114,6 +114,6 @@ export const sampleProducts = [
     product_name: 'Stanley FatMax Tape Measure',
     description: 'Professional measuring tape with Armor coating on the first 150mm to reduce tear risks. Ergonomic case design fits comfortably in hand.',
     specifications: 'Length: 8 m | Blade Width: 32 mm | Standout: 3.3 m | Coating: BladeArmor | Case Material: Bi-Material',
-    images: ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278560/port/wnoyku31gx14sgymc4ca.png']
+    images: ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857701/oocas9kxytwfpmwoabkf.png']
   }
 ];

@@ -1,5 +1,7 @@
 require('dotenv').config();
-require('dns').setDefaultResultOrder('ipv4first'); // Force IPv4 to prevent Nodemailer ETIMEDOUT on Render
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first'); // Force IPv4
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Bypass local ISP DNS block for MongoDB
 const express = require('express');
 const cors = require('cors');
 

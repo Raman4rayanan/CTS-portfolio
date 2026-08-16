@@ -137,12 +137,12 @@ router.post('/products/bulk-delete', protectAdmin, async (req, res) => {
 
 // Default brands to seed if empty
 const defaultBrands = [
-  { name: 'Atlas Protective Products', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' },
-  { name: 'Bosch Power Tools', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' },
-  { name: 'Cromwell Tools Industries', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' },
-  { name: 'Eibenstock', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' },
-  { name: 'Ingersoll Rand', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' },
-  { name: 'Stanley Black & Decker', logoUrl: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png' }
+  { name: 'Atlas Protective Products', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' },
+  { name: 'Bosch Power Tools', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' },
+  { name: 'Cromwell Tools Industries', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' },
+  { name: 'Eibenstock', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' },
+  { name: 'Ingersoll Rand', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' },
+  { name: 'Stanley Black & Decker', logoUrl: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png' }
 ];
 
 // Brand API Routes
@@ -156,11 +156,11 @@ router.get('/brands', async (req, res) => {
     
     // Auto-update placeholders
     const brandUpdates = [
-      { name: 'Atlas', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278516/port/hym3rag4eal3xxn9bx6d.png' },
-      { name: 'Bosch', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278517/port/svdnbsmz2mkirhr9oqes.png' },
-      { name: 'Eibenstock Positron', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278519/port/wkn0oyaxl2jgzwklcupo.png' },
-      { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278558/port/ctrjijbpcixvkfvv636m.png' },
-      { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png' }
+      { name: 'Atlas', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857702/y9ypyosfhfdnwicpli3j.png' },
+      { name: 'Bosch', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/iziqyyzfm4pk07bsf0xe.png' },
+      { name: 'Eibenstock Positron', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857699/sr3zhdx7bmas7nscdd9c.png' },
+      { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/u77micfxwbh6b7td5nsz.png' },
+      { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857698/jcjic1y0hsv8jeydept7.png' }
     ];
 
     let modified = false;
@@ -197,7 +197,7 @@ router.post('/brands/sync', protectAdmin, async (req, res) => {
     
     const formattedBrands = brands.map(b => ({
       name: b.name.trim(),
-      logoUrl: b.src || b.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+      logoUrl: b.src || b.logoUrl || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'
     }));
 
     if (formattedBrands.length > 0) {
@@ -224,7 +224,7 @@ router.post('/brands', protectAdmin, async (req, res) => {
 
     const brand = new Brand({
       name: name.trim(),
-      logoUrl: logoUrl ? logoUrl.trim() : 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+      logoUrl: logoUrl ? logoUrl.trim() : 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'
     });
     await brand.save();
     res.status(201).json({ success: true, data: brand });
@@ -251,7 +251,7 @@ router.put('/brands/:id', protectAdmin, async (req, res) => {
       req.params.id,
       {
         name: name.trim(),
-        logoUrl: logoUrl ? logoUrl.trim() : 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png'
+        logoUrl: logoUrl ? logoUrl.trim() : 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'
       },
       { new: true, runValidators: true }
     );

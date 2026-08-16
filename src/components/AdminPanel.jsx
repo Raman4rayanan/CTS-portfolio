@@ -426,7 +426,7 @@ export default function AdminPanel() {
         {
           title: 'New Slider Title',
           subtitle: 'New slider description text',
-          image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png',
+          image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png',
           tag: 'TAG'
         }
       ]
@@ -2961,7 +2961,7 @@ export default function AdminPanel() {
                             {/* Logo Preview */}
                             <div className="w-16 h-16 rounded-xl bg-[#F5F7FA] border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
                               <img
-                                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'}
+                                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'}
                                 alt={brand.name}
                                 className="max-w-full max-h-full object-contain opacity-80"
                                 style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}
@@ -3763,7 +3763,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
       product_name: product.product_name || '',
       description: product.description || '',
       specifications: product.specifications || '',
-      image: product.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'
+      image: product.images?.[0] || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'
     });
     setActiveModal('edit_ecomm_product');
   };
@@ -3781,7 +3781,7 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
       product_name: '',
       description: '',
       specifications: '',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'
+      image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'
     });
     setActiveModal('create_ecomm_product');
   };
@@ -3918,10 +3918,10 @@ function EcommCatalogManager({ products, setProducts, brands, setBrands, setActi
                   <td className="p-4">
                     <div className="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden bg-[#F5F7FA] flex items-center justify-center p-1">
                       <img 
-                        src={optimizeCloudinaryUrl(prod.images?.[0]) || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'} 
+                        src={optimizeCloudinaryUrl(prod.images?.[0]) || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'} 
                         alt={prod.product_name} 
                         className="max-w-full max-h-full object-contain"
-                        onError={(e) => { e.target.src = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'; }}
+                        onError={(e) => { e.target.src = 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'; }}
                       />
                     </div>
                   </td>
@@ -4418,7 +4418,7 @@ function EcommCsvImportModal({ setProducts, setActiveModal, API_BASE_URL, fetchS
         product_name: cols[headerMap.product_name] || '',
         description: headerMap.description !== undefined ? cols[headerMap.description] || '' : '',
         specifications: headerMap.specifications !== undefined ? cols[headerMap.specifications] || '' : '',
-        images: headerMap.image !== undefined && cols[headerMap.image] && cols[headerMap.image].trim() ? [cols[headerMap.image].trim()] : ['https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png']
+        images: headerMap.image !== undefined && cols[headerMap.image] && cols[headerMap.image].trim() ? [cols[headerMap.image].trim()] : ['https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png']
       };
 
       // Validation check
@@ -5536,7 +5536,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
       formData.append('upload_preset', 'cts_unsigned');
       formData.append('folder', folder);
       
-      const response = await fetch(`https://api.cloudinary.com/v1_1/dzfuhxr2z/image/upload`, {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/coo50qxq/image/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -5577,7 +5577,7 @@ function EcommBrandManagerModal({ brands, setBrands, setActiveModal, API_BASE_UR
               title="Click to delete this brand"
             >
               <img
-                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png'}
+                src={brand.src || brand.logoUrl || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png'}
                 alt={brand.name}
                 className="max-w-full max-h-full object-contain opacity-80"
                 style={{ transform: `scale(${parseFloat(brand.scale) || 1})` }}

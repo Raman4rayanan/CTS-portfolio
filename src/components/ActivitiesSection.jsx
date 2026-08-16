@@ -6,37 +6,37 @@ const activities = [
   {
     title: 'Work Updates',
     subtitle: 'Latest developments and operational milestones from our daily industrial engagements.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857693/fhzsbpsktiawwqraf8lh.png',
     gradient: 'linear-gradient(135deg, #0F4C81, #0B1F3A)',
   },
   {
     title: 'Project Highlights',
     subtitle: 'Showcasing our recent successful implementations and turnkey solutions.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857694/cceq41dnnlwuxtidgqa4.png',
     gradient: 'linear-gradient(135deg, #198e9d, #0B1F3A)',
   },
   {
     title: 'Product Demonstrations',
     subtitle: 'On-site technical demonstrations of our newest power tools and equipment.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857695/a4v03lafndermfqibdi5.png',
     gradient: 'linear-gradient(135deg, #016A8A, #053b4d)',
   },
   {
     title: 'Client Visits',
     subtitle: 'Building lasting partnerships through on-site visits and collaborative consultations with our clients.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857693/fhzsbpsktiawwqraf8lh.png',
     gradient: 'linear-gradient(135deg, #1a3a5c, #0B1F3A)',
   },
   {
     title: 'Training & Workshops',
     subtitle: 'Empowering our teams with the latest safety protocols, tool handling skills, and industry best practices.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857694/cceq41dnnlwuxtidgqa4.png',
     gradient: 'linear-gradient(135deg, #0e5c6e, #0B1F3A)',
   },
   {
     title: 'Trade Exhibitions',
     subtitle: 'Representing CTS at premier industrial expos to showcase innovations and connect with global partners.',
-    image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png',
+    image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857695/a4v03lafndermfqibdi5.png',
     gradient: 'linear-gradient(135deg, #0a4a7a, #0B1F3A)',
   },
 ];

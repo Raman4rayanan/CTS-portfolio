@@ -112,19 +112,19 @@ const PortfolioConfigSchema = new mongoose.Schema({
       {
         title: 'High-Performance Pneumatics',
         subtitle: 'Industrial Grinding and Milling tools by Ingersoll Rand',
-        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+        image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857708/mwiwaarn1zhykjtpu4hp.jpg',
         tag: 'PNEUMATICS'
       },
       {
         title: 'Precision German Engineering',
         subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
-        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782367880/ecomm/placeholder.png',
+        image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png',
         tag: 'POWER TOOLS'
       },
       {
         title: 'HSE Safety Standard Gear',
         subtitle: 'Full protective equipment for hazardous work sites',
-        image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/v1782278562/port/i57qdajixxllurowpkev.jpg',
+        image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857710/mja5koba7dyakvpdae7c.jpg',
         tag: 'SAFETY'
       }
     ]

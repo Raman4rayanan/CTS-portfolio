@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { optimizeCloudinaryUrl } from '../utils/imageOptimizer';
 
 const images = [
-  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278523/port/qssdgzsxxah2fteaiysb.png'),
-  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278694/port/cnf3tpa6axlr8ctcbb9k.png'),
-  optimizeCloudinaryUrl('https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278556/port/is9uae1dghh7jql2mjqz.png')
+  optimizeCloudinaryUrl('https://res.cloudinary.com/coo50qxq/image/upload/v1786857693/fhzsbpsktiawwqraf8lh.png'),
+  optimizeCloudinaryUrl('https://res.cloudinary.com/coo50qxq/image/upload/v1786857694/cceq41dnnlwuxtidgqa4.png'),
+  optimizeCloudinaryUrl('https://res.cloudinary.com/coo50qxq/image/upload/v1786857695/a4v03lafndermfqibdi5.png')
 ];
 
 

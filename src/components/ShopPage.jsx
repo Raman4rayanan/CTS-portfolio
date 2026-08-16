@@ -33,12 +33,12 @@ import { optimizeCloudinaryUrl } from '../utils/imageOptimizer';
 
 // Brand logos with Cloudinary URLs and scale specifications (6 Authorized Partners Only)
 const brandLogos = [
-  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278558/port/ctrjijbpcixvkfvv636m.png', scale: 1.35 },
-  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278517/port/svdnbsmz2mkirhr9oqes.png', scale: 1.25 },
-  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278565/port/dfhdgyfgk2q4ddivq0rv.png', scale: 1.00 },
-  { name: 'Eibenstock', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278519/port/wkn0oyaxl2jgzwklcupo.png', scale: 2.5 },
-  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278518/port/khritkvs9abfqepsxpa9.png', scale: 1.8 },
-  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278516/port/hym3rag4eal3xxn9bx6d.png', scale: 2.5 }
+  { name: 'Ingersoll Rand', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/u77micfxwbh6b7td5nsz.png', scale: 1.35 },
+  { name: 'Bosch Power Tools', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/iziqyyzfm4pk07bsf0xe.png', scale: 1.25 },
+  { name: 'Stanley Black & Decker', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857698/jcjic1y0hsv8jeydept7.png', scale: 1.00 },
+  { name: 'Eibenstock', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857699/sr3zhdx7bmas7nscdd9c.png', scale: 2.5 },
+  { name: 'Cromwell Tools Industries', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857700/sjkwjbngi9cxd4rdkty3.png', scale: 1.8 },
+  { name: 'Atlas Protective Products', src: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857702/y9ypyosfhfdnwicpli3j.png', scale: 2.5 }
 ];
 
 // Carousel items placeholder (will be replaced by state on mount)
@@ -58,19 +58,19 @@ export default function ShopPage() {
     {
       title: 'Industrial Storage Units',
       subtitle: 'Heavy-duty storage solutions for your workspace',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+      image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857708/mwiwaarn1zhykjtpu4hp.jpg',
       tag: 'STORAGE'
     },
     {
       title: 'Precision German Engineering',
       subtitle: 'Heavy duty drilling and core machines by Eibenstock & Bosch',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png',
+      image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png',
       tag: 'POWER TOOLS'
     },
     {
       title: 'HSE Safety Standard Gear',
       subtitle: 'Full protective equipment for hazardous work sites',
-      image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/i57qdajixxllurowpkev.jpg',
+      image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857710/mja5koba7dyakvpdae7c.jpg',
       tag: 'SAFETY'
     }
   ]);
@@ -79,13 +79,13 @@ export default function ShopPage() {
     const nameLower = b.name.toLowerCase();
     let fallbackLogo = '';
     if (nameLower.includes('bosch')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278517/port/svdnbsmz2mkirhr9oqes.png';
+      fallbackLogo = 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857697/iziqyyzfm4pk07bsf0xe.png';
     } else if (nameLower.includes('atlas')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278516/port/hym3rag4eal3xxn9bx6d.png';
+      fallbackLogo = 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857702/y9ypyosfhfdnwicpli3j.png';
     } else if (nameLower.includes('eibenstock')) {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278519/port/wkn0oyaxl2jgzwklcupo.png';
+      fallbackLogo = 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857699/sr3zhdx7bmas7nscdd9c.png';
     } else {
-      fallbackLogo = 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png';
+      fallbackLogo = 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png';
     }
 
     const matchingPortfolioPartner = config?.partners?.find(
@@ -116,7 +116,7 @@ export default function ShopPage() {
               slides[0] = {
                 title: 'Industrial Storage Units',
                 subtitle: 'Heavy-duty storage solutions for your workspace',
-                image: 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278562/port/awouogqczxlfzf4fn9qf.jpg',
+                image: 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857708/mwiwaarn1zhykjtpu4hp.jpg',
                 tag: 'STORAGE'
               };
             }
@@ -1191,7 +1191,7 @@ export default function ShopPage() {
                         .map((catName, index) => {
                           const isSelected = selectedCategories.includes(catName);
                           const repProduct = products.find(p => p.category === catName);
-                          const image = repProduct?.images?.[0] || 'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782367880/ecomm/placeholder.png';
+                          const image = repProduct?.images?.[0] || 'https://res.cloudinary.com/coo50qxq/image/upload/v1786857696/vzthjir8tfsmgpjq9b6c.png';
 
                           const handleCardMove = (e) => {
                             const c = e.currentTarget;

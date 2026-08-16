@@ -38,10 +38,10 @@ export default function AboutSection({ config }) {
       }))
     : reasons;
   const aboutImages = [
-    'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278513/port/oeab1g6omyotxybrfr7z.jpg',
-    'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278513/port/duwpchjvbw0h88pdtvfj.jpg',
-    'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278514/port/u3tft0lgc4bjvdhvijt9.jpg',
-    'https://res.cloudinary.com/dzfuhxr2z/image/upload/f_auto,q_auto/v1782278515/port/vyhmdtke8rcldddixwmb.jpg'
+    'https://res.cloudinary.com/coo50qxq/image/upload/v1786857690/vxn69w5ddzoys1mduioq.jpg',
+    'https://res.cloudinary.com/coo50qxq/image/upload/v1786857691/mbgzz8v4md1da4id4nsi.jpg',
+    'https://res.cloudinary.com/coo50qxq/image/upload/v1786857692/vhyx5h1mjmdrdire02lz.jpg',
+    'https://res.cloudinary.com/coo50qxq/image/upload/v1786857693/e9yiavtrsmkjzjh9yrlg.jpg'
   ];
 
   useEffect(() => {
