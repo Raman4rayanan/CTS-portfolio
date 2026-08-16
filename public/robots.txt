@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /admin
 
-Sitemap: https://www.concept-tools.com/sitemap.xml
+Sitemap: https://concepttoolsandservice.com/sitemap.xml

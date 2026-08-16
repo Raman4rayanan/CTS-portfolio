@@ -2,10 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import https from 'https';
 import http from 'http';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // In a real Vercel environment, this would ideally fetch from the production backend URL
 const API_URL = process.env.VITE_API_URL || 'http://localhost:5000';
-const BASE_URL = process.env.VITE_FRONTEND_URL || 'https://www.concept-tools.com'; // Change to actual production URL
+const BASE_URL = process.env.VITE_FRONTEND_URL || 'https://concepttoolsandservice.com'; // Change to actual production URL
 
 async function fetchProducts() {
   return new Promise((resolve, reject) => {
